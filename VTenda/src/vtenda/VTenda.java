@@ -25,10 +25,9 @@ public class VTenda {
     /****************** AUX CAMBIO PRODUCTO ****************************************************/
         public static String cod = "";        
     /***************** BASE DE DATOS ***********************************************************/
-        public static String db = "jdbc:mysql://127.0.0.1/proxecto_DAW2";
-        //public static String db = "jdbc:mysql://177.0.0.1/proxecto_DAW2"+"?verifyServerCertificate=true"+"&useSSL=true"+"&requireSSL=true";
-        public static String dbUser = "root";
-        public static String dbPass = "";
+        public static String db = "jdbc:mysql://beta.fiandeira.es/proxecto_DAW2";
+        public static String dbUser = "proxecto";
+        public static String dbPass = "PK38czqKwQfkpB1U";
     /***************** PANTALLA CONTRASEÑA *****************************************************/
         public static String usuario = "";
         public static String contrasena = "";

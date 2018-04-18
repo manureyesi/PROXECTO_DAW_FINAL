@@ -314,7 +314,7 @@ public class PaAnadirProductos extends javax.swing.JDialog {
                 switch(PaAnadirProductos.salir){
                     
                     case 0:
-                        vtenda.errores.errorCategoria PaAvisoCategoria = new vtenda.errores.errorCategoria(new javax.swing.JDialog(), true);
+                        errores.errorCategoria PaAvisoCategoria = new errores.errorCategoria(new javax.swing.JDialog(), true);
                         PaAvisoCategoria.setVisible(true);
                     break;
                     

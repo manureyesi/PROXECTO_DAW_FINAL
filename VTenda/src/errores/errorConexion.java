@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package vtenda.errores;
+package errores;
 
 import java.awt.Image;
 import java.awt.Toolkit;
@@ -13,12 +13,12 @@ import java.awt.event.KeyEvent;
  *
  * @author DAW221
  */
-public class errorCambiarProducto extends javax.swing.JDialog {
+public class errorConexion extends javax.swing.JDialog {
 
     /**
      * Creates new form errorCategoria
      */
-    public errorCambiarProducto(javax.swing.JDialog parent, boolean modal) {
+    public errorConexion(javax.swing.JDialog parent, boolean modal) {
         super(parent, modal);
         initComponents();
         
@@ -50,10 +50,10 @@ public class errorCambiarProducto extends javax.swing.JDialog {
         });
 
         jLInfo1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jLInfo1.setText("No se ha encontrado el producto solicitado");
+        jLInfo1.setText("Lo sentimos acabamos de sufrir un error");
 
         jLInfo2.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jLInfo2.setText("Pruebe con otro código");
+        jLInfo2.setText("Vuelva a intentarlo más tarde");
 
         volver.setBackground(new java.awt.Color(153, 153, 153));
         volver.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
@@ -99,12 +99,10 @@ public class errorCambiarProducto extends javax.swing.JDialog {
     }//GEN-LAST:event_volverActionPerformed
 
     private void formKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_formKeyPressed
-        
         /*Evento para tecla ENTER*/
         if(evt.getKeyCode()==KeyEvent.VK_ENTER){
             dispose();
-        }      
-                
+        }
     }//GEN-LAST:event_formKeyPressed
 
     /**
@@ -124,21 +122,23 @@ public class errorCambiarProducto extends javax.swing.JDialog {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(errorCambiarProducto.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(errorConexion.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(errorCambiarProducto.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(errorConexion.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(errorCambiarProducto.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(errorConexion.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(errorCambiarProducto.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(errorConexion.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
 
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                errorCambiarProducto dialog = new errorCambiarProducto(new javax.swing.JDialog(), true);
+                errorConexion dialog = new errorConexion(new javax.swing.JDialog(), true);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {

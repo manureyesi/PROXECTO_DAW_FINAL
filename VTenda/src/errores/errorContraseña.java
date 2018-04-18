@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package vtenda.errores;
+package errores;
 
 import java.awt.Image;
 import java.awt.Toolkit;
@@ -11,15 +11,17 @@ import java.awt.event.KeyEvent;
 
 /**
  *
- * @author DAW221
+ * @author MANU
  */
-public class errorConexion extends javax.swing.JDialog {
+public class errorContraseña extends javax.swing.JDialog {
 
     /**
-     * Creates new form errorCategoria
+     * Creates new form errorContraseña
      */
-    public errorConexion(javax.swing.JDialog parent, boolean modal) {
+    public errorContraseña(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
+        initComponents();
+        
         initComponents();
         
         Image icono = Toolkit.getDefaultToolkit().getImage("img/tpv.png");
@@ -39,10 +41,10 @@ public class errorConexion extends javax.swing.JDialog {
 
         jLInfo1 = new javax.swing.JLabel();
         jLInfo2 = new javax.swing.JLabel();
-        volver = new javax.swing.JButton();
+        ok = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("VTenda - Error Actualizar");
+        setTitle("VTenda - Error");
         addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 formKeyPressed(evt);
@@ -50,18 +52,18 @@ public class errorConexion extends javax.swing.JDialog {
         });
 
         jLInfo1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jLInfo1.setText("Lo sentimos acabamos de sufrir un error");
+        jLInfo1.setText("Hemos detectado que tiene la contraseña por defecto");
 
         jLInfo2.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jLInfo2.setText("Vuelva a intentarlo más tarde");
+        jLInfo2.setText("Porfavor cambiela para proteger su cuenta");
 
-        volver.setBackground(new java.awt.Color(153, 153, 153));
-        volver.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
-        volver.setText("Volver");
-        volver.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        volver.addActionListener(new java.awt.event.ActionListener() {
+        ok.setBackground(new java.awt.Color(153, 153, 153));
+        ok.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        ok.setText("OK");
+        ok.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        ok.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                volverActionPerformed(evt);
+                okActionPerformed(evt);
             }
         });
 
@@ -76,7 +78,7 @@ public class errorConexion extends javax.swing.JDialog {
                     .addComponent(jLInfo2, javax.swing.GroupLayout.DEFAULT_SIZE, 380, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(volver, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(ok, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -86,17 +88,19 @@ public class errorConexion extends javax.swing.JDialog {
                 .addComponent(jLInfo1, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLInfo2, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 18, Short.MAX_VALUE)
-                .addComponent(volver)
-                .addContainerGap())
+                .addGap(18, 18, 18)
+                .addComponent(ok)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void volverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_volverActionPerformed
+    private void okActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_okActionPerformed
+        
         dispose();
-    }//GEN-LAST:event_volverActionPerformed
+        
+    }//GEN-LAST:event_okActionPerformed
 
     private void formKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_formKeyPressed
         /*Evento para tecla ENTER*/
@@ -122,27 +126,23 @@ public class errorConexion extends javax.swing.JDialog {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(errorConexion.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(errorContraseña.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(errorConexion.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(errorContraseña.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(errorConexion.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(errorContraseña.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(errorConexion.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(errorContraseña.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                errorConexion dialog = new errorConexion(new javax.swing.JDialog(), true);
+                errorContraseña dialog = new errorContraseña(new javax.swing.JFrame(), true);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {
-                        System.exit(0);
                     }
                 });
                 dialog.setVisible(true);
@@ -153,6 +153,6 @@ public class errorConexion extends javax.swing.JDialog {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLInfo1;
     private javax.swing.JLabel jLInfo2;
-    private javax.swing.JButton volver;
+    private javax.swing.JButton ok;
     // End of variables declaration//GEN-END:variables
 }

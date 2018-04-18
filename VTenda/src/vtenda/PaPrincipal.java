@@ -347,7 +347,7 @@ public class PaPrincipal extends javax.swing.JFrame {
         
             if(VTenda.contrasena.compareTo(en.getCifer()) == 0){
 
-                vtenda.errores.errorContraseña errorContrasena = new vtenda.errores.errorContraseña(this, true);
+                errores.errorContraseña errorContrasena = new errores.errorContraseña(this, true);
                 errorContrasena.setVisible(true);
 
             }
@@ -403,7 +403,7 @@ public class PaPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_verTicketActionPerformed
 
     private void administrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_administrarActionPerformed
-        vtenda.admin.administrar administrar = new vtenda.admin.administrar(this, true);
+        admin.administrar administrar = new admin.administrar(this, true);
         administrar.setVisible(true);
     }//GEN-LAST:event_administrarActionPerformed
 

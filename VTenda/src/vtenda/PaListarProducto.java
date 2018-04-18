@@ -273,7 +273,7 @@ public class PaListarProducto extends javax.swing.JDialog {
                 switch(PaListarProducto.salir){
                     
                     case 0:
-                        vtenda.errores.errorProductos PaAvisoProductos = new vtenda.errores.errorProductos(new javax.swing.JDialog(), true);
+                        errores.errorProductos PaAvisoProductos = new errores.errorProductos(new javax.swing.JDialog(), true);
                         PaAvisoProductos.setVisible(true);
                     break;
                     
@@ -328,7 +328,7 @@ public class PaListarProducto extends javax.swing.JDialog {
             
             if(encontrado == false){
                 
-                vtenda.errores.errorCambiarProducto errorCambiarProducto = new vtenda.errores.errorCambiarProducto(new javax.swing.JDialog(), true);
+                errores.errorCambiarProducto errorCambiarProducto = new errores.errorCambiarProducto(new javax.swing.JDialog(), true);
                 errorCambiarProducto.setVisible(true);
                 
             }
