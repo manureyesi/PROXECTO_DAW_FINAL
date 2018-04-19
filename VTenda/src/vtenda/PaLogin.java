@@ -160,9 +160,19 @@ public class PaLogin extends javax.swing.JFrame {
             else{
                 /*Conexion contra DB*/
                 Connection cn = DriverManager.getConnection(VTenda.db,VTenda.dbUser,VTenda.dbPass);
-                 db.conexion con= new db.conexion();
+                db.conexion con= new db.conexion();
                 
-
+                
+                db.consultas buscar = new db.consultas();
+                
+                if(buscar.consultaUser(this.usuario.getText(), this.contrasena.getText()) == 1){
+                    
+                    
+                    
+                }
+                
+               
+                
                 /*Consulta de usuario*/
                 PreparedStatement consultarUsuario= con.getCn().prepareStatement("SELECT * FROM usuarios where usuario = ?");
 
