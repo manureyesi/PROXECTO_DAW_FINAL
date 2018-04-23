@@ -1,4 +1,4 @@
-package vtenda;
+package mail;
 
 /*
  * To change this license header, choose License Headers in Project Properties.

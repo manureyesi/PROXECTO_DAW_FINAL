@@ -292,13 +292,10 @@ public class PaAnadirProductos extends javax.swing.JDialog {
             /* Introducir categoria */
             this.categoria.addItem("Seleccione:");            
             
-            /*Conexion contra DB*/
-            Connection cn = DriverManager.getConnection(VTenda.db,VTenda.dbUser,VTenda.dbPass);
+            /* Consulta */
+            db.consultas con = new db.consultas();
             
-            /* Consulta categorias */
-            PreparedStatement consultarCategoria = cn.prepareStatement("SELECT * FROM `categorias` WHERE 1 ORDER BY `cod` ASC");
-                
-            ResultSet rs = consultarCategoria.executeQuery();
+            ResultSet rs = con.select("categorias", "1 ORDER BY `cod` ASC");
             
             int cont = 0;
             
