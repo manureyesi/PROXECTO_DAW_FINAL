@@ -158,93 +158,13 @@ public class PaLogin extends javax.swing.JFrame {
                 this.errores.setText("No se permiten campos vacios");
             }
             else{
-                /*Conexion contra DB*/
-                Connection cn = DriverManager.getConnection(VTenda.db,VTenda.dbUser,VTenda.dbPass);
-                db.conexion con= new db.conexion();
                 
+                db.buscarUser bu = new db.buscarUser();
                 
-                db.consultas buscar = new db.consultas();
+                int numErro = bu.consultaUser(this.usuario.getText(), this.contrasena.getText());
                 
-                if(buscar.consultaUser(this.usuario.getText(), this.contrasena.getText()) == 1){
-                    
-                    
-                    
-                }
-                
-               
-                
-                /*Consulta de usuario*/
-                PreparedStatement consultarUsuario= con.getCn().prepareStatement("SELECT * FROM usuarios where usuario = ?");
-
-                consultarUsuario.setString(1, this.usuario.getText());
-
-                ResultSet rs = consultarUsuario.executeQuery();
-
-                Encriptar nc = new Encriptar(this.contrasena.getText());
-
-                String contra = nc.getCifer();
-
-                int numErro = 0;
-
-                while(rs.next()){
-                    /*Comparacion usuario contra DB*/
-                    if(this.usuario.getText().compareToIgnoreCase(rs.getString("usuario")) == 0){
-                        /*Comparacion contraseña contra DB*/
-                        if(contra.compareTo(rs.getString("contrasena")) == 0){
-
-                            if(rs.getInt("verificado") == 0){
-
-                                numErro = 2;
-
-                            }
-                            else{
-                                numErro = 3;
-
-                                /*Consulta de Tenda*/
-                                PreparedStatement consultarTienda = cn.prepareStatement("SELECT * FROM `tendas` WHERE `cod` = 1");
-
-                                ResultSet Resultienda = consultarTienda.executeQuery();
-
-                                while(Resultienda.next()){
-
-                                    if(rs.getInt("admin") == 1){
-                                        VTenda.admin = true;
-                                        VTenda.nTenda.getAll(Resultienda.getInt("cod"), Resultienda.getString("nomeTenda"), Resultienda.getString("dir1"), Resultienda.getString("dir2"));
-                                    }
-
-                                    VTenda.nTenda.getAll(Resultienda.getInt("cod"), Resultienda.getString("nomeTenda"), Resultienda.getString("dir1"), Resultienda.getString("dir2"));
-
-                                }
-                                
-                                VTenda.usuario = rs.getString("usuario");
-                                VTenda.contrasena = rs.getString("contrasena");
-                                
-                                /*Consulta Vendedores*/
-                                PreparedStatement consultarVendedor = cn.prepareStatement("SELECT * FROM `usuarios` WHERE `usuario` = ?");
-
-                                consultarVendedor.setString(1, VTenda.usuario);
-
-                                ResultSet vende = consultarVendedor.executeQuery();
-
-                                while(vende.next()){
-                                    
-                                    VTenda.vendedor.setNomeVendedor(vende.getString("nombre") + " " + vende.getString("apellidos"));
-                                    VTenda.vendedor.setNumVendedor(vende.getInt("cod"));
-                                }
-                                
-                            }
-                        }
-                        else{
-                            numErro = 1;
-                        }
-
-                    }
-
-                }
-
-                cn.close();
-
                 switch(numErro){
+                    
                     /* Tipos de errores */
 
                     case 0:
@@ -280,13 +200,24 @@ public class PaLogin extends javax.swing.JFrame {
                     this.contrasena.setText("");
 
                     break;
+                    
+                    case 4:
+
+                    this.errores.setText("No podemos conectar con el servidor");
+                    this.usuario.setText("");
+                    this.contrasena.setText("");
+                    this.usuario.requestFocus();
+
+                    break;
 
                 }
+
+                
             }
 
         }catch (Exception e){
 
-            this.errores.setText("Lo sentimos no podemos conectar con la base de datos");
+            this.errores.setText("Lo sentimos acabamos de sufrir un error");
         }
 
     }//GEN-LAST:event_entrarActionPerformed
@@ -309,7 +240,7 @@ public class PaLogin extends javax.swing.JFrame {
         if(evt.getKeyCode()==KeyEvent.VK_ENTER){
             
             try{
-                
+
                 VTenda.entrar = false;
                 VTenda.admin = false;
                 this.errores.setText("");
@@ -318,82 +249,13 @@ public class PaLogin extends javax.swing.JFrame {
                     this.errores.setText("No se permiten campos vacios");
                 }
                 else{
-                    /*Conexion contra DB*/
-                    Connection cn = DriverManager.getConnection(VTenda.db,VTenda.dbUser,VTenda.dbPass);
 
-                    /*Consulta de usuario*/
-                    PreparedStatement consultarUsuario= cn.prepareStatement("SELECT * FROM usuarios where usuario = ?");
+                    db.buscarUser bu = new db.buscarUser();
 
-                    consultarUsuario.setString(1, this.usuario.getText());
-
-                    ResultSet rs = consultarUsuario.executeQuery();
-
-                    Encriptar nc = new Encriptar(this.contrasena.getText());
-
-                    String contra = nc.getCifer();
-
-                    int numErro = 0;
-
-                    while(rs.next()){
-                        /*Comparacion usuario contra DB*/
-                        if(this.usuario.getText().compareToIgnoreCase(rs.getString("usuario")) == 0){
-                            /*Comparacion contraseña contra DB*/
-                            if(contra.compareTo(rs.getString("contrasena")) == 0){
-
-                                if(rs.getInt("verificado") == 0){
-
-                                    numErro = 2;
-
-                                }
-                                else{
-                                    numErro = 3;
-
-                                    /*Consulta de Tenda*/
-                                    PreparedStatement consultarTienda = cn.prepareStatement("SELECT * FROM `tendas` WHERE `cod` = 1");
-
-                                    ResultSet Resultienda = consultarTienda.executeQuery();
-
-                                    while(Resultienda.next()){
-
-                                        if(rs.getInt("admin") == 1){
-                                            VTenda.admin = true;
-                                            VTenda.nTenda.getAll(Resultienda.getInt("cod"), Resultienda.getString("nomeTenda"), Resultienda.getString("dir1"), Resultienda.getString("dir2"));
-                                        }
-
-                                        VTenda.nTenda.getAll(Resultienda.getInt("cod"), Resultienda.getString("nomeTenda"), Resultienda.getString("dir1"), Resultienda.getString("dir2"));
-
-                                    }
-                                    
-                                    VTenda.usuario = rs.getString("usuario");
-                                    VTenda.contrasena = rs.getString("contrasena");
-                                    
-                                    /*Consulta Vendedores*/
-                                    PreparedStatement consultarVendedor = cn.prepareStatement("SELECT * FROM `usuarios` WHERE `usuario` = ?");
-
-                                    consultarVendedor.setString(1, VTenda.usuario);
-
-                                    ResultSet vende = consultarVendedor.executeQuery();
-
-                                    while(vende.next()){
-
-                                        VTenda.vendedor.setNomeVendedor(vende.getString("nombre") + " " + vende.getString("apellidos"));
-                                        VTenda.vendedor.setNumVendedor(vende.getInt("cod"));
-                                    }
-                                    
-                                    
-                                }
-                            }
-                            else{
-                                numErro = 1;
-                            }
-
-                        }
-
-                    }
-
-                    cn.close();
+                    int numErro = bu.consultaUser(this.usuario.getText(), this.contrasena.getText());
 
                     switch(numErro){
+
                         /* Tipos de errores */
 
                         case 0:
@@ -427,19 +289,28 @@ public class PaLogin extends javax.swing.JFrame {
                         this.errores.setText("");
                         this.usuario.setText("");
                         this.contrasena.setText("");
+
+                        break;
+
+                        case 4:
+
+                        this.errores.setText("No podemos conectar con el servidor");
+                        this.usuario.setText("");
+                        this.contrasena.setText("");
                         this.usuario.requestFocus();
-                        
+
                         break;
 
                     }
+
+
                 }
 
             }catch (Exception e){
 
-                this.errores.setText("Lo sentimos no podemos conectar con la base de datos");
-                e.printStackTrace();
+                this.errores.setText("Lo sentimos acabamos de sufrir un error");
             }
-        
+            
         }
         
     }//GEN-LAST:event_contrasenaKeyPressed
