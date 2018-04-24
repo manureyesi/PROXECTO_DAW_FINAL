@@ -361,15 +361,17 @@ public class PaPrincipal extends javax.swing.JFrame {
     private void anadirProductosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_anadirProductosActionPerformed
         PaAnadirProductos PaAnadirProductos = new PaAnadirProductos(new javax.swing.JDialog(),true);
         PaAnadirProductos.setVisible(true);
+        System.out.println("Entrando en Añadir Productos");
     }//GEN-LAST:event_anadirProductosActionPerformed
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
-        
+        // TODO add your handling code here:
     }//GEN-LAST:event_formWindowOpened
 
     private void cambioContrasenaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cambioContrasenaActionPerformed
         PaCambioContrasena PaAnadirProductos = new PaCambioContrasena(this, true);
         PaAnadirProductos.setVisible(true);
+        System.out.println("Entrando en Cambio de Contraseña");
     }//GEN-LAST:event_cambioContrasenaActionPerformed
 
     private void cerrarSesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cerrarSesionActionPerformed
@@ -382,34 +384,44 @@ public class PaPrincipal extends javax.swing.JFrame {
         VTenda.PaLogin.setVisible(true);
         VTenda.PaPrincipal.setVisible(false);
         
+        System.out.println("Cerrando Sesion");
+        
     }//GEN-LAST:event_cerrarSesionActionPerformed
 
     private void listadoProActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_listadoProActionPerformed
         PaListarProducto PaListarPro = new PaListarProducto(this, true);
         PaListarPro.setVisible(true);
+        System.out.println("Entrando en Listado de Productos");
     }//GEN-LAST:event_listadoProActionPerformed
 
     private void anadirCategoriasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_anadirCategoriasActionPerformed
         PaAnadirCategoria PaAnadirCategoria = new PaAnadirCategoria(new javax.swing.JDialog(), true);
         PaAnadirCategoria.setVisible(true);
+        System.out.println("Entrando en Añadir Categorias");
     }//GEN-LAST:event_anadirCategoriasActionPerformed
 
     private void verPedidosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_verPedidosActionPerformed
-        // TODO add your handling code here:
+        errores.errorVentanaNula errorVentanaNula = new errores.errorVentanaNula(new javax.swing.JDialog(), true);
+        errorVentanaNula.setVisible(true);
+        System.out.println("Entrando en Ver Pedidos");
     }//GEN-LAST:event_verPedidosActionPerformed
 
     private void verTicketActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_verTicketActionPerformed
-        // TODO add your handling code here:
+        errores.errorVentanaNula errorVentanaNula = new errores.errorVentanaNula(new javax.swing.JDialog(), true);
+        errorVentanaNula.setVisible(true);
+        System.out.println("Entrando en Ver Ticket");
     }//GEN-LAST:event_verTicketActionPerformed
 
     private void administrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_administrarActionPerformed
         admin.administrar administrar = new admin.administrar(this, true);
         administrar.setVisible(true);
+        System.out.println("Entrando en Administracion con "+VTenda.usuario);
     }//GEN-LAST:event_administrarActionPerformed
 
     private void tpvActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tpvActionPerformed
         TPV TPV = new TPV(this, true);
         TPV.setVisible(true);
+        System.out.println("Entrando en TPV");
     }//GEN-LAST:event_tpvActionPerformed
 
     /**

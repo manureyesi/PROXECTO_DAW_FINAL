@@ -8,10 +8,8 @@ package vtenda;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -215,16 +213,14 @@ public class PaAnadirCategoria extends javax.swing.JDialog {
                 boolean encontrado = false;
                 
                 /*Conexion contra DB*/
-                Connection cn = DriverManager.getConnection(VTenda.db,VTenda.dbUser,VTenda.dbPass);
+                db.consultas con = new db.consultas();
 
                 /* Buscar Categorias */
-                PreparedStatement buscarCategorias = cn.prepareStatement("SELECT * FROM `categorias` WHERE 1 ORDER BY `cod` ASC");
+                ResultSet rs = con.select("categorias", "1 ORDER BY 'cod' ASC");
+                
+                while(rs.next()){
 
-                ResultSet bc = buscarCategorias.executeQuery();
-
-                while(bc.next()){
-
-                    if(this.nomCategoria.getText().compareToIgnoreCase(bc.getString("nombre")) == 0){
+                    if(this.nomCategoria.getText().compareToIgnoreCase(rs.getString("nombre")) == 0){
                         
                         encontrado = true;
                     
@@ -233,29 +229,26 @@ public class PaAnadirCategoria extends javax.swing.JDialog {
                 }
                 
                 if(encontrado == true){
+                    System.err.println("La categoria se encuentra repetida");
                     this.errores.setText("La categoria está repetida");
                 }
                 else{
-                
+                    
+                    System.out.println("Creando nueva categoria");
+                    
                     String nombre = Character.toUpperCase(this.nomCategoria.getText().charAt(0)) + this.nomCategoria.getText().substring(1); 
                     
                     /* Insertar Categorias */
-                    PreparedStatement insertarCategorias = cn.prepareStatement("INSERT INTO `categorias`(`nombre`) VALUES (?)");
-                        
-                        insertarCategorias.setString(1, nombre);
-                    
-                    insertarCategorias.executeUpdate();
+                    con.insert("categorias", "nombre", "'"+nombre+"'");
                     
                     this.nomCategoria.setText("");
                     
                     /* Buscar Categorias */
-                    PreparedStatement consultaCategorias = cn.prepareStatement("SELECT * FROM `categorias` WHERE `nombre` = ?");
-                        
-                        consultaCategorias.setString(1, nombre);
-                    
-                    ResultSet rs = consultaCategorias.executeQuery();
+                    rs = con.select("categorias", "nombre = '"+nombre+"'");
                     
                     while(rs.next()){
+                        
+                        System.out.println("Añadiendo fila");
                         
                         Object Datos[]={rs.getInt("cod"), rs.getString("nombre")};
                         modelo.addRow(Datos);
@@ -266,8 +259,9 @@ public class PaAnadirCategoria extends javax.swing.JDialog {
                 
 
             }
-            catch(Exception ex){
+            catch(SQLException ex){
                 this.errores.setText("Lo sentimos no podemos conectar con la base de datos");
+                System.err.println("Error al conectar con la DB");
             }
         
         }
@@ -278,6 +272,9 @@ public class PaAnadirCategoria extends javax.swing.JDialog {
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
         
         try{
+            
+            System.out.println("Limpiando Lista");
+            
             /*Limpar Lista*/
             int a=modelo.getRowCount();
             
@@ -286,32 +283,30 @@ public class PaAnadirCategoria extends javax.swing.JDialog {
             }
             
         }catch(Exception ex){
-            System.err.println(ex.getMessage());
+            System.err.println("Error al borrar la lista");
         }
         
         try{
             
             /*Conexion contra DB*/
-            Connection cn = DriverManager.getConnection(VTenda.db,VTenda.dbUser,VTenda.dbPass);
+            db.consultas con = new db.consultas();
             
             /* Contar Categorias */
-            PreparedStatement verCategorias = cn.prepareStatement("SELECT * FROM `categorias` WHERE 1 ORDER BY `cod` ASC");
+            System.out.println("Buscando Categorias");
+            ResultSet rs = con.select("categorias", "1 ORDER BY 'cod' ASC");
             
-            ResultSet vc = verCategorias.executeQuery();
-            
-            while(vc.next()){
+            while(rs.next()){
                 
-                Object Datos[]={vc.getInt("cod"), vc.getString("nombre")};
+                Object Datos[]={rs.getInt("cod"), rs.getString("nombre")};
                 modelo.addRow(Datos);
             
             }
             
         }
-        catch(Exception ex){
+        catch(SQLException ex){
             this.errores.setText("Lo sentimos no podemos conectar con la base de datos");
+            System.err.println("Error al conectar con la DB");
         }
-        
-        
         
     }//GEN-LAST:event_formWindowOpened
 
@@ -330,16 +325,14 @@ public class PaAnadirCategoria extends javax.swing.JDialog {
                     boolean encontrado = false;
 
                     /*Conexion contra DB*/
-                    Connection cn = DriverManager.getConnection(VTenda.db,VTenda.dbUser,VTenda.dbPass);
+                    db.consultas con = new db.consultas();
 
                     /* Buscar Categorias */
-                    PreparedStatement buscarCategorias = cn.prepareStatement("SELECT * FROM `categorias` WHERE 1");
+                    ResultSet rs = con.select("categorias", "1 ORDER BY 'cod' ASC");
 
-                    ResultSet bc = buscarCategorias.executeQuery();
+                    while(rs.next()){
 
-                    while(bc.next()){
-
-                        if(this.nomCategoria.getText().compareToIgnoreCase(bc.getString("nombre")) == 0){
+                        if(this.nomCategoria.getText().compareToIgnoreCase(rs.getString("nombre")) == 0){
 
                             encontrado = true;
 
@@ -348,29 +341,26 @@ public class PaAnadirCategoria extends javax.swing.JDialog {
                     }
 
                     if(encontrado == true){
+                        System.err.println("La categoria se encuentra repetida");
                         this.errores.setText("La categoria está repetida");
                     }
                     else{
 
+                        System.out.println("Creando nueva categoria");
+
                         String nombre = Character.toUpperCase(this.nomCategoria.getText().charAt(0)) + this.nomCategoria.getText().substring(1); 
 
                         /* Insertar Categorias */
-                        PreparedStatement insertarCategorias = cn.prepareStatement("INSERT INTO `categorias`(`nombre`) VALUES (?)");
-
-                            insertarCategorias.setString(1, nombre);
-
-                        insertarCategorias.executeUpdate();
+                        con.insert("categorias", "nombre", "'"+nombre+"'");
 
                         this.nomCategoria.setText("");
 
                         /* Buscar Categorias */
-                        PreparedStatement consultaCategorias = cn.prepareStatement("SELECT * FROM `categorias` WHERE `nombre` = ?");
-
-                            consultaCategorias.setString(1, nombre);
-
-                        ResultSet rs = consultaCategorias.executeQuery();
+                        rs = con.select("categorias", "nombre = '"+nombre+"'");
 
                         while(rs.next()){
+
+                            System.out.println("Añadiendo fila");
 
                             Object Datos[]={rs.getInt("cod"), rs.getString("nombre")};
                             modelo.addRow(Datos);
@@ -381,8 +371,9 @@ public class PaAnadirCategoria extends javax.swing.JDialog {
 
 
                 }
-                catch(Exception ex){
+                catch(SQLException ex){
                     this.errores.setText("Lo sentimos no podemos conectar con la base de datos");
+                    System.err.println("Error al conectar con la DB");
                 }
 
             }

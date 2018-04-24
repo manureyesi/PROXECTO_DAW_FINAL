@@ -13,18 +13,19 @@ import java.awt.event.KeyEvent;
  *
  * @author DAW221
  */
-public class errorProductos extends javax.swing.JDialog {
+public class errorVentanaNula extends javax.swing.JDialog {
 
     /**
-     * Creates new form errorProductos
+     * Creates new form errorCategoria
      */
-    public errorProductos(javax.swing.JDialog parent, boolean modal) {
+    public errorVentanaNula(javax.swing.JDialog parent, boolean modal) {
         super(parent, modal);
         initComponents();
         
         Image icono = Toolkit.getDefaultToolkit().getImage("img/tpv.png");
         this.setIconImage(icono);
         this.setLocationRelativeTo(null);
+        
     }
 
     /**
@@ -37,10 +38,11 @@ public class errorProductos extends javax.swing.JDialog {
     private void initComponents() {
 
         jLInfo1 = new javax.swing.JLabel();
+        jLInfo2 = new javax.swing.JLabel();
         volver = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("VTenda - Error Productos");
+        setTitle("VTenda - Error");
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowActivated(java.awt.event.WindowEvent evt) {
                 formWindowActivated(evt);
@@ -53,7 +55,10 @@ public class errorProductos extends javax.swing.JDialog {
         });
 
         jLInfo1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jLInfo1.setText("No tiene creado ningun producto");
+        jLInfo1.setText("Lo sentimo está ventana no se encuentra disponible");
+
+        jLInfo2.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLInfo2.setText("en esta versión");
 
         volver.setBackground(new java.awt.Color(153, 153, 153));
         volver.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
@@ -72,7 +77,8 @@ public class errorProductos extends javax.swing.JDialog {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLInfo1, javax.swing.GroupLayout.DEFAULT_SIZE, 380, Short.MAX_VALUE)
+                    .addComponent(jLInfo1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLInfo2, javax.swing.GroupLayout.DEFAULT_SIZE, 380, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(volver, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -83,28 +89,31 @@ public class errorProductos extends javax.swing.JDialog {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLInfo1, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLInfo2, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 18, Short.MAX_VALUE)
                 .addComponent(volver)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void volverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_volverActionPerformed
-        vtenda.PaListarProducto.salir = 1;
         dispose();
     }//GEN-LAST:event_volverActionPerformed
 
     private void formKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_formKeyPressed
+        
         /*Evento para tecla ENTER*/
         if(evt.getKeyCode()==KeyEvent.VK_ENTER){
             dispose();
-        }
+        }      
+                
     }//GEN-LAST:event_formKeyPressed
 
     private void formWindowActivated(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowActivated
-        // TODO add your handling code here:
+        this.volver.getCursor();
     }//GEN-LAST:event_formWindowActivated
 
     /**
@@ -124,20 +133,23 @@ public class errorProductos extends javax.swing.JDialog {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(errorProductos.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(errorVentanaNula.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(errorProductos.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(errorVentanaNula.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(errorProductos.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(errorVentanaNula.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(errorProductos.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(errorVentanaNula.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                errorProductos dialog = new errorProductos(new javax.swing.JDialog(), true);
+                errorVentanaNula dialog = new errorVentanaNula(new javax.swing.JDialog(), true);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {
@@ -151,6 +163,7 @@ public class errorProductos extends javax.swing.JDialog {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLInfo1;
+    private javax.swing.JLabel jLInfo2;
     private javax.swing.JButton volver;
     // End of variables declaration//GEN-END:variables
 }

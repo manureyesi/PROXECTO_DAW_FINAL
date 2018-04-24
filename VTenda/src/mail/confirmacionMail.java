@@ -35,7 +35,7 @@ public class confirmacionMail {
         
         db.consultas con = new db.consultas();
         
-        ResultSet rs = con.select("usuarios", "usuario = "+this.user);
+        ResultSet rs = con.select("usuarios", "usuario = '"+this.user+"'");
         
         mail.envioMail em = new mail.envioMail();
         

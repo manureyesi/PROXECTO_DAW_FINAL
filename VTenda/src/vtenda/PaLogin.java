@@ -187,7 +187,9 @@ public class PaLogin extends javax.swing.JFrame {
                     break;
 
                     case 3:
-
+                    
+                    System.out.println("Entrando con el usuario: "+this.usuario.getText());
+                        
                     VTenda.PaLogin.setVisible(false);
                     VTenda.PaPrincipal.setVisible(true);
 
@@ -219,7 +221,9 @@ public class PaLogin extends javax.swing.JFrame {
     }//GEN-LAST:event_entrarActionPerformed
 
     private void registroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_registroActionPerformed
-
+        
+        System.out.println("Entrando en registro");
+        
         this.errores.setText("");
 
         this.usuario.setText("");
@@ -278,7 +282,9 @@ public class PaLogin extends javax.swing.JFrame {
                         break;
 
                         case 3:
-
+                        
+                        System.out.println("Entrando con el usuario: "+this.usuario.getText());
+                        
                         VTenda.PaLogin.setVisible(false);
                         VTenda.PaPrincipal.setVisible(true);
 

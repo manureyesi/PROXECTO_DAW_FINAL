@@ -13,6 +13,7 @@ import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -22,7 +23,7 @@ import java.util.logging.Logger;
  */
 public class PaRegistro extends javax.swing.JFrame {
     
-    public String dirCorreo = "";
+    public String userEmail = "";
     
     /**
      * Creates new form PaReguistro
@@ -302,6 +303,7 @@ public class PaRegistro extends javax.swing.JFrame {
                         /*Se o usuario e igual a outro*/
                         this.errores.setText("Hai otro usuario con el mismo nombre");
                         this.usuario.setText("");
+                        System.err.println("El usuario "+this.usuario.getText()+" se encuentra creado");
                     }
                     else{
                                 
@@ -315,30 +317,9 @@ public class PaRegistro extends javax.swing.JFrame {
                             /*Comprobar se o serial existe e esta usado*/
                             if(this.clave.getText().compareTo(rs.getString("serial")) == 0 && rs.getInt("usada") == 0){
                                 
-                                /* Envio de Correo */
-                                dirCorreo = this.email.getText();
-                                
-                                Thread thread = new Thread(){
-                                    public void run(){
-                                        
-                                        try{
-                                        
-                                            mail.confirmacionMail email = new mail.confirmacionMail(dirCorreo);
-
-                                            email.enviaMail();
-                                        
-                                        }
-                                        catch(Exception ex){}
-                                        
-                                    }
-                                };
-                                
-                                thread.start();
-                                
-                                
                                 claveEncontrada = true;
                                             
-                                String user = this.usuario.getText();
+                                String user = this.usuario.getText().toLowerCase();
                                 Encriptar contra = new Encriptar(this.pass.getText());
                                     
                                 /* mayusculas apellido */
@@ -377,12 +358,43 @@ public class PaRegistro extends javax.swing.JFrame {
                                     
                                 /* Crear usuario en BD */
                                 con.insert("usuarios", "usuario, nombre, apellidos, mail, contrasena", "'"+user+"','"+nombre+"','"+apellidos+"','"+this.email.getText()+"','"+contra.cifer+"'");
-
+                                
+                                System.out.println("Creando usuario: "+user);
+                                
                                 VTenda.usuario = this.usuario.getText();
                                 VTenda.contrasena = contra.cifer;
 
                                 this.errores.setText("Usuario creado");
+                                
+                                /* Envio de Correo */
+                                userEmail = this.usuario.getText();
+                                
+                                Thread thread = new Thread(){
+                                    public void run(){
+                                        
+                                        try{
+                                            
+                                            System.out.println("Preparando envio para "+userEmail);
+                                            
+                                            mail.confirmacionMail email = new mail.confirmacionMail(userEmail);
 
+                                            email.enviaMail();
+                                            
+                                            System.out.println("Enviando mail a: "+userEmail);
+                                        
+                                        }
+                                        catch(Exception ex){
+                                            
+                                            System.err.println("Error al enviar correo");
+                                            
+                                        }
+                                        
+                                    }
+                                };
+                                
+                                thread.start();
+                                
+                                
                                 /*Modificar Tabla Serial*/
                                 con.update("tablaSerial", "usada = 1", "serial = '"+this.clave.getText()+"'");
                                 
@@ -409,6 +421,7 @@ public class PaRegistro extends javax.swing.JFrame {
                             /*Se non existe un serial*/
                             this.clave.setText("");
                             this.errores.setText("No tiene clave para crear usuario");
+                            System.err.println("Error de clave usada");
                         }
                                     
                     }
@@ -416,10 +429,11 @@ public class PaRegistro extends javax.swing.JFrame {
                 }
             }
 
-        } catch (Exception e){
+        } catch (SQLException e){
             
             this.clave.setText("");
             this.errores.setText("Lo sentimos no podemos acceder a la Base de Datos");
+            System.err.println("Error en registro");
                     
         }
         
@@ -446,6 +460,7 @@ public class PaRegistro extends javax.swing.JFrame {
                 if(cont ==3){
                     if(text.length()==19){
                         this.clave.setText(text);
+                        System.out.println("Clave copiada");
                     }
                 }
                 
@@ -532,6 +547,7 @@ public class PaRegistro extends javax.swing.JFrame {
                             /*Se o usuario e igual a outro*/
                             this.errores.setText("Hai otro usuario con el mismo nombre");
                             this.usuario.setText("");
+                            System.err.println("El usuario "+this.usuario.getText()+" se encuentra creado");
                         }
                         else{
 
@@ -545,30 +561,9 @@ public class PaRegistro extends javax.swing.JFrame {
                                 /*Comprobar se o serial existe e esta usado*/
                                 if(this.clave.getText().compareTo(rs.getString("serial")) == 0 && rs.getInt("usada") == 0){
 
-                                    /* Envio de Correo */
-                                    dirCorreo = this.email.getText();
-
-                                    Thread thread = new Thread(){
-                                        public void run(){
-
-                                            try{
-
-                                                mail.confirmacionMail email = new mail.confirmacionMail(dirCorreo);
-
-                                                email.enviaMail();
-
-                                            }
-                                            catch(Exception ex){}
-
-                                        }
-                                    };
-
-                                    thread.start();
-
-
                                     claveEncontrada = true;
 
-                                    String user = this.usuario.getText();
+                                    String user = this.usuario.getText().toLowerCase();
                                     Encriptar contra = new Encriptar(this.pass.getText());
 
                                     /* mayusculas apellido */
@@ -608,10 +603,41 @@ public class PaRegistro extends javax.swing.JFrame {
                                     /* Crear usuario en BD */
                                     con.insert("usuarios", "usuario, nombre, apellidos, mail, contrasena", "'"+user+"','"+nombre+"','"+apellidos+"','"+this.email.getText()+"','"+contra.cifer+"'");
 
+                                    System.out.println("Creando usuario: "+user);
+
                                     VTenda.usuario = this.usuario.getText();
                                     VTenda.contrasena = contra.cifer;
 
                                     this.errores.setText("Usuario creado");
+
+                                    /* Envio de Correo */
+                                    userEmail = this.usuario.getText();
+
+                                    Thread thread = new Thread(){
+                                        public void run(){
+
+                                            try{
+
+                                                System.out.println("Preparando envio para "+userEmail);
+
+                                                mail.confirmacionMail email = new mail.confirmacionMail(userEmail);
+
+                                                email.enviaMail();
+
+                                                System.out.println("Enviando mail a: "+userEmail);
+
+                                            }
+                                            catch(Exception ex){
+
+                                                System.err.println("Error al enviar correo");
+
+                                            }
+
+                                        }
+                                    };
+
+                                    thread.start();
+
 
                                     /*Modificar Tabla Serial*/
                                     con.update("tablaSerial", "usada = 1", "serial = '"+this.clave.getText()+"'");
@@ -639,6 +665,7 @@ public class PaRegistro extends javax.swing.JFrame {
                                 /*Se non existe un serial*/
                                 this.clave.setText("");
                                 this.errores.setText("No tiene clave para crear usuario");
+                                System.err.println("Error de clave usada");
                             }
 
                         }
@@ -646,10 +673,11 @@ public class PaRegistro extends javax.swing.JFrame {
                     }
                 }
 
-            } catch (Exception e){
+            } catch (SQLException e){
 
                 this.clave.setText("");
                 this.errores.setText("Lo sentimos no podemos acceder a la Base de Datos");
+                System.err.println("Error en registro");
 
             }
         

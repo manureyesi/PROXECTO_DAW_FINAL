@@ -8,10 +8,8 @@ package vtenda;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -282,6 +280,7 @@ public class PaAnadirProductos extends javax.swing.JDialog {
         this.descripcion.setText("");
         
         try{
+            System.out.println("Buscando Categorias");
             
             int itemCount = categoria.getItemCount();
 
@@ -295,7 +294,7 @@ public class PaAnadirProductos extends javax.swing.JDialog {
             /* Consulta */
             db.consultas con = new db.consultas();
             
-            ResultSet rs = con.select("categorias", "1 ORDER BY `cod` ASC");
+            ResultSet rs = con.select("categorias", "1 ORDER BY 'cod' ASC");
             
             int cont = 0;
             
@@ -306,6 +305,7 @@ public class PaAnadirProductos extends javax.swing.JDialog {
             
             if(cont == 0){
                 
+                System.err.println("No existen categorias");
                 this.errores.setText("Lo sentimos no tiene ninguna categoria creada.");
                 
                 switch(PaAnadirProductos.salir){
@@ -335,7 +335,15 @@ public class PaAnadirProductos extends javax.swing.JDialog {
             }
             
         }
-        catch(Exception ex){
+        catch(SQLException ex){
+            
+            System.err.println("Error de Base de Datos");
+            
+            errores.errorConexion errorConexion = new errores.errorConexion(new javax.swing.JDialog(), true);
+            errorConexion.setVisible(true);
+            
+            dispose();
+            
         }
         
     }//GEN-LAST:event_formWindowActivated
@@ -350,11 +358,8 @@ public class PaAnadirProductos extends javax.swing.JDialog {
             }
             catch(Exception ex){
                 this.errores.setText("Lo sentimos, compruebe los campos numericos");
+                System.err.println("Error de campos numericos");
             }
-            
-            
-            /*Conexion contra DB*/
-            Connection cn = DriverManager.getConnection(VTenda.db,VTenda.dbUser,VTenda.dbPass);
             
             Productos p1 = new Productos();
 
@@ -371,6 +376,8 @@ public class PaAnadirProductos extends javax.swing.JDialog {
                 this.errores.setText("Lo sentimos, el precio tiene que ser superior a 0");
             }
             else{
+                
+                System.out.println("Pasada comprobación de errores");
                 
                 int error = 0;
                 
@@ -395,14 +402,12 @@ public class PaAnadirProductos extends javax.swing.JDialog {
                     p1.setStock(value);
                 }
 
-
+                /* Declarar clase para consultas */
+                db.consultas con = new db.consultas();
+                
                 /*Consulta buscar codigo repetido productos da tenda*/
-                PreparedStatement consultarCodigo = cn.prepareStatement("SELECT * FROM `productos` WHERE `cod` = ?");
-
-                consultarCodigo.setString(1, this.codArticulo.getText());
-
-                ResultSet rs = consultarCodigo.executeQuery();
-
+                ResultSet rs = con.select("productos", "cod = '"+this.codArticulo.getText()+"'");
+                
                 while(rs.next()){
 
                     if(this.codArticulo.getText().compareTo(rs.getString("cod")) == 0 ){
@@ -411,87 +416,81 @@ public class PaAnadirProductos extends javax.swing.JDialog {
 
                 }
 
-                if(error == 2){
-
-                    this.errores.setText("El código de artículo se encuentra repetido");
-                    this.codArticulo.setText("");
-
-                }
-                else if(error == 0){
-
-                    /* Consulta codCategoria */
-                    PreparedStatement consultarCategoria = cn.prepareStatement("SELECT `cod`, `nombre` FROM `categorias` WHERE `nombre` = ?");
-
-                        consultarCategoria.setString(1, (String)categoria.getSelectedItem());
-
-                    ResultSet cat = consultarCategoria.executeQuery();
-
-                    int codCategoria = 0;
-
-                    while(cat.next()){
-
-                        codCategoria = cat.getInt("cod");
-
-                    }
-
-
-                    String cod=this.codArticulo.getText();
-                    String nome=this.nomArticulo.getText();
-
-                    int val=(int)this.stock.getValue();
-
-                    String Stock;
-
-                    if(val<=0){
-                        Stock="1";
-                    }
-                    else{
-                        Stock=val+"";
-                    }
-
-                    double iv=Double.parseDouble(this.precio.getText())*0.21;
-
-                    Redondear rd = new Redondear();
-
-                    double fin =rd.redondearDecimales(iv);
+                switch (error) {
                     
-                    String iva=fin+"";
-                    double SinIVA=Double.parseDouble(this.precio.getText());
-                    String ConIVA=(Double.parseDouble(this.precio.getText())+fin)+"";
+                    case 0:
+                        /* Consulta codCategoria */
+                        rs = con.select("categorias", "nombre = '"+(String)categoria.getSelectedItem()+"'");
+                        
+                        int codCategoria = 0;
+                        
+                        while(rs.next()){
+                            
+                            codCategoria = rs.getInt("cod");
+                            
+                        }   
+                        
+                        String cod=this.codArticulo.getText();
+                        String nome=this.nomArticulo.getText();
+                        int val=(int)this.stock.getValue();
+                        String Stock;
+                        
+                        if(val<=0){
+                            Stock="1";
+                        }
+                        else{
+                            Stock=val+"";
+                        }   
+                        
+                        double iv=Double.parseDouble(this.precio.getText())*0.21;
+                        
+                        Redondear rd = new Redondear();
+                        
+                        double fin =rd.redondearDecimales(iv);
+                        String iva=fin+"";
+                        double SinIVA=Double.parseDouble(this.precio.getText());
+                        String ConIVA=(Double.parseDouble(this.precio.getText())+fin)+"";
+                        
+                        /*Insertar datos Productos*/
+                        System.out.println("Insertando producto en DB");
+                        
+                        con.insert("productos", "cod, nombre, descripcion, codCategoria, precioSin, stock", "'"+cod+"', "+"'"+nome+"', "+"'"+this.descripcion.getText()+"', "+" "+codCategoria+", "+SinIVA+", "+Stock);
 
-                    /*Insertar datos Productos*/
-                    PreparedStatement insertProductos = cn.prepareStatement("INSERT INTO `productos`(`cod`, `nombre`, `descripcion`, `codCategoria`, `precioSin`, `stock`) VALUES (?, ?, ?, ?, ?, ?)");
-
-                        insertProductos.setString(1, cod);
-                        insertProductos.setString(2, nome);
-                        insertProductos.setString(3, this.descripcion.getText());
-                        insertProductos.setInt(4, codCategoria);
-                        insertProductos.setDouble(5, SinIVA);
-                        insertProductos.setString(6, Stock);
-
-                    insertProductos.executeUpdate();
-
-                    Object Datos[]={cod, nome,(String)categoria.getSelectedItem(), Stock, SinIVA, iva, ConIVA};
-
-                    modelo.addRow(Datos);
-
-                    this.errores.setText("");
-                    this.codArticulo.setText("");
-                    this.nomArticulo.setText("");
-                    this.precio.setText("");
-                    this.stock.setValue(0);
-                    this.descripcion.setText("");
+                        Object Datos[]={cod, nome,(String)categoria.getSelectedItem(), Stock, SinIVA, iva, ConIVA};
+                        modelo.addRow(Datos);
+                        
+                        this.errores.setText("");
+                        this.codArticulo.setText("");
+                        this.nomArticulo.setText("");
+                        this.precio.setText("");
+                        this.stock.setValue(0);
+                        this.descripcion.setText("");
+                        
+                    break;
                     
-
-                }
-                else{
-                    this.errores.setText("Lo sentimos, compruebe los campos númerico");
+                    case 1:
+                        
+                        this.errores.setText("Lo sentimos, compruebe los campos númerico");
+                        System.err.println("Error de campos numericos");
+                        
+                    break;
+                    
+                    case 2:
+                        
+                        this.errores.setText("El código de artículo se encuentra repetido");
+                        this.codArticulo.setText("");
+                        System.err.println("El cod Articulo esta repetido");
+                        
+                    break;
+                    
+                    
                 }
 
             }
             
         }catch(Exception ex){
             this.errores.setText("Lo sentimos, acabamos de sufrir un error");
+            System.err.println("Error en Añadir Productos");
         }
         
     }//GEN-LAST:event_anadirActionPerformed
@@ -511,11 +510,8 @@ public class PaAnadirProductos extends javax.swing.JDialog {
                 }
                 catch(Exception ex){
                     this.errores.setText("Lo sentimos, compruebe los campos numericos");
+                    System.err.println("Error de campos numericos");
                 }
-
-
-                /*Conexion contra DB*/
-                Connection cn = DriverManager.getConnection(VTenda.db,VTenda.dbUser,VTenda.dbPass);
 
                 Productos p1 = new Productos();
 
@@ -532,6 +528,8 @@ public class PaAnadirProductos extends javax.swing.JDialog {
                     this.errores.setText("Lo sentimos, el precio tiene que ser superior a 0");
                 }
                 else{
+
+                    System.out.println("Pasada comprobación de errores");
 
                     int error = 0;
 
@@ -556,13 +554,11 @@ public class PaAnadirProductos extends javax.swing.JDialog {
                         p1.setStock(value);
                     }
 
+                    /* Declarar clase para consultas */
+                    db.consultas con = new db.consultas();
 
                     /*Consulta buscar codigo repetido productos da tenda*/
-                    PreparedStatement consultarCodigo = cn.prepareStatement("SELECT * FROM `productos` WHERE `cod` = ?");
-
-                    consultarCodigo.setString(1, this.codArticulo.getText());
-
-                    ResultSet rs = consultarCodigo.executeQuery();
+                    ResultSet rs = con.select("productos", "cod = '"+this.codArticulo.getText()+"'");
 
                     while(rs.next()){
 
@@ -572,88 +568,81 @@ public class PaAnadirProductos extends javax.swing.JDialog {
 
                     }
 
-                    if(error == 2){
+                    switch (error) {
 
-                        this.errores.setText("El código de artículo se encuentra repetido");
-                        this.codArticulo.setText("");
+                        case 0:
+                            /* Consulta codCategoria */
+                            rs = con.select("categorias", "nombre = '"+(String)categoria.getSelectedItem()+"'");
 
-                    }
-                    else if(error == 0){
+                            int codCategoria = 0;
 
-                        /* Consulta codCategoria */
-                        PreparedStatement consultarCategoria = cn.prepareStatement("SELECT `cod`, `nombre` FROM `categorias` WHERE `nombre` = ?");
+                            while(rs.next()){
 
-                            consultarCategoria.setString(1, (String)categoria.getSelectedItem());
+                                codCategoria = rs.getInt("cod");
 
-                        ResultSet cat = consultarCategoria.executeQuery();
+                            }   
 
-                        int codCategoria = 0;
+                            String cod=this.codArticulo.getText();
+                            String nome=this.nomArticulo.getText();
+                            int val=(int)this.stock.getValue();
+                            String Stock;
 
-                        while(cat.next()){
+                            if(val<=0){
+                                Stock="1";
+                            }
+                            else{
+                                Stock=val+"";
+                            }   
 
-                            codCategoria = cat.getInt("cod");
+                            double iv=Double.parseDouble(this.precio.getText())*0.21;
 
-                        }
+                            Redondear rd = new Redondear();
 
+                            double fin =rd.redondearDecimales(iv);
+                            String iva=fin+"";
+                            double SinIVA=Double.parseDouble(this.precio.getText());
+                            String ConIVA=(Double.parseDouble(this.precio.getText())+fin)+"";
 
-                        String cod=this.codArticulo.getText();
-                        String nome=this.nomArticulo.getText();
+                            /*Insertar datos Productos*/
+                            System.out.println("Insertando producto en DB");
 
-                        int val=(int)this.stock.getValue();
+                            con.insert("productos", "cod, nombre, descripcion, codCategoria, precioSin, stock", "'"+cod+"', "+"'"+nome+"', "+"'"+this.descripcion.getText()+"', "+" "+codCategoria+", "+SinIVA+", "+Stock);
 
-                        String Stock;
+                            Object Datos[]={cod, nome,(String)categoria.getSelectedItem(), Stock, SinIVA, iva, ConIVA};
+                            modelo.addRow(Datos);
 
-                        if(val<=0){
-                            Stock="1";
-                        }
-                        else{
-                            Stock=val+"";
-                        }
+                            this.errores.setText("");
+                            this.codArticulo.setText("");
+                            this.nomArticulo.setText("");
+                            this.precio.setText("");
+                            this.stock.setValue(0);
+                            this.descripcion.setText("");
 
-                        double iv=Double.parseDouble(this.precio.getText())*0.21;
+                        break;
 
-                        Redondear rd = new Redondear();
+                        case 1:
 
-                        double fin=rd.redondearDecimales(iv);
+                            this.errores.setText("Lo sentimos, compruebe los campos númerico");
+                            System.err.println("Error de campos numericos");
 
-                        String iva=fin+"";
-                        double SinIVA=Double.parseDouble(this.precio.getText());
-                        String ConIVA=(Double.parseDouble(this.precio.getText())+fin)+"";
+                        break;
 
-                        /*Insertar datos Productos*/
-                        PreparedStatement insertProductos = cn.prepareStatement("INSERT INTO `productos`(`cod`, `nombre`, `descripcion`, `codCategoria`, `precioSin`, `stock`) VALUES (?, ?, ?, ?, ?, ?)");
+                        case 2:
 
-                            insertProductos.setString(1, cod);
-                            insertProductos.setString(2, nome);
-                            insertProductos.setString(3, this.descripcion.getText());
-                            insertProductos.setInt(4, codCategoria);
-                            insertProductos.setDouble(5, SinIVA);
-                            insertProductos.setString(6, Stock);
+                            this.errores.setText("El código de artículo se encuentra repetido");
+                            this.codArticulo.setText("");
+                            System.err.println("El cod Articulo esta repetido");
 
-                        insertProductos.executeUpdate();
-
-                        Object Datos[]={cod, nome,(String)categoria.getSelectedItem(), Stock, SinIVA, iva, ConIVA};
-
-                        modelo.addRow(Datos);
-
-                        this.errores.setText("");
-                        this.codArticulo.setText("");
-                        this.nomArticulo.setText("");
-                        this.precio.setText("");
-                        this.stock.setValue(0);
-                        this.descripcion.setText("");
+                        break;
 
 
-                    }
-                    else{
-                        this.errores.setText("Lo sentimos, compruebe los campos númerico");
                     }
 
                 }
 
             }catch(Exception ex){
                 this.errores.setText("Lo sentimos, acabamos de sufrir un error");
-                ex.printStackTrace();
+                System.err.println("Error en Añadir Productos");
             }
         
         }

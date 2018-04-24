@@ -7,10 +7,8 @@ package vtenda;
 
 import java.awt.Image;
 import java.awt.Toolkit;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 
 /**
  *
@@ -210,6 +208,7 @@ public class PaActualizarProducto extends javax.swing.JDialog {
             
             
             
+            
         }
         catch(Exception ex){
             this.errores.setText("Lo sentimos acabamos de sufrir un error");
@@ -222,28 +221,27 @@ public class PaActualizarProducto extends javax.swing.JDialog {
         try{
             
             /*Conexion contra DB*/
-            Connection cn = DriverManager.getConnection(VTenda.db,VTenda.dbUser,VTenda.dbPass);
+            db.consultas con = new db.consultas();
 
             /* Contar Categorias */
-            PreparedStatement buscarProducto = cn.prepareStatement("SELECT * FROM `productos` WHERE `cod` = ?");
-                
-                buscarProducto.setString(1, VTenda.cod);
+            ResultSet rs = con.select("productos", "cod = '"+VTenda.cod+"'");
             
-            ResultSet cc = buscarProducto.executeQuery();
-            
-            while(cc.next()){
+            while(rs.next()){
                 
                 this.codigo.setText(VTenda.cod);
-                this.nombre.setText(cc.getString("nombre"));
-                this.descripcion.setText(cc.getString("descripcion"));
-                this.stock.setValue(cc.getInt("stock"));
-                this.precio.setText(cc.getInt("precioSin")+"");
+                this.nombre.setText(rs.getString("nombre"));
+                this.descripcion.setText(rs.getString("descripcion"));
+                this.stock.setValue(rs.getInt("stock"));
+                this.precio.setText(rs.getInt("precioSin")+"");
                 
             }
             
         }
-        catch(Exception ex){
+        catch(SQLException ex){
+            
             this.errores.setText("Lo sentimos acabamos de sufrir un error");
+            System.err.println("Problemas al conectar con la DB");
+        
         }
         
     }//GEN-LAST:event_formWindowActivated
