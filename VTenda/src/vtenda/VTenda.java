@@ -33,6 +33,7 @@ public class VTenda {
         public static String contrasena = "";
         public static int pantalla;
        
+       
         
     public static void main(String[] args) {
            

@@ -45,7 +45,7 @@ public class consultas {
         db.conexion con= new db.conexion();
             
         /* Insert */
-        PreparedStatement insert = con.getCn().prepareStatement("UPDATE "+ tabla +" SET "+campos+" WHERE "+cadena+")");
+        PreparedStatement insert = con.getCn().prepareStatement("UPDATE "+ tabla +" SET "+campos+" WHERE "+cadena);
 
         insert.executeUpdate();
             

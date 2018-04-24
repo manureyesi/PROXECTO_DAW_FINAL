@@ -5,7 +5,6 @@
  */
 package vtenda;
 
-import mail.envioMail;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.datatransfer.DataFlavor;
@@ -13,11 +12,7 @@ import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -26,7 +21,9 @@ import java.util.logging.Logger;
  * @author DAW221
  */
 public class PaRegistro extends javax.swing.JFrame {
-
+    
+    public String dirCorreo = "";
+    
     /**
      * Creates new form PaReguistro
      */
@@ -289,7 +286,7 @@ public class PaRegistro extends javax.swing.JFrame {
                     db.consultas con = new db.consultas();
                     
                     /*Consulta usuario*/
-                    ResultSet rs = con.select("usuarios", "usuario = "+this.usuario.getText());
+                    ResultSet rs = con.select("usuarios", "usuario = '"+this.usuario.getText()+"'");
                     
                     boolean comprobarUsuario = false;
 
@@ -309,7 +306,7 @@ public class PaRegistro extends javax.swing.JFrame {
                     else{
                                 
                         /*Consulta Serial*/
-                        rs = con.select("tablaSerial", "serial = "+this.clave.getText());
+                        rs = con.select("tablaSerial", "serial = '"+this.clave.getText()+"'");
                                
                         boolean claveEncontrada = false;
                                 
@@ -317,7 +314,28 @@ public class PaRegistro extends javax.swing.JFrame {
                             
                             /*Comprobar se o serial existe e esta usado*/
                             if(this.clave.getText().compareTo(rs.getString("serial")) == 0 && rs.getInt("usada") == 0){
-                                            
+                                
+                                /* Envio de Correo */
+                                dirCorreo = this.email.getText();
+                                
+                                Thread thread = new Thread(){
+                                    public void run(){
+                                        
+                                        try{
+                                        
+                                            mail.confirmacionMail email = new mail.confirmacionMail(dirCorreo);
+
+                                            email.enviaMail();
+                                        
+                                        }
+                                        catch(Exception ex){}
+                                        
+                                    }
+                                };
+                                
+                                thread.start();
+                                
+                                
                                 claveEncontrada = true;
                                             
                                 String user = this.usuario.getText();
@@ -358,7 +376,7 @@ public class PaRegistro extends javax.swing.JFrame {
                                 }
                                     
                                 /* Crear usuario en BD */
-                                con.insert("usuarios", "usuario, nombre, apellidos, mail, contrasena", user+","+nombre+","+apellidos+","+this.email.getText()+","+contra.cifer);
+                                con.insert("usuarios", "usuario, nombre, apellidos, mail, contrasena", "'"+user+"','"+nombre+"','"+apellidos+"','"+this.email.getText()+"','"+contra.cifer+"'");
 
                                 VTenda.usuario = this.usuario.getText();
                                 VTenda.contrasena = contra.cifer;
@@ -366,21 +384,8 @@ public class PaRegistro extends javax.swing.JFrame {
                                 this.errores.setText("Usuario creado");
 
                                 /*Modificar Tabla Serial*/
-                                con.update("tablaSerial", "usada = 1", "serial = this.clave.getText()");
+                                con.update("tablaSerial", "usada = 1", "serial = '"+this.clave.getText()+"'");
                                 
-                                /*Consulta datos Usuarios*/
-                                rs = con.select("usuarios", "usuario = "+this.usuario.getText());
-                                        
-                                while(rs.next()){
-                                    
-                                    /*Enviar Email Confirmacion Correo*/
-                                    mail.envioMail em = new mail.envioMail();
-
-                                    em.enviarGMail("Para finalizar el rexistro pulse en el siguiente enlace https://beta.fiandeira.es/proxecto_DAW2/verificar.php?mail=" + this.email.getText() + "&user=" + this.usuario.getText() + "&cod=" + rs.getInt("cod") + " ."
-                                                            + "En caso de no haber echo este registro envie un mensaje a admin@fiandeira.es.", "Confirmacion VTenda", this.email.getText());
-
-                                }
-
                                 /*Borrar datos*/
                                 this.usuario.setText("");
                                 this.pass.setText("");
@@ -412,7 +417,7 @@ public class PaRegistro extends javax.swing.JFrame {
             }
 
         } catch (Exception e){
-
+            
             this.clave.setText("");
             this.errores.setText("Lo sentimos no podemos acceder a la Base de Datos");
                     
@@ -499,163 +504,144 @@ public class PaRegistro extends javax.swing.JFrame {
                     this.errores.setText("Lo sentimos el correo no es valido");
                 }
                 else if(this.pass.getText().length() <= 8){
-            
+
                     this.errores.setText("La contraseña tiene que ser mayor de 8 caracteres");
-            
+
                 }
                 else{
 
                     if((this.pass.getText().compareTo(this.pass2.getText())) == 0){
 
-                        /*Conexion contra DB*/
-                        Connection cn = DriverManager.getConnection(VTenda.db,VTenda.dbUser,VTenda.dbPass);
+                        /* Inicializar Consultas */
+                        db.consultas con = new db.consultas();
 
                         /*Consulta usuario*/
-
-                        PreparedStatement consultarUsuario= cn.prepareStatement("SELECT * FROM `usuarios` WHERE `usuario` = ?");
-
-                        consultarUsuario.setString(1, this.usuario.getText());
-
-                        ResultSet rs = consultarUsuario.executeQuery();
+                        ResultSet rs = con.select("usuarios", "usuario = '"+this.usuario.getText()+"'");
 
                         boolean comprobarUsuario = false;
 
-                            while (rs.next()){
-                                /*Comprobacion USUARIO*/
-                                if(0 == rs.getString("usuario").compareToIgnoreCase(this.usuario.getText())){
-                                    comprobarUsuario = true;
-                                }
-
+                        while (rs.next()){
+                            /*Comprobacion USUARIO*/
+                            if(0 == rs.getString("usuario").compareToIgnoreCase(this.usuario.getText())){
+                                comprobarUsuario = true;
                             }
 
-                            if(comprobarUsuario == true){
-                                /*Se o usuario e igual a outro*/
-                                this.errores.setText("Hai otro usuario con el mismo nombre");
-                                this.usuario.setText("");
-                            }
-                            else{
+                        }
 
-                                /*Consulta Serial*/
-                                Statement buscarSerial = cn.createStatement();
+                        if(comprobarUsuario == true){
+                            /*Se o usuario e igual a outro*/
+                            this.errores.setText("Hai otro usuario con el mismo nombre");
+                            this.usuario.setText("");
+                        }
+                        else{
 
-                                PreparedStatement consultarSerial = cn.prepareStatement("SELECT * FROM tablaSerial WHERE serial = ?");
+                            /*Consulta Serial*/
+                            rs = con.select("tablaSerial", "serial = '"+this.clave.getText()+"'");
 
-                                consultarSerial.setString(1, this.clave.getText());
+                            boolean claveEncontrada = false;
 
-                                ResultSet cs = consultarSerial.executeQuery();
+                            while(rs.next()){
 
-                                boolean claveEncontrada = false;
+                                /*Comprobar se o serial existe e esta usado*/
+                                if(this.clave.getText().compareTo(rs.getString("serial")) == 0 && rs.getInt("usada") == 0){
 
-                                while(cs.next()){
-                                    /*Comprobar se o serial existe e esta usado*/
-                                    if(this.clave.getText().compareTo(cs.getString("serial")) == 0 && cs.getInt("usada") == 0){
+                                    /* Envio de Correo */
+                                    dirCorreo = this.email.getText();
 
-                                        claveEncontrada = true;
+                                    Thread thread = new Thread(){
+                                        public void run(){
 
-                                        String user = this.usuario.getText();
-                                        Encriptar contra = new Encriptar(this.pass.getText());
-                                        
-                                        /* mayusculas apellido */
-                                        String apellidos = "";
+                                            try{
 
-                                        String []  apel = this.apellidos.getText().split(" ");
+                                                mail.confirmacionMail email = new mail.confirmacionMail(dirCorreo);
 
-                                        for(int i =0; i < apel.length;i++){
+                                                email.enviaMail();
 
-                                            apel[i]=Character.toUpperCase(apel[i].charAt(0)) + apel[i].substring(1).toLowerCase();
+                                            }
+                                            catch(Exception ex){}
 
                                         }
+                                    };
 
-                                        for(int i =0; i < apel.length;i++){
+                                    thread.start();
 
-                                            apellidos += apel[i]+" ";
 
-                                        }
+                                    claveEncontrada = true;
 
-                                        /* mayusculas nombre */
-                                        String nombre = "";
+                                    String user = this.usuario.getText();
+                                    Encriptar contra = new Encriptar(this.pass.getText());
 
-                                        String []  nom = this.nombre.getText().split(" ");
+                                    /* mayusculas apellido */
+                                    String apellidos = "";
 
-                                        for(int i =0; i < nom.length;i++){
+                                    String []  apel = this.apellidos.getText().split(" ");
 
-                                            nom[i]=Character.toUpperCase(nom[i].charAt(0)) + nom[i].substring(1).toLowerCase();
+                                    for(int i =0; i < apel.length;i++){
 
-                                        }
-
-                                        for(int i =0; i < nom.length;i++){
-
-                                            nombre += nom[i]+" ";
-
-                                        }
-                                        
-                                        /*Crear usuario en BD*/
-                                        PreparedStatement crearUser = cn.prepareStatement("INSERT INTO `usuarios`(`usuario`, `nombre`, `apellidos`, `mail`, `contrasena`) VALUES (?,?,?,?,?)");
-
-                                            crearUser.setString(1, user);
-                                            crearUser.setString(2, nombre);
-                                            crearUser.setString(3, apellidos);
-                                            crearUser.setString(4, this.email.getText());
-                                            crearUser.setString(5, contra.cifer);
-
-                                        crearUser.executeUpdate();
-
-                                        VTenda.usuario = this.usuario.getText();
-                                        VTenda.contrasena = contra.cifer;
-
-                                        this.errores.setText("Usuario creado");
-
-                                        /*Modificar Tabla Serial*/
-                                        PreparedStatement UpdateSerial = cn.prepareStatement("UPDATE `tablaSerial` SET `usada`= ? WHERE `serial` = ?");
-
-                                        UpdateSerial.setString(2, this.clave.getText());
-
-                                            UpdateSerial.setInt(1, 1);
-
-                                        UpdateSerial.executeUpdate();
-
-                                        /*Consulta datos Usuarios*/
-                                        PreparedStatement buscarDatos= cn.prepareStatement("SELECT * FROM `usuarios` WHERE `usuario` = ?");
-
-                                            buscarDatos.setString(1, this.usuario.getText());
-
-                                        ResultSet datosUser = buscarDatos.executeQuery();
-
-                                        while(datosUser.next()){
-                                            /*Enviar Emeil Confirmacion Correo*/
-                                            envioMail em = new envioMail();
-
-                                            em.enviarGMail("Para finalizar el rexistro pulse en el siguiente enlace https://beta.fiandeira.es/proxectos/proxecto_DAW2/verificar.php?mail=" + this.email.getText() + "&user=" + this.usuario.getText() + "&cod=" + datosUser.getInt("cod") + " ."
-                                                                + "En caso de no haber echo este registro envie un mensaje a admin@fiandeira.es.", "Confirmacion VTenda", this.email.getText());
-
-                                        }
-
-                                        /*Borrar datos*/
-                                        this.usuario.setText("");
-                                        this.pass.setText("");
-                                        this.pass2.setText("");
-                                        this.clave.setText("");
-                                        this.email.setText("");
-                                        this.nombre.setText("");
-                                        this.apellidos.setText("");
-                                        this.errores.setText("Verifique su buzon de correo");
-
-                                    }
-                                    else{
-
-                                        claveEncontrada = false;
+                                        apel[i]=Character.toUpperCase(apel[i].charAt(0)) + apel[i].substring(1).toLowerCase();
 
                                     }
 
-                                }
+                                    for(int i =0; i < apel.length;i++){
 
-                                if(claveEncontrada == false){
-                                    /*Se non existe un serial*/
+                                        apellidos += apel[i]+" ";
+
+                                    }
+
+                                    /* mayusculas nombre */
+                                    String nombre = "";
+
+                                    String []  nom = this.nombre.getText().split(" ");
+
+                                    for(int i =0; i < nom.length;i++){
+
+                                        nom[i]=Character.toUpperCase(nom[i].charAt(0)) + nom[i].substring(1).toLowerCase();
+
+                                    }
+
+                                    for(int i =0; i < nom.length;i++){
+
+                                        nombre += nom[i]+" ";
+
+                                    }
+
+                                    /* Crear usuario en BD */
+                                    con.insert("usuarios", "usuario, nombre, apellidos, mail, contrasena", "'"+user+"','"+nombre+"','"+apellidos+"','"+this.email.getText()+"','"+contra.cifer+"'");
+
+                                    VTenda.usuario = this.usuario.getText();
+                                    VTenda.contrasena = contra.cifer;
+
+                                    this.errores.setText("Usuario creado");
+
+                                    /*Modificar Tabla Serial*/
+                                    con.update("tablaSerial", "usada = 1", "serial = '"+this.clave.getText()+"'");
+
+                                    /*Borrar datos*/
+                                    this.usuario.setText("");
+                                    this.pass.setText("");
+                                    this.pass2.setText("");
                                     this.clave.setText("");
-                                    this.errores.setText("No tiene clave para crear usuario");
+                                    this.email.setText("");
+                                    this.nombre.setText("");
+                                    this.apellidos.setText("");
+                                    this.errores.setText("Verifique su buzon de correo");
+
+                                }
+                                else{
+
+                                    claveEncontrada = false;
+
                                 }
 
                             }
+
+                            if(claveEncontrada == false){
+                                /*Se non existe un serial*/
+                                this.clave.setText("");
+                                this.errores.setText("No tiene clave para crear usuario");
+                            }
+
+                        }
 
                     }
                 }
