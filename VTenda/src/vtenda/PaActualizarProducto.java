@@ -206,12 +206,41 @@ public class PaActualizarProducto extends javax.swing.JDialog {
         
         try{
             
-            
-            
+            /* Definir Conexion y ResultSet */
+            db.consultas con = new db.consultas();
+            ResultSet rs;
+                    
+            if(this.nombre.getText().isEmpty()){
+                rs = con.select("productos", "cod = '"+this.codigo.getText()+"'");
+                while(rs.next()){
+                    this.nombre.setText(rs.getString("nombre"));
+                }
+            }
+            if(this.descripcion.getText().isEmpty()){
+                rs = con.select("productos", "cod = '"+this.codigo.getText()+"'");
+                while(rs.next()){
+                    this.descripcion.setText(rs.getString("descripcion"));
+                }
+            }
+            if((int)this.stock.getValue() < 0){
+                rs = con.select("productos", "cod = '"+this.codigo.getText()+"'");
+                while(rs.next()){
+                    this.stock.setValue(rs.getInt("stock"));
+                }
+            }
+            if(this.precio.getText().isEmpty()){
+                rs = con.select("productos", "cod = '"+this.codigo.getText()+"'");
+                while(rs.next()){
+                    this.precio.setText(rs.getDouble("precioSin")+"");
+                }
+            }
+           
+            con.update("productos", "nombre = '"+this.nombre.getText()+"', descripcion = '"+this.descripcion.getText()+"', precioSin = "+this.precio.getText()+",stock = "+this.stock.getValue(), "cod = '"+this.codigo.getText()+"'");
             
         }
-        catch(Exception ex){
+        catch(SQLException ex){
             this.errores.setText("Lo sentimos acabamos de sufrir un error");
+            System.err.println("Acabamos de sufrir un error al conectar con la DB");
         }
         
     }//GEN-LAST:event_modificarActionPerformed
