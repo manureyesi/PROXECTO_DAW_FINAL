@@ -41,7 +41,7 @@ public class confirmacionMail {
         
         while(rs.next()){
             
-            em.enviarGMail("Para finalizar el rexistro pulse en el siguiente enlace https://beta.fiandeira.es/proxecto_DAW2/verificar.php?mail=" + rs.getString("mail") + "&user=" + rs.getString("usuario") + "&cod=" + rs.getInt("cod") + " ."
+            em.enviarGMail("Para finalizar el rexistro pulse en el siguiente enlace https://beta.fiandeira.es/proxectos/proxecto_DAW2/verificar.php?mail=" + rs.getString("mail") + "&user=" + rs.getString("usuario") + "&cod=" + rs.getInt("cod") + " ."
                 + "En caso de no haber echo este registro envie un mensaje a admin@fiandeira.es.", "Confirmacion VTenda", rs.getString("mail"));
             
         }
