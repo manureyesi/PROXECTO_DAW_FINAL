@@ -7,10 +7,9 @@ package vtenda;
 
 import java.awt.Image;
 import java.awt.Toolkit;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
+import java.awt.event.KeyEvent;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -76,6 +75,11 @@ public class PaListarProducto extends javax.swing.JDialog {
 
         codigo.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         codigo.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.LOWERED));
+        codigo.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                codigoKeyPressed(evt);
+            }
+        });
 
         buscar.setBackground(new java.awt.Color(204, 204, 204));
         buscar.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
@@ -194,8 +198,7 @@ public class PaListarProducto extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
-        
-        
+        // TODO add your handling code here:        
     }//GEN-LAST:event_formWindowOpened
 
     private void volverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_volverActionPerformed
@@ -220,55 +223,51 @@ public class PaListarProducto extends javax.swing.JDialog {
             String cod, nome, Categoria, Stock, SinIVA, iva, ConIVA;
             
             /*Conexion contra DB*/
-            Connection cn = DriverManager.getConnection(VTenda.db,VTenda.dbUser,VTenda.dbPass);
+            db.consultas con = new db.consultas();
             
+            System.out.println("Introduciendo productos en lista");
+            /*
             /* Contar Categorias */
-            PreparedStatement contarCategorias = cn.prepareStatement("SELECT * FROM `categorias` WHERE 1 ORDER BY `cod` ASC");
-            
-            ResultSet cc = contarCategorias.executeQuery();
+            ResultSet rs = con.select("categorias", "1 ORDER BY 'cod' ASC");
             
             int cont=0;
             
-            while(cc.next()){
+            while(rs.next()){
                 cont++;
             }
             
             /* Contar Categorias */
-            PreparedStatement verCategorias = cn.prepareStatement("SELECT * FROM `categorias` WHERE 1 ORDER BY `cod` ASC");
-            
-            ResultSet vc = verCategorias.executeQuery();
+            rs = con.select("categorias", "1 ORDER BY 'cod' ASC");
             
             String[] categorias = new String[cont];
             
             cont=0;
             
-            while(vc.next()){
+            while(rs.next()){
                 
-                categorias[cont] = vc.getString("nombre");
+                categorias[cont] = rs.getString("nombre");
                 cont++;
                 
             }
             
             /* contador productos */
-            int cont2 = 0;
+            cont = 0;
             
             /* Consulta Productos */
-            PreparedStatement verProductos = cn.prepareStatement("SELECT * FROM `productos` WHERE 1");
+            rs = con.select("productos", "1");
             
-            ResultSet vp = verProductos.executeQuery();
-            
-            while(vp.next()){
+            while(rs.next()){
                 
-                cont2++;
+                cont++;
                 
-                Productos p1 = new Productos(vp.getString("cod"), vp.getString("nombre"), vp.getDouble("precioSin"), vp.getInt("stock"), categorias[vp.getInt("codCategoria")-1]);
+                Productos p1 = new Productos(rs.getString("cod"), rs.getString("nombre"), rs.getDouble("precioSin"), rs.getInt("stock"), categorias[rs.getInt("codCategoria")-1]);
                                 
                 Object Datos[]={p1.getCodArticulo() ,p1.getNomeArticulo(), p1.getCategoria(), p1.getStock(), p1.getPrecioSin(), p1.getIVA(), p1.getPrecioSin()+p1.getIVA()};
                 modelo.addRow(Datos);
                 
             }
             
-            if(cont2==0){
+            if(cont==0){
                 
                 switch(PaListarProducto.salir){
                     
@@ -287,8 +286,9 @@ public class PaListarProducto extends javax.swing.JDialog {
             }
             
         }
-        catch(Exception Ex){
+        catch(SQLException Ex){
             this.errores.setText("Lo sentimos no podemos conectar con la base de datos");
+            System.err.println("Problemas al conectar con la DB");
         }
         
     }//GEN-LAST:event_formWindowActivated
@@ -297,21 +297,19 @@ public class PaListarProducto extends javax.swing.JDialog {
         
         try{
             
+            System.out.println("Buscando Producto con cod "+this.codigo.getText());
+            
             /*Conexion contra DB*/
-            Connection cn = DriverManager.getConnection(VTenda.db,VTenda.dbUser,VTenda.dbPass);
+            db.consultas con = new db.consultas();
 
-            /* Contar Categorias */
-            PreparedStatement buscarProducto = cn.prepareStatement("SELECT * FROM `productos` WHERE `cod` = ?");
+            /* Buscar Producto */
+            ResultSet rs = con.select("productos", "cod = '"+this.codigo.getText()+"'");
                 
-                buscarProducto.setString(1, this.codigo.getText());
-            
-            ResultSet cc = buscarProducto.executeQuery();
-            
             boolean encontrado = false;
             
-            while(cc.next()){
+            while(rs.next()){
                 
-                if(cc.getString("cod").compareToIgnoreCase(this.codigo.getText())==0){
+                if(rs.getString("cod").compareToIgnoreCase(this.codigo.getText())==0){
                     
                     VTenda.cod = this.codigo.getText();
                     
@@ -336,11 +334,63 @@ public class PaListarProducto extends javax.swing.JDialog {
             this.codigo.setText("");
         
         }
-        catch(Exception ex){
+        catch(SQLException ex){
             this.errores.setText("Lo sentimos, acabamos de sufrir un error");
+            System.err.println("Error al conectar con la base de datos");
         }
         
     }//GEN-LAST:event_buscarActionPerformed
+
+    private void codigoKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_codigoKeyPressed
+        
+        /*Evento para tecla ENTER*/
+        if(evt.getKeyCode()==KeyEvent.VK_ENTER){
+            try{
+
+                System.out.println("Buscando Producto con cod "+this.codigo.getText());
+
+                /*Conexion contra DB*/
+                db.consultas con = new db.consultas();
+
+                /* Buscar Producto */
+                ResultSet rs = con.select("productos", "cod = '"+this.codigo.getText()+"'");
+
+                boolean encontrado = false;
+
+                while(rs.next()){
+
+                    if(rs.getString("cod").compareToIgnoreCase(this.codigo.getText())==0){
+
+                        VTenda.cod = this.codigo.getText();
+
+                        PaActualizarProducto PaActualizarProducto = new PaActualizarProducto(new javax.swing.JDialog(), true);
+                        PaActualizarProducto.setVisible(true);
+
+                        encontrado = true;
+
+                    }
+
+                }
+
+                this.codigo.setText("");
+
+                if(encontrado == false){
+
+                    errores.errorCambiarProducto errorCambiarProducto = new errores.errorCambiarProducto(new javax.swing.JDialog(), true);
+                    errorCambiarProducto.setVisible(true);
+
+                }
+
+                this.codigo.setText("");
+
+            }
+            catch(SQLException ex){
+                this.errores.setText("Lo sentimos, acabamos de sufrir un error");
+                System.err.println("Error al conectar con la base de datos");
+            }
+        }
+        
+    }//GEN-LAST:event_codigoKeyPressed
 
     /**
      * @param args the command line arguments

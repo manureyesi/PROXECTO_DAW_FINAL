@@ -17,11 +17,10 @@ public class conexion {
     
     Connection cn = null;
     
-    //final String url = "jdbc:mysql://beta.fiandeira.es:8082/";
-    final String url = "jdbc:mysql://localhost/";
-    final String dbName = "proxecto_daw2";
-    final String dbUser = "root";
-    final String dbPass = "";
+    final String url = "jdbc:mysql://beta.fiandeira.es:8082/";
+    final String dbName = "proxecto_DAW2";
+    final String dbUser = "proxecto";
+    final String dbPass = "abc123.";
 
     public conexion() throws SQLException {
         
