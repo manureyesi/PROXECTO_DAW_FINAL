@@ -8,10 +8,8 @@ package vtenda;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -315,6 +313,8 @@ public class TPV extends javax.swing.JDialog {
 
     private void formWindowActivated(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowActivated
         
+        System.out.println("Iniciando TPV");
+        
         if(pantalla == false){
             
             pantalla =true;
@@ -392,7 +392,7 @@ public class TPV extends javax.swing.JDialog {
                
                
            }
-           catch(Exception ex){
+           catch(NumberFormatException ex){
                error = true;
            }
            
@@ -407,31 +407,26 @@ public class TPV extends javax.swing.JDialog {
                 this.errores.setText("");
                
                 /*Conexion contra DB*/
-                Connection cn = DriverManager.getConnection(VTenda.db,VTenda.dbUser,VTenda.dbPass);
+                db.consultas con = new db.consultas();
                
                 /*Consulta Producto*/
-                PreparedStatement consultarCodigo = cn.prepareStatement("SELECT * FROM `productos` WHERE `cod` = ?");
-
-                    consultarCodigo.setString(1, this.codProducto.getText());
-
-                    
-                ResultSet vende = consultarCodigo.executeQuery();
-               
+                ResultSet rs = con.select("productos", "cod = '"+this.codProducto.getText()+"'");
+                
                 boolean stock = false;
                 int maxStock = 0;
                 
                 
-                while(vende.next()){
+                while(rs.next()){
                     
                     /* Comprobar Stock */
-                    if(vende.getInt("stock")>= Integer.parseInt(this.unidades.getText())){
+                    if(rs.getInt("stock")>= Integer.parseInt(this.unidades.getText())){
                         
                         stock = true;
                     
                     }
                     else{
                         
-                        maxStock = vende.getInt("stock");
+                        maxStock = rs.getInt("stock");
                         
                     }
                 
@@ -454,36 +449,23 @@ public class TPV extends javax.swing.JDialog {
                         int codVendedor = 0;
                         
                         /*Buscar Codigo Usuario*/
-                        PreparedStatement buscarUsuario = cn.prepareStatement("SELECT * FROM `usuarios` WHERE `usuario` = ?");
-
-                            buscarUsuario.setString(1, VTenda.usuario);
-
-                        ResultSet buscaCod = buscarUsuario.executeQuery();
+                        rs = con.select("usuarios", "usuario = '"+VTenda.usuario+"'");
                         
-                        while(buscaCod.next()){
+                        while(rs.next()){
                             
-                            codVendedor = buscaCod.getInt("cod");
+                            codVendedor = rs.getInt("cod");
                             
                         }
                         
                         /*Iniciar Ticket*/
-                        PreparedStatement iniciarTicket = cn.prepareStatement("INSERT INTO `ticket`(`codVendedor`, `estado`) VALUES (?,?)");
-
-                            iniciarTicket.setInt(1, codVendedor);
-                            iniciarTicket.setString(2, "Iniciado");
-
-                        iniciarTicket.executeUpdate();
+                        con.insert("ticket", "codVendedor, estado", "'"+codVendedor+", 'Iniciado'");
                         
                         /*Buscar cod Ticket*/
-                        PreparedStatement codTicket = cn.prepareStatement("SELECT MAX(`cod`)CodMax FROM `ticket` WHERE `codVendedor` = ? and `estado` = 'Iniciado'");
-
-                            codTicket.setInt(1, codVendedor);
-
-                        ResultSet ticket = codTicket.executeQuery();
+                        rs = con.selectEspecial("MAX(`cod`)CodMax", "ticket", "codVendedor = "+codVendedor+" and estado = 'Iniciado'");
                         
-                        while(ticket.next()){
+                        while(rs.next()){
                             
-                            auxTicket = ticket.getInt("CodMax");
+                            auxTicket = rs.getInt("CodMax");
                             
                         }
                         
@@ -511,36 +493,18 @@ public class TPV extends javax.swing.JDialog {
                     }
                     
                     /*Buscar Producto*/
-                    PreparedStatement buscarPro = cn.prepareStatement("SELECT * FROM `productos` WHERE `cod` = ?");
-
-                        buscarPro.setString(1, this.codProducto.getText());
-
-                    ResultSet cambiarStock = buscarPro.executeQuery();
+                    rs = con.select("productos", "cod = "+this.codProducto.getText());
                         
-                    while(cambiarStock.next()){
+                    while(rs.next()){
                             
                         /*Quitar stock producto*/
-                        PreparedStatement quitarStockProducto = cn.prepareStatement("UPDATE `productos` SET `stock`= ? WHERE `cod` = ?");
-
-                            quitarStockProducto.setInt(1, cambiarStock.getInt("stock") - uni);
-                            quitarStockProducto.setString(2, this.codProducto.getText());
-
-                        quitarStockProducto.executeUpdate();
+                        con.update("productos", "stock = "+(rs.getInt("stock") - uni), "cod = "+this.codProducto.getText());
                         
                     }
                         
                     /*Insertar Producto*/
-                    PreparedStatement anadirStockProducto = cn.prepareStatement("INSERT INTO `productosTicket`(`codTicket`, `codProducto`, `stock`, `descuento`, `precioIVA`) VALUES (?,?,?,?,?)");
-
-                        anadirStockProducto.setInt(1, auxTicket);
-                        anadirStockProducto.setString(2, this.codProducto.getText());
-                        anadirStockProducto.setInt(3, uni);
-                        anadirStockProducto.setInt(4, des);
-                        anadirStockProducto.setDouble(5, Double.parseDouble(this.precio.getText()));
-
-                    anadirStockProducto.executeUpdate();
-                        
-                        
+                    con.insert("productosTicket", "codTicket, codProducto, stock, descuento, precioIVA", auxTicket+", '"+this.codProducto.getText()+"', "+uni+", "+des+", "+Double.parseDouble(this.precio.getText()));
+                                         
                     Object datos[]={cod, nome, uni, precioIVA, des + " %", precioFinal};
                     modelo.addRow(datos);
                                 
@@ -562,8 +526,8 @@ public class TPV extends javax.swing.JDialog {
            }
            
        }
-       catch(Exception ex){
-           ex.printStackTrace();
+       catch(SQLException ex){
+           System.err.println("Acabamos de sufrir un error contra la DB");
            this.errores.setText("Lo sentimos, acabamos de sufrir un error");
        }
         
@@ -579,20 +543,16 @@ public class TPV extends javax.swing.JDialog {
             try{
 
                 /*Conexion contra DB*/
-                Connection cn = DriverManager.getConnection(VTenda.db,VTenda.dbUser,VTenda.dbPass);
+                db.consultas con = new db.consultas();
 
                 /*Consulta Producto*/
-                PreparedStatement consultarCodigo = cn.prepareStatement("SELECT * FROM `productos` WHERE `cod` = ?");
-
-                    consultarCodigo.setString(1, this.codProducto.getText());
-
-                ResultSet vende = consultarCodigo.executeQuery();
+                ResultSet rs = con.select("productos", "cod = '"+this.codProducto.getText()+"'");
                 
                 boolean encontrado = false;
                 
-                while(vende.next()){
+                while(rs.next()){
                     
-                    if(vende.getInt("stock") == 0){
+                    if(rs.getInt("stock") == 0){
                         this.errores.setText("El producto no se encuentra disponible");
                         encontrado = true;
                         
@@ -603,12 +563,12 @@ public class TPV extends javax.swing.JDialog {
                         
                         
                     }
-                    else if(vende.getString("cod").compareTo(this.codProducto.getText()) == 0){
+                    else if(rs.getString("cod").compareTo(this.codProducto.getText()) == 0){
                     
                         Productos p1= new Productos();
                         p1.setCodArticulo(this.codProducto.getText());
-                        p1.setPrecioSin(vende.getDouble("precioSin"));
-                        p1.setNomeArticulo(vende.getString("nombre"));
+                        p1.setPrecioSin(rs.getDouble("precioSin"));
+                        p1.setNomeArticulo(rs.getString("nombre"));
 
 
                         this.nombreProducto.setText(p1.getNomeArticulo());
@@ -630,7 +590,8 @@ public class TPV extends javax.swing.JDialog {
                     this.errores.setText("No se encontro el producto");
                 }
                 
-            }catch(Exception ex){
+            }catch(SQLException ex){
+                System.err.println("Problemas al conectar con la DB");
                 this.errores.setText("Lo sentimos, acabamos de sufrir un error");
             }
         

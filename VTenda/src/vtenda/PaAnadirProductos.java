@@ -356,7 +356,7 @@ public class PaAnadirProductos extends javax.swing.JDialog {
                 /*Introducir datos en clase*/
                 preci = Double.parseDouble(this.precio.getText());
             }
-            catch(Exception ex){
+            catch(NumberFormatException ex){
                 this.errores.setText("Lo sentimos, compruebe los campos numericos");
                 System.err.println("Error de campos numericos");
             }
@@ -388,7 +388,7 @@ public class PaAnadirProductos extends javax.swing.JDialog {
                         p1.setNomeArticulo(this.nomArticulo.getText());
                         p1.setPrecioSin(Double.parseDouble(this.precio.getText()));
                 }
-                catch(Exception ex){
+                catch(NumberFormatException ex){
                     this.errores.setText("Lo sentimos, compruebe los campos numericos");
                     error = 1;
                 }
@@ -488,7 +488,7 @@ public class PaAnadirProductos extends javax.swing.JDialog {
 
             }
             
-        }catch(Exception ex){
+        }catch(SQLException ex){
             this.errores.setText("Lo sentimos, acabamos de sufrir un error");
             System.err.println("Error en Añadir Productos");
         }
@@ -502,13 +502,12 @@ public class PaAnadirProductos extends javax.swing.JDialog {
         if(evt.getKeyCode()==KeyEvent.VK_ENTER){
         
             try{
-                
                 double preci = 0;
                 try{
                     /*Introducir datos en clase*/
                     preci = Double.parseDouble(this.precio.getText());
                 }
-                catch(Exception ex){
+                catch(NumberFormatException ex){
                     this.errores.setText("Lo sentimos, compruebe los campos numericos");
                     System.err.println("Error de campos numericos");
                 }
@@ -540,7 +539,7 @@ public class PaAnadirProductos extends javax.swing.JDialog {
                             p1.setNomeArticulo(this.nomArticulo.getText());
                             p1.setPrecioSin(Double.parseDouble(this.precio.getText()));
                     }
-                    catch(Exception ex){
+                    catch(NumberFormatException ex){
                         this.errores.setText("Lo sentimos, compruebe los campos numericos");
                         error = 1;
                     }
@@ -640,7 +639,7 @@ public class PaAnadirProductos extends javax.swing.JDialog {
 
                 }
 
-            }catch(Exception ex){
+            }catch(SQLException ex){
                 this.errores.setText("Lo sentimos, acabamos de sufrir un error");
                 System.err.println("Error en Añadir Productos");
             }

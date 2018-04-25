@@ -32,7 +32,7 @@ public class PaRegistro extends javax.swing.JFrame {
         
         initComponents();
         
-        Image icono = Toolkit.getDefaultToolkit().getImage("img/tpv.png");
+        Image icono = Toolkit.getDefaultToolkit().getImage("img/IconoProgramaFinal.png");
         this.setIconImage(icono);
         this.setLocationRelativeTo(null);
         

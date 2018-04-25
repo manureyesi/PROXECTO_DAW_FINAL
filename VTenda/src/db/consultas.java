@@ -28,6 +28,19 @@ public class consultas {
         
     }
     
+    public ResultSet selectEspecial(String datos, String tabla, String cadena) throws SQLException{
+        
+        db.conexion con= new db.conexion();
+            
+        /* Select */
+        PreparedStatement consulta= con.getCn().prepareStatement("SELECT "+datos+" FROM "+ tabla +" where "+cadena);
+
+        ResultSet rs = consulta.executeQuery();
+            
+        return rs;
+    
+    }
+    
     
     public void insert(String tabla, String campos, String cadena) throws SQLException{
         

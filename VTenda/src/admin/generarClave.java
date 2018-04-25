@@ -8,11 +8,8 @@ package admin;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.datatransfer.*;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import vtenda.VTenda;
+import java.sql.SQLException;
 
 /**
  *
@@ -124,8 +121,9 @@ public class generarClave extends javax.swing.JDialog {
 
     private void volverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_volverActionPerformed
         try{
-
-            Connection cn = DriverManager.getConnection(VTenda.db,VTenda.dbUser,VTenda.dbPass);
+            
+            /* Conexion contra la DB */
+            db.consultas con = new db.consultas();
             
             String Serial = "";
 
@@ -165,16 +163,12 @@ public class generarClave extends javax.swing.JDialog {
                 }
 
                 encontrado = false;
+                
+                ResultSet rs = con.select("tablaSerial", "serial = '"+Serial+"'");
+                
+                while(rs.next()){
 
-                PreparedStatement SelectSerial = cn.prepareStatement("SELECT `serial` FROM `tablaSerial` WHERE `serial` = ?");
-
-                SelectSerial.setString(1, Serial);
-
-                ResultSet ss = SelectSerial.executeQuery();
-
-                while(ss.next()){
-
-                    if(ss.getString("serial").compareTo(Serial) == 0){
+                    if(rs.getString("serial").compareTo(Serial) == 0){
 
                         encontrado = true;
 
@@ -184,24 +178,20 @@ public class generarClave extends javax.swing.JDialog {
 
             }
 
-            /*Generar Serial*/
-
-            PreparedStatement GenerarSerial = cn.prepareStatement("INSERT INTO `tablaSerial`(`serial`) VALUES (?)");
-
-            GenerarSerial.setString(1, Serial);
-
-            GenerarSerial.executeUpdate();
-
+            /* Introducir serial en DB */
+            con.insert("tablaSerial", "serial", "'"+Serial+"'");
+            
             this.claves.setText(Serial);
 
-            /*System.out.println("Clave: " + Serial + " generada con exito.");*/
+            System.out.println("Clave: " + Serial + " generada con exito.");
             
             this.jLInfo1.setText("La clave fue generada con exito");
             this.jLInfo2.setText("Copiela y enviesela a su usuario a registrar");
             
-        }catch(Exception ex){
+        }catch(SQLException ex){
             this.jLInfo1.setText("Lo sentimos acabamos de sufrir un error");
             this.jLInfo2.setText("");
+            System.err.println("Error contra la DB");
         }
     }//GEN-LAST:event_volverActionPerformed
 

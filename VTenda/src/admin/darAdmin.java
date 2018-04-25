@@ -7,11 +7,8 @@ package admin;
 
 import java.awt.Image;
 import java.awt.Toolkit;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import vtenda.VTenda;
+import java.sql.SQLException;
 
 /**
  *
@@ -55,7 +52,7 @@ public class darAdmin extends javax.swing.JDialog {
             }
         });
 
-        darAdmin.setBackground(new java.awt.Color(153, 153, 153));
+        darAdmin.setBackground(new java.awt.Color(204, 204, 204));
         darAdmin.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         darAdmin.setText("Dar Administrador");
         darAdmin.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
@@ -128,16 +125,15 @@ public class darAdmin extends javax.swing.JDialog {
         try{
             
             /*Conexion contra DB*/
-            Connection cn = DriverManager.getConnection(VTenda.db,VTenda.dbUser,VTenda.dbPass);
+            db.consultas con = new db.consultas();
             
             /* Actualizar Admin */
-            PreparedStatement actualizarAdmin = cn.prepareStatement("UPDATE `usuarios` SET `admin`= 1 WHERE `usuario` = ?");
-                actualizarAdmin.setString(1, (String)this.usuarios.getSelectedItem());
-            actualizarAdmin.executeUpdate();
+            con.update("usuarios", "admin = 1", "usuario = '"+(String)this.usuarios.getSelectedItem()+"'");
             
             this.errores.setText("Administrador dado con exito");
             
-        }catch(Exception ex){
+        }catch(SQLException ex){
+            System.err.println("Error al conectarse contra la DB");
             this.errores.setText("Lo sentimos acabamos de sufrir un error");
         }
         
@@ -153,12 +149,10 @@ public class darAdmin extends javax.swing.JDialog {
         try{
             
             /*Conexion contra DB*/
-            Connection cn = DriverManager.getConnection(VTenda.db,VTenda.dbUser,VTenda.dbPass);
+            db.consultas con = new db.consultas();
             
             /* Consulta usuarios */
-            PreparedStatement consultarUsuario = cn.prepareStatement("SELECT * FROM `usuarios` WHERE `admin` = 0");
-                
-            ResultSet rs = consultarUsuario.executeQuery();
+            ResultSet rs = con.select("usuarios", "admin = 0");
             
             int cont = 0;
             
@@ -176,7 +170,8 @@ public class darAdmin extends javax.swing.JDialog {
                 this.darAdmin.setEnabled(true);
             }
             
-        }catch(Exception ex){
+        }catch(SQLException ex){
+            System.err.println("Error de conexion contra la DB");
             this.errores.setText("Lo sentimos acabamos de sufrir un error");
         }
         
@@ -200,12 +195,10 @@ public class darAdmin extends javax.swing.JDialog {
         try{
             
             /*Conexion contra DB*/
-            Connection cn = DriverManager.getConnection(VTenda.db,VTenda.dbUser,VTenda.dbPass);
+            db.consultas con = new db.consultas();
             
             /* Consulta usuarios */
-            PreparedStatement consultarUsuario = cn.prepareStatement("SELECT * FROM `usuarios` WHERE `admin` = 0");
-                
-            ResultSet rs = consultarUsuario.executeQuery();
+            ResultSet rs = con.select("usuarios", "admin = 0");
             
             int cont = 0;
             
@@ -223,7 +216,8 @@ public class darAdmin extends javax.swing.JDialog {
                 this.darAdmin.setEnabled(true);
             }
             
-        }catch(Exception ex){
+        }catch(SQLException ex){
+            System.err.println("Acabamos de sufrir un error al conectar con la DB");
             this.errores.setText("Lo sentimos acabamos de sufrir un error");
         }
     }//GEN-LAST:event_formWindowActivated

@@ -226,43 +226,35 @@ public class PaListarProducto extends javax.swing.JDialog {
             db.consultas con = new db.consultas();
             
             System.out.println("Introduciendo productos en lista");
-            /*
-            /* Contar Categorias */
-            ResultSet rs = con.select("categorias", "1 ORDER BY 'cod' ASC");
-            
-            int cont=0;
-            
-            while(rs.next()){
-                cont++;
-            }
-            
-            /* Contar Categorias */
-            rs = con.select("categorias", "1 ORDER BY 'cod' ASC");
-            
-            String[] categorias = new String[cont];
-            
-            cont=0;
-            
-            while(rs.next()){
-                
-                categorias[cont] = rs.getString("nombre");
-                cont++;
-                
-            }
-            
+             
             /* contador productos */
-            cont = 0;
+            int cont = 0;
             
             /* Consulta Productos */
-            rs = con.select("productos", "1");
+            ResultSet rs = con.select("productos", "1");
             
             while(rs.next()){
                 
                 cont++;
                 
-                Productos p1 = new Productos(rs.getString("cod"), rs.getString("nombre"), rs.getDouble("precioSin"), rs.getInt("stock"), categorias[rs.getInt("codCategoria")-1]);
-                                
-                Object Datos[]={p1.getCodArticulo() ,p1.getNomeArticulo(), p1.getCategoria(), p1.getStock(), p1.getPrecioSin(), p1.getIVA(), p1.getPrecioSin()+p1.getIVA()};
+                ResultSet rsaux = con.select("categorias", "1 ORDER BY 'cod' ASC");
+                
+                String NombreCategoria = "";
+                
+                while(rsaux.next()){
+                    
+                    if(rs.getInt("codCategoria") == rsaux.getInt("cod")){
+                        NombreCategoria = rsaux.getString("nombre");
+                    }
+                    
+                }
+                
+                Productos p1 = new Productos(rs.getString("cod"), rs.getString("nombre"), rs.getDouble("precioSin"), rs.getInt("stock"), NombreCategoria);
+                
+                /* Redondear */
+                Redondear redondear = new Redondear();
+                
+                Object Datos[]={p1.getCodArticulo() ,p1.getNomeArticulo(), p1.getCategoria(), p1.getStock(), p1.getPrecioSin(), p1.getIVA(), redondear.redondearDecimales(p1.getPrecioSin()+p1.getIVA()) };
                 modelo.addRow(Datos);
                 
             }

@@ -234,8 +234,29 @@ public class PaActualizarProducto extends javax.swing.JDialog {
                     this.precio.setText(rs.getDouble("precioSin")+"");
                 }
             }
-           
-            con.update("productos", "nombre = '"+this.nombre.getText()+"', descripcion = '"+this.descripcion.getText()+"', precioSin = "+this.precio.getText()+",stock = "+this.stock.getValue(), "cod = '"+this.codigo.getText()+"'");
+            
+            double precioSin = 0;
+            
+            try{
+                
+                /* Pasar texto a double */
+                precioSin = Double.parseDouble(this.precio.getText());
+                
+                Redondear redondear = new Redondear();
+                
+                /* Actualizar datos */
+                con.update("productos", "nombre = '"+this.nombre.getText()+"', descripcion = '"+this.descripcion.getText()+"', precioSin = "+redondear.redondearDecimales(precioSin)+",stock = "+this.stock.getValue(), "cod = '"+this.codigo.getText()+"'");
+            
+                dispose();
+                
+                
+            }
+            catch(NumberFormatException ex){
+                this.errores.setText("Introduce un precio correcto");
+                System.err.println("Error al pasar a Double");
+            }
+            
+            
             
         }
         catch(SQLException ex){
@@ -261,7 +282,7 @@ public class PaActualizarProducto extends javax.swing.JDialog {
                 this.nombre.setText(rs.getString("nombre"));
                 this.descripcion.setText(rs.getString("descripcion"));
                 this.stock.setValue(rs.getInt("stock"));
-                this.precio.setText(rs.getInt("precioSin")+"");
+                this.precio.setText(rs.getDouble("precioSin")+"");
                 
             }
             

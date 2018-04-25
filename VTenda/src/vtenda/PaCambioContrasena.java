@@ -11,6 +11,7 @@ import java.awt.event.KeyEvent;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.SQLException;
 
 /**
  *
@@ -148,7 +149,7 @@ public class PaCambioContrasena extends javax.swing.JDialog {
     private void cambiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cambiarActionPerformed
         
         Encriptar en = new Encriptar(this.pass1.getText());
-        
+                
         if(this.passA.getText().isEmpty()||this.pass1.getText().isEmpty()||this.pass2.getText().isEmpty()){
             
             this.errores.setText("Rellene los campos");
@@ -173,22 +174,22 @@ public class PaCambioContrasena extends javax.swing.JDialog {
             
             try{
                 
+                
+                
                 /*Conexion contra DB*/
-                Connection cn = DriverManager.getConnection(VTenda.db,VTenda.dbUser,VTenda.dbPass);
+                db.consultas con = new db.consultas();
 
                 /* Cambio contraseña */
-                PreparedStatement canbioContrasena = cn.prepareStatement("UPDATE `usuarios` SET `contrasena`= ? WHERE `usuario` = ?");
+                con.update("usuarios", "contrasena = '"+en.getCifer()+"'", "usuario = '"+VTenda.usuario+"'");
                     
-                    canbioContrasena.setString(1, en.getCifer());
-                    canbioContrasena.setString(2, VTenda.usuario);
-                
-                canbioContrasena.executeUpdate();
                 
                 this.errores.setText("Contraseña cambiada con exito");
+                System.out.println("Contraseña cambiada con exito");
                 
             }
-            catch(Exception ex){
+            catch(SQLException ex){
                 this.errores.setText("Acabamos de sufrir un error");
+                System.err.println("Error al cambiar contraseña problema con DB");
             }
             
             
@@ -209,7 +210,7 @@ public class PaCambioContrasena extends javax.swing.JDialog {
         if(evt.getKeyCode()==KeyEvent.VK_ENTER){
             
             Encriptar en = new Encriptar(this.pass1.getText());
-        
+
             if(this.passA.getText().isEmpty()||this.pass1.getText().isEmpty()||this.pass2.getText().isEmpty()){
 
                 this.errores.setText("Rellene los campos");
@@ -234,22 +235,22 @@ public class PaCambioContrasena extends javax.swing.JDialog {
 
                 try{
 
+
+
                     /*Conexion contra DB*/
-                    Connection cn = DriverManager.getConnection(VTenda.db,VTenda.dbUser,VTenda.dbPass);
+                    db.consultas con = new db.consultas();
 
                     /* Cambio contraseña */
-                    PreparedStatement canbioContrasena = cn.prepareStatement("UPDATE `usuarios` SET `contrasena`= ? WHERE `usuario` = ?");
+                    con.update("usuarios", "contrasena = '"+en.getCifer()+"'", "usuario = '"+VTenda.usuario+"'");
 
-                        canbioContrasena.setString(1, en.getCifer());
-                        canbioContrasena.setString(2, VTenda.usuario);
-
-                    canbioContrasena.executeUpdate();
 
                     this.errores.setText("Contraseña cambiada con exito");
+                    System.out.println("Contraseña cambiada con exito");
 
                 }
-                catch(Exception ex){
+                catch(SQLException ex){
                     this.errores.setText("Acabamos de sufrir un error");
+                    System.err.println("Error al cambiar contraseña problema con DB");
                 }
 
 

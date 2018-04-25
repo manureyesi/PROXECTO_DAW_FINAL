@@ -7,7 +7,6 @@ package admin;
 
 import java.awt.Image;
 import java.awt.Toolkit;
-import vtenda.PaAnadirProductos;
 
 /**
  *
@@ -39,7 +38,6 @@ public class administrar extends javax.swing.JDialog {
         generarClave = new javax.swing.JButton();
         darAdmin = new javax.swing.JButton();
         volver = new javax.swing.JButton();
-        borrarProducto = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("VTenda - Administrador");
@@ -74,33 +72,21 @@ public class administrar extends javax.swing.JDialog {
             }
         });
 
-        borrarProducto.setBackground(new java.awt.Color(204, 204, 204));
-        borrarProducto.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
-        borrarProducto.setText("Borrar Producto");
-        borrarProducto.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        borrarProducto.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                borrarProductoActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
                         .addComponent(generarClave, javax.swing.GroupLayout.PREFERRED_SIZE, 205, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(darAdmin, javax.swing.GroupLayout.PREFERRED_SIZE, 205, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(borrarProducto, javax.swing.GroupLayout.PREFERRED_SIZE, 205, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(darAdmin, javax.swing.GroupLayout.PREFERRED_SIZE, 205, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(123, 123, 123)
                         .addComponent(volver, javax.swing.GroupLayout.PREFERRED_SIZE, 205, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap())
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -110,9 +96,7 @@ public class administrar extends javax.swing.JDialog {
                     .addComponent(generarClave, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(darAdmin, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(volver, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(borrarProducto, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(volver, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(49, Short.MAX_VALUE))
         );
 
@@ -120,23 +104,21 @@ public class administrar extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void generarClaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_generarClaveActionPerformed
+        System.out.println("Entrando en Generar Clave");
         generarClave PaGenerarClave = new generarClave(new javax.swing.JDialog(),true);
         PaGenerarClave.setVisible(true);
     }//GEN-LAST:event_generarClaveActionPerformed
 
     private void darAdminActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_darAdminActionPerformed
+        System.out.println("Entrando en generar Administrador");
         darAdmin darAdmin = new darAdmin(new javax.swing.JDialog(),true);
         darAdmin.setVisible(true);
     }//GEN-LAST:event_darAdminActionPerformed
 
     private void volverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_volverActionPerformed
+        System.out.println("Salir de Administracion");
         dispose();
     }//GEN-LAST:event_volverActionPerformed
-
-    private void borrarProductoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_borrarProductoActionPerformed
-        eliminarProducto eliminarProducto = new eliminarProducto(new javax.swing.JDialog(),true);
-        eliminarProducto.setVisible(true);      
-    }//GEN-LAST:event_borrarProductoActionPerformed
 
     /**
      * @param args the command line arguments
@@ -181,7 +163,6 @@ public class administrar extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton borrarProducto;
     private javax.swing.JButton darAdmin;
     private javax.swing.JButton generarClave;
     private javax.swing.JButton volver;

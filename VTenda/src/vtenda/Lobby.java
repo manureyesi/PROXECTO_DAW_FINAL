@@ -12,7 +12,6 @@ import java.awt.Image;
 import java.awt.Toolkit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.ImageIcon;
 
 /**
  *
@@ -78,6 +77,8 @@ public class Lobby extends javax.swing.JFrame {
     private void formWindowActivated(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowActivated
         try {
             
+            System.out.println("Iniciando VTenda");
+            
             Fade.JFrameFadeIn(0f, 1f, 0.1f, 50, this);
             
             Thread.sleep(3000);
@@ -90,6 +91,7 @@ public class Lobby extends javax.swing.JFrame {
             VTenda.PaLogin.setVisible(true);
             
         } catch (InterruptedException ex) {
+            System.err.println("Error al cargar la IMG");
             Logger.getLogger(Lobby.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_formWindowActivated
