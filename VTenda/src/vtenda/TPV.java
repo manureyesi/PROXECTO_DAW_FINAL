@@ -727,6 +727,8 @@ public class TPV extends javax.swing.JDialog {
 
     private void guardaTicketActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_guardaTicketActionPerformed
         
+        VTenda.auxTicketGuardar = auxTicket;
+        
         System.out.println("Preparandose para guardar Ticket");
         guardaTicket.GuardarTicket GuardaTicket = new guardaTicket.GuardarTicket(new javax.swing.JDialog(),true);
         GuardaTicket.setVisible(true);
@@ -775,7 +777,7 @@ public class TPV extends javax.swing.JDialog {
             
             case 2:
                 
-                System.err.println("Erron en guardar Ticket");
+                System.err.println("Error en guardar Ticket");
                 this.errores.setText("Error al Guardar Ticket");
                 
             break;
@@ -788,9 +790,92 @@ public class TPV extends javax.swing.JDialog {
 
     private void recuperarTicketActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_recuperarTicketActionPerformed
         
+        /* Declarar Consultas */
+        db.consultas con = new db.consultas();
+        
         System.out.println("Preparandose para recuperar Ticket");
         guardaTicket.RecuperaTicket RecuperaTicket = new guardaTicket.RecuperaTicket(new javax.swing.JDialog(),true);
         RecuperaTicket.setVisible(true);
+        
+        switch(VTenda.guardarTicket){
+            
+            case 0:
+                
+                System.out.println("Cancelada operacion de recuperar ticket");
+                
+                
+            break;
+            
+            case 1:
+                
+                System.out.println("Ticket "+this.auxTicket+" Preparado para recuperarse");
+                
+                /********************* LIMPIAR TABLA *******************/
+
+                try{
+
+                    int a=modelo.getRowCount();
+
+                    for (int i = 0; i < a; i++) {
+                        modelo.removeRow(0);
+                    }
+
+                }catch(Exception ex){
+                    System.err.println(ex.getMessage());
+                }
+
+                /********************* LIMPIAR JTEXT *******************/
+
+                this.codProducto.setText("");
+                this.nombreProducto.setText("");
+                this.descuento.setText("");
+                this.precio.setText("");
+                this.unidades.setText("");
+                this.totalTicket.setText("");
+                this.guardaTicket.setEnabled(false);
+                this.errores.setText("Ticket Recuperado con exito");
+                
+                /* Introducir datos */
+                
+                try{
+                    
+                    /* Recuperar Ticket */
+                    ResultSet rs = con.select("productosTicket", "codTicket = "+VTenda.auxTicketGuardar);
+                    
+                    while(rs.next()){
+                        
+                        ResultSet proc = con.select("productos", "cod = '"+rs.getString("codProducto")+"'");
+                        
+                        /* Recuperar datos de Stock */
+                        while(proc.next()){
+                            
+                            Productos producto = new Productos(proc.getString("cod"), proc.getString("nombre"), proc.getDouble("PrecioSin"), rs.getInt("stock"), "");
+                            
+                            Object datos[]={producto.getCodArticulo(), producto.getNomeArticulo(), producto.getStock(), producto.getPrecioSin(), rs.getInt("descuento") + " %", producto.getPrecioSin()+producto.getIVA()};
+                            modelo.addRow(datos);
+                        
+                        }
+                        
+                    }
+                    
+                }
+                catch(SQLException ex){
+                    System.err.println("Error al conectar con la DB al recuperar Ticket");
+                    this.errores.setText("Error al recuperar Ticket");
+                    ex.printStackTrace();
+                }
+                
+                
+            break;
+            
+            case 2:
+                
+                System.err.println("Erron en guardar Ticket");
+                this.errores.setText("Error al Guardar Ticket");
+                
+            break;
+            
+        }
         
     }//GEN-LAST:event_recuperarTicketActionPerformed
 

@@ -48,6 +48,7 @@ public class GuardarTicket extends javax.swing.JDialog {
         guardar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("VTenda - Guardar Ticket");
 
         jLInfo1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLInfo1.setText("Introduce un ALIAS para guardar el Ticket:");
