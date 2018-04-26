@@ -335,6 +335,7 @@
                     <Column editable="true" title="T&#xed;tulo 7" type="java.lang.Object"/>
                   </Table>
                 </Property>
+                <Property name="cellSelectionEnabled" type="boolean" value="true"/>
                 <Property name="enabled" type="boolean" value="false"/>
               </Properties>
             </Component>

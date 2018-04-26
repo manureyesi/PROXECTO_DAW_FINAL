@@ -21,7 +21,7 @@ public class PaLogin extends javax.swing.JFrame {
     public PaLogin() {
         initComponents();
         
-        Image icono = Toolkit.getDefaultToolkit().getImage("img/IconoProgramaFinal.png");
+        Image icono = Toolkit.getDefaultToolkit().getImage(VTenda.dirIMG);
         this.setIconImage(icono);
         this.setLocationRelativeTo(null);
         this.errores.setText("");

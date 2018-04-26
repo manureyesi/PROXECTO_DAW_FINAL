@@ -24,7 +24,7 @@ public class errorContraseña extends javax.swing.JDialog {
         
         initComponents();
         
-        Image icono = Toolkit.getDefaultToolkit().getImage("img/tpv.png");
+        Image icono = Toolkit.getDefaultToolkit().getImage(vtenda.VTenda.dirIMG);
         this.setIconImage(icono);
         this.setLocationRelativeTo(null);
         

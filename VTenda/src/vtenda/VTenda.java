@@ -11,7 +11,9 @@ package vtenda;
 */
 public class VTenda {
     
-    /*************** * GRAFICOS ****************************************************************/
+    /***************** DIR IMG ****************************************************************/
+        public static String dirIMG = "img/IconoProgramaFinal.png";
+    /***************** GRAFICOS ****************************************************************/
         public static PaLogin PaLogin = new PaLogin();
         public static PaPrincipal PaPrincipal = new PaPrincipal();
         public static PaRegistro PaRegistro = new PaRegistro();
@@ -24,10 +26,9 @@ public class VTenda {
         public static boolean entrar = false;
     /****************** AUX CAMBIO PRODUCTO ****************************************************/
         public static String cod = "";        
-    /***************** BASE DE DATOS ***********************************************************/
-        public static String db = "jdbc:mysql://beta.fiandeira.es:8082/proxecto_DAW2";
-        public static String dbUser = "root";
-        public static String dbPass = "";
+    /***************** GUARDAR TICKET **********************************************************/
+        public static int auxTicketGuardar;
+        public static int guardarTicket = 0;
     /***************** PANTALLA CONTRASEÑA *****************************************************/
         public static String usuario = "";
         public static String contrasena = "";

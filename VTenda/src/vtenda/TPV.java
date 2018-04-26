@@ -36,7 +36,7 @@ public class TPV extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         
-        Image icono = Toolkit.getDefaultToolkit().getImage("img/tpv.png");
+        Image icono = Toolkit.getDefaultToolkit().getImage(VTenda.dirIMG);
         this.setIconImage(icono);
         this.setLocationRelativeTo(null);
         
@@ -59,12 +59,14 @@ public class TPV extends javax.swing.JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTextArea1 = new javax.swing.JTextArea();
         jLVendedor = new javax.swing.JLabel();
         nomeVendedor = new javax.swing.JTextField();
         jLFecha = new javax.swing.JLabel();
         fecha1 = new javax.swing.JTextField();
         jPanel1 = new javax.swing.JPanel();
-        jScrollPane1 = new javax.swing.JScrollPane();
+        jScrollPane2 = new javax.swing.JScrollPane();
         productos = new javax.swing.JTable();
         volver = new javax.swing.JButton();
         cerrarTicket = new javax.swing.JButton();
@@ -83,12 +85,24 @@ public class TPV extends javax.swing.JDialog {
         errores = new javax.swing.JLabel();
         totalTicket = new javax.swing.JTextField();
         jLTotalTicket = new javax.swing.JLabel();
+        jPanel2 = new javax.swing.JPanel();
+        guardaTicket = new javax.swing.JButton();
+        recuperarTicket = new javax.swing.JButton();
+
+        jTextArea1.setColumns(20);
+        jTextArea1.setRows(5);
+        jScrollPane1.setViewportView(jTextArea1);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("VTenda - TPV");
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowActivated(java.awt.event.WindowEvent evt) {
                 formWindowActivated(evt);
+            }
+        });
+        addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                formKeyPressed(evt);
             }
         });
 
@@ -115,9 +129,14 @@ public class TPV extends javax.swing.JDialog {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        productos.setCellSelectionEnabled(true);
-        productos.setEnabled(false);
-        jScrollPane1.setViewportView(productos);
+        productos.setEditingColumn(0);
+        productos.setRowSelectionAllowed(true);
+        productos.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                productosMouseClicked(evt);
+            }
+        });
+        jScrollPane2.setViewportView(productos);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -125,15 +144,15 @@ public class TPV extends javax.swing.JDialog {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1)
+                .addComponent(jScrollPane2)
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 282, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(144, 144, 144))
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 269, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         volver.setBackground(new java.awt.Color(204, 204, 204));
@@ -157,6 +176,11 @@ public class TPV extends javax.swing.JDialog {
         });
 
         codVendedor.setEditable(false);
+        codVendedor.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                presionarF4(evt);
+            }
+        });
 
         jLProducto.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLProducto.setText("COD. PRODUCTO:");
@@ -208,6 +232,51 @@ public class TPV extends javax.swing.JDialog {
         jLTotalTicket.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jLTotalTicket.setText("Total Ticket:");
 
+        jPanel2.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+
+        guardaTicket.setBackground(new java.awt.Color(204, 204, 204));
+        guardaTicket.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        guardaTicket.setText("Guardar Ticket");
+        guardaTicket.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        guardaTicket.setEnabled(false);
+        guardaTicket.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                guardaTicketActionPerformed(evt);
+            }
+        });
+
+        recuperarTicket.setBackground(new java.awt.Color(204, 204, 204));
+        recuperarTicket.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        recuperarTicket.setText("Recuperar Ticket");
+        recuperarTicket.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        recuperarTicket.setEnabled(false);
+        recuperarTicket.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                recuperarTicketActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(guardaTicket, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 33, Short.MAX_VALUE)
+                .addComponent(recuperarTicket, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(guardaTicket, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(recuperarTicket, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -218,25 +287,22 @@ public class TPV extends javax.swing.JDialog {
                     .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(jLProducto, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLProducto, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                                 .addComponent(jLVendedor, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(codVendedor, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(codVendedor))
                             .addComponent(codProducto, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(15, 15, 15)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addGap(15, 15, 15)
+                                .addComponent(nomeVendedor, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(nombreProducto, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(7, 7, 7)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addGap(22, 22, 22)
-                                .addComponent(nomeVendedor, javax.swing.GroupLayout.PREFERRED_SIZE, 212, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(45, 45, 45)
-                                .addComponent(jLFecha, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(fecha1, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(nombreProducto, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addGap(24, 24, 24)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                     .addComponent(jLDescuento, javax.swing.GroupLayout.DEFAULT_SIZE, 102, Short.MAX_VALUE)
@@ -247,8 +313,17 @@ public class TPV extends javax.swing.JDialog {
                                     .addComponent(jLPrecio, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                                 .addGap(14, 14, 14)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(precio, javax.swing.GroupLayout.DEFAULT_SIZE, 112, Short.MAX_VALUE)
-                                    .addComponent(unidades)))))
+                                    .addComponent(precio, javax.swing.GroupLayout.DEFAULT_SIZE, 114, Short.MAX_VALUE)
+                                    .addComponent(unidades)))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(32, 32, 32)
+                                .addComponent(jLFecha, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(fecha1))))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(anadir, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(39, 39, 39)
+                        .addComponent(errores, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(cerrarTicket, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(31, 31, 31)
@@ -258,9 +333,8 @@ public class TPV extends javax.swing.JDialog {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(totalTicket, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(anadir, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(39, 39, 39)
-                        .addComponent(errores, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -276,28 +350,30 @@ public class TPV extends javax.swing.JDialog {
                     .addComponent(jLVendedor, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLProducto, javax.swing.GroupLayout.DEFAULT_SIZE, 25, Short.MAX_VALUE)
-                    .addComponent(jLNombre, javax.swing.GroupLayout.DEFAULT_SIZE, 25, Short.MAX_VALUE)
-                    .addComponent(jLDescuento, javax.swing.GroupLayout.DEFAULT_SIZE, 25, Short.MAX_VALUE)
-                    .addComponent(jLUnidades, javax.swing.GroupLayout.DEFAULT_SIZE, 25, Short.MAX_VALUE)
+                    .addComponent(jLProducto, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLNombre, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLDescuento, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLUnidades, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(unidades, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(codProducto, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(nombreProducto, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(descuento, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLPrecio, javax.swing.GroupLayout.DEFAULT_SIZE, 25, Short.MAX_VALUE)
+                    .addComponent(jLPrecio, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(precio, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(13, 13, 13)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(anadir, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(errores, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 314, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(volver, javax.swing.GroupLayout.DEFAULT_SIZE, 33, Short.MAX_VALUE)
-                    .addComponent(cerrarTicket, javax.swing.GroupLayout.DEFAULT_SIZE, 33, Short.MAX_VALUE)
+                    .addComponent(volver, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(cerrarTicket, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(totalTicket, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(jLTotalTicket, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -306,12 +382,16 @@ public class TPV extends javax.swing.JDialog {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+    
     private void volverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_volverActionPerformed
         dispose();
     }//GEN-LAST:event_volverActionPerformed
 
     private void formWindowActivated(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowActivated
+        
+        /* Desbloquear Ticket */
+        this.recuperarTicket.setEnabled(true);
+        
         
         System.out.println("Iniciando TPV");
         
@@ -446,6 +526,9 @@ public class TPV extends javax.swing.JDialog {
                     
                     if(countProductos == 0){
                         
+                        this.guardaTicket.setEnabled(true);
+                        this.recuperarTicket.setEnabled(false);
+                        
                         int codVendedor = 0;
                         
                         /*Buscar Codigo Usuario*/
@@ -458,7 +541,7 @@ public class TPV extends javax.swing.JDialog {
                         }
                         
                         /*Iniciar Ticket*/
-                        con.insert("ticket", "codVendedor, estado", "'"+codVendedor+", 'Iniciado'");
+                        con.insert("ticket", "codVendedor, estado", "'"+codVendedor+"', 'Iniciado'");
                         
                         /*Buscar cod Ticket*/
                         rs = con.selectEspecial("MAX(`cod`)CodMax", "ticket", "codVendedor = "+codVendedor+" and estado = 'Iniciado'");
@@ -466,7 +549,7 @@ public class TPV extends javax.swing.JDialog {
                         while(rs.next()){
                             
                             auxTicket = rs.getInt("CodMax");
-                            
+                            VTenda.auxTicketGuardar = rs.getInt("CodMax");
                         }
                         
                     }
@@ -519,7 +602,6 @@ public class TPV extends javax.swing.JDialog {
                     this.precio.setText("");
                     this.errores.setText("");
                     
-                
                 }
                 
                 
@@ -534,7 +616,6 @@ public class TPV extends javax.swing.JDialog {
     }//GEN-LAST:event_anadirActionPerformed
 
     private void codProductoKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_codProductoKeyPressed
-        
         
         if(evt.getKeyCode()==KeyEvent.VK_ENTER){
             
@@ -629,6 +710,90 @@ public class TPV extends javax.swing.JDialog {
         
     }//GEN-LAST:event_descuentoKeyPressed
 
+    private void productosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_productosMouseClicked
+        
+        int row = this.productos.getSelectedRow();
+        System.err.println("Clicando a fila "+row+" da tabla");
+        
+    }//GEN-LAST:event_productosMouseClicked
+
+    private void formKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_formKeyPressed
+        // TODO add your handling code here:       
+    }//GEN-LAST:event_formKeyPressed
+
+    private void presionarF4(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_presionarF4
+        // TODO add your handling code here:      
+    }//GEN-LAST:event_presionarF4
+
+    private void guardaTicketActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_guardaTicketActionPerformed
+        
+        System.out.println("Preparandose para guardar Ticket");
+        guardaTicket.GuardarTicket GuardaTicket = new guardaTicket.GuardarTicket(new javax.swing.JDialog(),true);
+        GuardaTicket.setVisible(true);
+        
+        switch(VTenda.guardarTicket){
+            
+            case 0:
+                
+                System.out.println("Cancelada operacion de guardar ticket");
+                
+                
+            break;
+            
+            case 1:
+                
+                System.out.println("Ticket "+this.auxTicket+" Guardado con exito");
+                this.auxTicket = 0;
+
+
+                /********************* LIMPIAR TABLA *******************/
+
+                try{
+
+                    int a=modelo.getRowCount();
+
+                    for (int i = 0; i < a; i++) {
+                        modelo.removeRow(0);
+                    }
+
+                }catch(Exception ex){
+                    System.err.println(ex.getMessage());
+                }
+
+                /********************* LIMPIAR JTEXT *******************/
+
+                this.codProducto.setText("");
+                this.nombreProducto.setText("");
+                this.descuento.setText("");
+                this.precio.setText("");
+                this.unidades.setText("");
+                this.totalTicket.setText("");
+                this.guardaTicket.setEnabled(false);
+                this.errores.setText("Ticket Guardado con exito");
+                
+            break;
+            
+            case 2:
+                
+                System.err.println("Erron en guardar Ticket");
+                this.errores.setText("Error al Guardar Ticket");
+                
+            break;
+            
+            
+        }
+        
+        
+    }//GEN-LAST:event_guardaTicketActionPerformed
+
+    private void recuperarTicketActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_recuperarTicketActionPerformed
+        
+        System.out.println("Preparandose para recuperar Ticket");
+        guardaTicket.RecuperaTicket RecuperaTicket = new guardaTicket.RecuperaTicket(new javax.swing.JDialog(),true);
+        RecuperaTicket.setVisible(true);
+        
+    }//GEN-LAST:event_recuperarTicketActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -679,6 +844,7 @@ public class TPV extends javax.swing.JDialog {
     private javax.swing.JTextField descuento;
     private javax.swing.JLabel errores;
     private javax.swing.JTextField fecha1;
+    private javax.swing.JButton guardaTicket;
     private javax.swing.JLabel jLDescuento;
     private javax.swing.JLabel jLFecha;
     private javax.swing.JLabel jLNombre;
@@ -688,11 +854,15 @@ public class TPV extends javax.swing.JDialog {
     private javax.swing.JLabel jLUnidades;
     private javax.swing.JLabel jLVendedor;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JTextArea jTextArea1;
     private javax.swing.JTextField nombreProducto;
     private javax.swing.JTextField nomeVendedor;
     private javax.swing.JTextField precio;
     private javax.swing.JTable productos;
+    private javax.swing.JButton recuperarTicket;
     private javax.swing.JTextField totalTicket;
     private javax.swing.JTextField unidades;
     private javax.swing.JButton volver;

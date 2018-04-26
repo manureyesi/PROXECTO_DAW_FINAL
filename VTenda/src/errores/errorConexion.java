@@ -22,7 +22,7 @@ public class errorConexion extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         
-        Image icono = Toolkit.getDefaultToolkit().getImage("img/tpv.png");
+        Image icono = Toolkit.getDefaultToolkit().getImage(vtenda.VTenda.dirIMG);
         this.setIconImage(icono);
         this.setLocationRelativeTo(null);
         

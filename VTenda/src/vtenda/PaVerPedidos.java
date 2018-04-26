@@ -5,6 +5,9 @@
  */
 package vtenda;
 
+import java.awt.Image;
+import java.awt.Toolkit;
+
 /**
  *
  * @author DAW221
@@ -17,6 +20,11 @@ public class PaVerPedidos extends javax.swing.JDialog {
     public PaVerPedidos(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        
+        Image icono = Toolkit.getDefaultToolkit().getImage(VTenda.dirIMG);
+        this.setIconImage(icono);
+        this.setLocationRelativeTo(null);
+        
     }
 
     /**

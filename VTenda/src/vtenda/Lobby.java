@@ -29,7 +29,7 @@ public class Lobby extends javax.swing.JFrame {
         Lobby.this.setBackground(new Color(0,0,0,0));
         //Lobby.this.setOpacity(0.6f);
         
-        Image icono = Toolkit.getDefaultToolkit().getImage("img/IconoProgramaFinal.png");
+        Image icono = Toolkit.getDefaultToolkit().getImage(VTenda.dirIMG);
         this.setIconImage(icono);
         this.setLocationRelativeTo(null);
     }

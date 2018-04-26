@@ -25,7 +25,7 @@ public class PaAnadirProductos extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         
-        Image icono = Toolkit.getDefaultToolkit().getImage("img/tpv.png");
+        Image icono = Toolkit.getDefaultToolkit().getImage(VTenda.dirIMG);
         this.setIconImage(icono);
         this.setLocationRelativeTo(null);
         
@@ -211,6 +211,7 @@ public class PaAnadirProductos extends javax.swing.JDialog {
                 "Title 1", "Title 2", "Title 3", "Title 4", "Título 5", "Título 6", "Título 7"
             }
         ));
+        productos.setCellSelectionEnabled(true);
         productos.setEnabled(false);
         jScrollPane1.setViewportView(productos);
 

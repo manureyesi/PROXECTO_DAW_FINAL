@@ -20,7 +20,7 @@ public class PaPrincipal extends javax.swing.JFrame {
         
         initComponents();
         
-        Image icono = Toolkit.getDefaultToolkit().getImage("img/IconoProgramaFinal.png");
+        Image icono = Toolkit.getDefaultToolkit().getImage(VTenda.dirIMG);
         this.setIconImage(icono);
         this.setLocationRelativeTo(null);
         

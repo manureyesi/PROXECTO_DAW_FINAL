@@ -25,7 +25,7 @@ public class PaListarProducto extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         
-        Image icono = Toolkit.getDefaultToolkit().getImage("img/tpv.png");
+        Image icono = Toolkit.getDefaultToolkit().getImage(VTenda.dirIMG);
         this.setIconImage(icono);
         
         this.setLocationRelativeTo(null);
