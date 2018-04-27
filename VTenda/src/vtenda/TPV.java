@@ -390,7 +390,27 @@ public class TPV extends javax.swing.JDialog {
     private void formWindowActivated(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowActivated
         
         /* Desbloquear Ticket */
-        this.recuperarTicket.setEnabled(true);
+        db.consultas con = new db.consultas();
+        
+        try {
+            
+            ResultSet rs = con.selectEspecial("count(*)", "ticket", "estado = 'Guardado'");
+            
+            while(rs.next()){
+                
+                if(rs.getInt(1) != 0){
+                    this.recuperarTicket.setEnabled(true);
+                }
+                
+            }
+            
+        } catch (SQLException ex) {
+            System.err.println("Problemas al Conectar con la DB");
+            this.errores.setText("Error al buscar Tickets Guardados");
+        }
+        
+        
+        //this.recuperarTicket.setEnabled(true);
         
         
         System.out.println("Iniciando TPV");
@@ -789,6 +809,7 @@ public class TPV extends javax.swing.JDialog {
     }//GEN-LAST:event_guardaTicketActionPerformed
 
     private void recuperarTicketActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_recuperarTicketActionPerformed
+        this.recuperarTicket.setEnabled(false);
         
         /* Declarar Consultas */
         db.consultas con = new db.consultas();
@@ -842,6 +863,8 @@ public class TPV extends javax.swing.JDialog {
                     /* Recuperar Ticket */
                     ResultSet rs = con.select("productosTicket", "codTicket = "+VTenda.auxTicketGuardar);
                     
+                    double precioFin = 0;
+                    
                     while(rs.next()){
                         
                         ResultSet proc = con.select("productos", "cod = '"+rs.getString("codProducto")+"'");
@@ -851,18 +874,33 @@ public class TPV extends javax.swing.JDialog {
                             
                             Productos producto = new Productos(proc.getString("cod"), proc.getString("nombre"), proc.getDouble("PrecioSin"), rs.getInt("stock"), "");
                             
-                            Object datos[]={producto.getCodArticulo(), producto.getNomeArticulo(), producto.getStock(), producto.getPrecioSin(), rs.getInt("descuento") + " %", producto.getPrecioSin()+producto.getIVA()};
+                            Object datos[]={producto.getCodArticulo(), producto.getNomeArticulo(), producto.getStock(), producto.getPrecioSin(), rs.getInt("descuento") + " %", rs.getDouble("precioIVA")};
                             modelo.addRow(datos);
-                        
+                            
+                            precioFin += rs.getDouble("precioIVA");
+                            
                         }
                         
                     }
+                    
+                    
+                    /* Cambio de estado Ticket */
+                    con.update("ticket", "estado = 'Iniciado'", "cod = "+VTenda.auxTicketGuardar);
+                    
+                    this.totalTicket.setText(precioFin+" €");
+                    
+                    /* Habilitar Guardado de Ticket */
+                    this.guardaTicket.setEnabled(true);
+                    
+                    /* Desabilitar Recuperacion de Ticket */
+                    this.recuperarTicket.setEnabled(false);
+                    
+                    
                     
                 }
                 catch(SQLException ex){
                     System.err.println("Error al conectar con la DB al recuperar Ticket");
                     this.errores.setText("Error al recuperar Ticket");
-                    ex.printStackTrace();
                 }
                 
                 
@@ -876,6 +914,7 @@ public class TPV extends javax.swing.JDialog {
             break;
             
         }
+        
         
     }//GEN-LAST:event_recuperarTicketActionPerformed
 
