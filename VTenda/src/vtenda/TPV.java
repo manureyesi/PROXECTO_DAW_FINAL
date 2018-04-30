@@ -392,6 +392,82 @@ public class TPV extends javax.swing.JDialog {
         /* Desbloquear Ticket */
         db.consultas con = new db.consultas();
         
+        if(VTenda.codCerrarTicket != 0){
+            
+            
+            System.out.println("Ticket "+this.auxTicket+" Preparado para recuperarse");
+                
+                /********************* LIMPIAR TABLA *******************/
+
+                try{
+
+                    int a=modelo.getRowCount();
+
+                    for (int i = 0; i < a; i++) {
+                        modelo.removeRow(0);
+                    }
+
+                }catch(Exception ex){
+                    System.err.println(ex.getMessage());
+                }
+
+                /********************* LIMPIAR JTEXT *******************/
+
+                this.codProducto.setText("");
+                this.nombreProducto.setText("");
+                this.descuento.setText("");
+                this.precio.setText("");
+                this.unidades.setText("");
+                this.totalTicket.setText("");
+                this.guardaTicket.setEnabled(false);
+                this.errores.setText("Ticket Recuperado con exito");
+                
+                /* Introducir datos */
+                
+                try{
+                    
+                    /* Recuperar Ticket */
+                    ResultSet rs = con.select("productosTicket", "codTicket = "+VTenda.codCerrarTicket);
+                    
+                    double precioFin = 0;
+                    
+                    while(rs.next()){
+                        
+                        ResultSet proc = con.select("productos", "cod = '"+rs.getString("codProducto")+"'");
+                        
+                        /* Recuperar datos de Stock */
+                        while(proc.next()){
+                            
+                            Productos producto = new Productos(proc.getString("cod"), proc.getString("nombre"), proc.getDouble("PrecioSin"), rs.getInt("stock"), "");
+                            
+                            Object datos[]={producto.getCodArticulo(), producto.getNomeArticulo(), producto.getStock(), producto.getPrecioSin(), rs.getInt("descuento") + " %", rs.getDouble("precioIVA")};
+                            modelo.addRow(datos);
+                            
+                            precioFin += rs.getDouble("precioIVA");
+                            
+                        }
+                        
+                    }
+                    
+                    
+                    this.totalTicket.setText(precioFin+" €");
+                    
+                    /* Habilitar Guardado de Ticket */
+                    this.guardaTicket.setEnabled(true);
+                    
+                    /* Desabilitar Recuperacion de Ticket */
+                    this.recuperarTicket.setEnabled(false);
+                    
+                    
+                }
+                catch(SQLException ex){
+                    System.err.println("Error al conectar con la DB al recuperar Ticket no Guardado");
+                    this.errores.setText("Error al recuperar Ticket Erroneo");
+                }
+            
+        
+        }
+        
         try {
             
             ResultSet rs = con.selectEspecial("count(*)", "ticket", "estado = 'Guardado'");

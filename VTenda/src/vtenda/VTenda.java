@@ -33,7 +33,8 @@ public class VTenda {
         public static String usuario = "";
         public static String contrasena = "";
         public static int pantalla;
-       
+    /***************** COD TICKET NON CERRADO **************************************************/
+        public static int codCerrarTicket = 0;
        
         
     public static void main(String[] args) {

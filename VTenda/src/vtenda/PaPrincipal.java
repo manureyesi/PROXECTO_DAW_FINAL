@@ -9,8 +9,6 @@ import java.awt.Image;
 import java.awt.Toolkit;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -20,6 +18,7 @@ public class PaPrincipal extends javax.swing.JFrame {
     /**
      * Creates new form PaPrincipal
      */
+    
     public PaPrincipal() {
         
         initComponents();
@@ -375,8 +374,17 @@ public class PaPrincipal extends javax.swing.JFrame {
                 errores.errorTicketCerrar errorTicketCerrar = new errores.errorTicketCerrar(new javax.swing.JDialog(),true);
                 errorTicketCerrar.setVisible(true);
                 
+                VTenda.codCerrarTicket = rs.getInt("cod");
+                
                 System.err.println(rs.getInt("cod"));
                 
+            }
+            
+            if(VTenda.codCerrarTicket != 0){
+                
+                TPV TPV = new TPV(this, true);
+                TPV.setVisible(true);
+            
             }
             
         } catch (SQLException ex) {
