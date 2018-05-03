@@ -7,6 +7,8 @@ package admin;
 
 import java.awt.Image;
 import java.awt.Toolkit;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 /**
  *
@@ -38,9 +40,15 @@ public class administrar extends javax.swing.JDialog {
         generarClave = new javax.swing.JButton();
         darAdmin = new javax.swing.JButton();
         volver = new javax.swing.JButton();
+        arreglarTicket = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("VTenda - Administrador");
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowActivated(java.awt.event.WindowEvent evt) {
+                formWindowActivated(evt);
+            }
+        });
 
         generarClave.setBackground(new java.awt.Color(204, 204, 204));
         generarClave.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
@@ -72,32 +80,47 @@ public class administrar extends javax.swing.JDialog {
             }
         });
 
+        arreglarTicket.setBackground(new java.awt.Color(204, 204, 204));
+        arreglarTicket.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        arreglarTicket.setText("Arreglar Ticket");
+        arreglarTicket.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        arreglarTicket.setEnabled(false);
+        arreglarTicket.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                arreglarTicketActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(generarClave, javax.swing.GroupLayout.PREFERRED_SIZE, 205, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(arreglarTicket, javax.swing.GroupLayout.PREFERRED_SIZE, 205, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(darAdmin, javax.swing.GroupLayout.PREFERRED_SIZE, 205, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(123, 123, 123)
+                        .addComponent(darAdmin, javax.swing.GroupLayout.PREFERRED_SIZE, 205, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(generarClave, javax.swing.GroupLayout.PREFERRED_SIZE, 205, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(volver, javax.swing.GroupLayout.PREFERRED_SIZE, 205, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(generarClave, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(darAdmin, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addComponent(volver, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(49, Short.MAX_VALUE))
+                    .addComponent(darAdmin, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(arreglarTicket, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(30, 30, 30)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(volver, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(generarClave, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -119,6 +142,43 @@ public class administrar extends javax.swing.JDialog {
         System.out.println("Salir de Administracion");
         dispose();
     }//GEN-LAST:event_volverActionPerformed
+
+    private void arreglarTicketActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_arreglarTicketActionPerformed
+        
+        /* Listas de Ticket no Guardados */
+        
+        System.out.println("Entrando en recuperacion de Ticket");
+        buscarTicket buscarTicket = new buscarTicket(new javax.swing.JDialog(),true);
+        buscarTicket.setVisible(true);
+        
+        
+    }//GEN-LAST:event_arreglarTicketActionPerformed
+
+    private void formWindowActivated(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowActivated
+        
+        /* Buscar Tickets No Cerrados */
+        
+        try {
+            
+            db.consultas con = new db.consultas();
+
+                ResultSet rs = con.select("ticket", "estado = 'Iniciado' and codVendedor = (SELECT cod FROM usuarios WHERE usuario = '"+vtenda.VTenda.usuario+"') limit 0,1");
+
+                while(rs.next()){
+
+                    System.out.println("Desbloquear boton de Arreglar Ticket");
+
+                    this.arreglarTicket.setEnabled(true);
+                    
+                }
+             
+        } 
+        catch (SQLException ex) {
+            System.err.println("Error al buscar un Ticket sin Cerrar");
+        }
+        
+        
+    }//GEN-LAST:event_formWindowActivated
 
     /**
      * @param args the command line arguments
@@ -163,6 +223,7 @@ public class administrar extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton arreglarTicket;
     private javax.swing.JButton darAdmin;
     private javax.swing.JButton generarClave;
     private javax.swing.JButton volver;

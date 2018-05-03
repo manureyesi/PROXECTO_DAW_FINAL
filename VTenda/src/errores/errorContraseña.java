@@ -22,8 +22,6 @@ public class errorContraseña extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         
-        initComponents();
-        
         Image icono = Toolkit.getDefaultToolkit().getImage(vtenda.VTenda.dirIMG);
         this.setIconImage(icono);
         this.setLocationRelativeTo(null);

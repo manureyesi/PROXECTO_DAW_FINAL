@@ -3,29 +3,32 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package errores;
+package admin;
 
 import java.awt.Image;
 import java.awt.Toolkit;
-import java.awt.event.KeyEvent;
+import java.awt.datatransfer.*;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import javax.swing.DefaultListModel;
+import javax.swing.JList;
 
 /**
  *
  * @author DAW221
  */
-public class errorTicketCerrar extends javax.swing.JDialog {
+public class buscarTicket extends javax.swing.JDialog {
 
     /**
-     * Creates new form errorCategoria
+     * Creates new form generarClave
      */
-    public errorTicketCerrar(javax.swing.JDialog parent, boolean modal) {
+    public buscarTicket(javax.swing.JDialog parent, boolean modal) {
         super(parent, modal);
         initComponents();
         
         Image icono = Toolkit.getDefaultToolkit().getImage(vtenda.VTenda.dirIMG);
         this.setIconImage(icono);
         this.setLocationRelativeTo(null);
-        
     }
 
     /**
@@ -37,38 +40,30 @@ public class errorTicketCerrar extends javax.swing.JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        anadir = new javax.swing.JButton();
-        jLInfo1 = new javax.swing.JLabel();
-        jLInfo2 = new javax.swing.JLabel();
+        volver = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        listaTicket = new javax.swing.JList<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("VTenda - Error Categorías");
+        setTitle("VTenda - Error Ticket");
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowActivated(java.awt.event.WindowEvent evt) {
                 formWindowActivated(evt);
             }
         });
-        addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                formKeyPressed(evt);
-            }
-        });
 
-        anadir.setBackground(new java.awt.Color(153, 153, 153));
-        anadir.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
-        anadir.setText("Cerrar Ticket");
-        anadir.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        anadir.addActionListener(new java.awt.event.ActionListener() {
+        volver.setBackground(new java.awt.Color(153, 153, 153));
+        volver.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        volver.setText("Volver");
+        volver.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        volver.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                anadirActionPerformed(evt);
+                volverActionPerformed(evt);
             }
         });
 
-        jLInfo1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jLInfo1.setText("Hemos detectado que no se han cerrado correctamente");
-
-        jLInfo2.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        jLInfo2.setText("algunos Tickets. Antes de Continuar Solucionelo.");
+        listaTicket.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        jScrollPane1.setViewportView(listaTicket);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -77,39 +72,54 @@ public class errorTicketCerrar extends javax.swing.JDialog {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLInfo1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLInfo2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(anadir, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(volver, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 302, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLInfo1, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLInfo2, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(anadir)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 163, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 41, Short.MAX_VALUE)
+                .addComponent(volver)
+                .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void anadirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_anadirActionPerformed
-        vtenda.PaAnadirProductos.salir = 1;
+    private void volverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_volverActionPerformed
         dispose();
-    }//GEN-LAST:event_anadirActionPerformed
-
-    private void formKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_formKeyPressed
-        
-    }//GEN-LAST:event_formKeyPressed
+    }//GEN-LAST:event_volverActionPerformed
 
     private void formWindowActivated(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowActivated
-        // TODO add your handling code here:
+        
+        /* Consulta Ticket */
+        try{
+            
+            db.consultas con = new db.consultas();
+            
+            ResultSet rs = con.select("ticket", "estado = 'Iniciado'");
+            
+            JList listaNombres=new JList();
+            DefaultListModel modelo = new DefaultListModel();
+            
+            while(rs.next()){
+                
+                modelo.addElement(" Ticket Nº "+rs.getString("cod"));
+            
+            }
+            
+            this.listaTicket.setModel(modelo);
+            
+        }
+        catch(SQLException ex){
+            System.err.println("Error al recuperar Ticket");
+        }
+        
     }//GEN-LAST:event_formWindowActivated
 
     /**
@@ -129,13 +139,13 @@ public class errorTicketCerrar extends javax.swing.JDialog {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(errorTicketCerrar.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(buscarTicket.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(errorTicketCerrar.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(buscarTicket.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(errorTicketCerrar.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(buscarTicket.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(errorTicketCerrar.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(buscarTicket.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
         //</editor-fold>
@@ -143,7 +153,7 @@ public class errorTicketCerrar extends javax.swing.JDialog {
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                errorTicketCerrar dialog = new errorTicketCerrar(new javax.swing.JDialog(), true);
+                buscarTicket dialog = new buscarTicket(new javax.swing.JDialog(), true);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {
@@ -156,8 +166,8 @@ public class errorTicketCerrar extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton anadir;
-    private javax.swing.JLabel jLInfo1;
-    private javax.swing.JLabel jLInfo2;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JList<String> listaTicket;
+    private javax.swing.JButton volver;
     // End of variables declaration//GEN-END:variables
 }

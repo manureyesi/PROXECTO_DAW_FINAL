@@ -7,8 +7,6 @@ package vtenda;
 
 import java.awt.Image;
 import java.awt.Toolkit;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 
 /**
  *
@@ -357,38 +355,6 @@ public class PaPrincipal extends javax.swing.JFrame {
             
             VTenda.entrar = true;      
         
-        }
-        
-        /* Buscar Tickets No Cerrados */
-        try {
-            
-            db.consultas con = new db.consultas();
-            
-
-            ResultSet rs = con.select("ticket", "estado = 'Iniciado' and codVendedor = (SELECT cod FROM usuarios WHERE usuario = '"+VTenda.usuario+"') limit 0,1");
-            
-            while(rs.next()){
-                
-                System.out.println("Abriendo un Ticket sin Cerrar");
-                
-                errores.errorTicketCerrar errorTicketCerrar = new errores.errorTicketCerrar(new javax.swing.JDialog(),true);
-                errorTicketCerrar.setVisible(true);
-                
-                VTenda.codCerrarTicket = rs.getInt("cod");
-                
-                System.err.println(rs.getInt("cod"));
-                
-            }
-            
-            if(VTenda.codCerrarTicket != 0){
-                
-                TPV TPV = new TPV(this, true);
-                TPV.setVisible(true);
-            
-            }
-            
-        } catch (SQLException ex) {
-            System.err.println("Error al buscar un Ticket sin Cerrar");
         }
         
     }//GEN-LAST:event_formWindowActivated
