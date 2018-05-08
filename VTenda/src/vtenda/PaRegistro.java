@@ -460,7 +460,7 @@ public class PaRegistro extends javax.swing.JFrame {
                 if(cont ==3){
                     if(text.length()==19){
                         this.clave.setText(text);
-                        System.out.println("Clave copiada");
+                        System.out.println("Clave pegada");
                     }
                 }
                 

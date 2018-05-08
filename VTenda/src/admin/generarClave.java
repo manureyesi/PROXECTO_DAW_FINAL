@@ -203,6 +203,7 @@ public class generarClave extends javax.swing.JDialog {
         Clipboard cb = Toolkit.getDefaultToolkit().getSystemClipboard();
         StringSelection ss = new StringSelection(this.claves.getText());
         cb.setContents(ss, ss);
+        System.out.println("Copiando clave en portapapeles");
     }//GEN-LAST:event_clavesMouseClicked
 
     /**

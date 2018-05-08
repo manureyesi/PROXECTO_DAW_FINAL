@@ -196,6 +196,7 @@ public class PaLogin extends javax.swing.JFrame {
                     this.errores.setText("");
                     this.usuario.setText("");
                     this.contrasena.setText("");
+                    this.usuario.requestFocus();
 
                     break;
                     
@@ -228,6 +229,7 @@ public class PaLogin extends javax.swing.JFrame {
 
         this.usuario.setText("");
         this.contrasena.setText("");
+        this.usuario.requestFocus();
 
         VTenda.PaLogin.setVisible(false);
         VTenda.PaRegistro.setVisible(true);
@@ -291,6 +293,7 @@ public class PaLogin extends javax.swing.JFrame {
                         this.errores.setText("");
                         this.usuario.setText("");
                         this.contrasena.setText("");
+                        this.usuario.requestFocus();
 
                         break;
 

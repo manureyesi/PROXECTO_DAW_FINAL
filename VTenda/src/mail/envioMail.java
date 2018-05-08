@@ -41,7 +41,7 @@ public class envioMail {
                 Message.RecipientType.TO,
                 new InternetAddress(correo));
             message.setSubject(asunto);
-            message.setText(mensaje);
+            message.setText(mensaje, "utf-8", "html");
 
             // Lo enviamos.
             Transport t = session.getTransport("smtp");

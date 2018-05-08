@@ -26,9 +26,8 @@ public class TPV extends javax.swing.JDialog {
     public static CarritoCompra CCompra;
     public static ArrayList<CarritoCompra> gardarCarrito = new ArrayList<CarritoCompra>();
     
-    public boolean pantalla = false;
     public int countProductos = 0;
-    public int auxTicket = 0;
+    public static int auxTicket = 0;
     
     public double total = 0;
     
@@ -61,6 +60,8 @@ public class TPV extends javax.swing.JDialog {
 
         jScrollPane1 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
+        jMenu1 = new javax.swing.JMenu();
+        jMenu2 = new javax.swing.JMenu();
         jLVendedor = new javax.swing.JLabel();
         nomeVendedor = new javax.swing.JTextField();
         jLFecha = new javax.swing.JLabel();
@@ -88,16 +89,25 @@ public class TPV extends javax.swing.JDialog {
         jPanel2 = new javax.swing.JPanel();
         guardaTicket = new javax.swing.JButton();
         recuperarTicket = new javax.swing.JButton();
+        jMenuBar1 = new javax.swing.JMenuBar();
+        TicketMenu = new javax.swing.JMenu();
 
         jTextArea1.setColumns(20);
         jTextArea1.setRows(5);
         jScrollPane1.setViewportView(jTextArea1);
+
+        jMenu1.setText("jMenu1");
+
+        jMenu2.setText("jMenu2");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("VTenda - TPV");
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowActivated(java.awt.event.WindowEvent evt) {
                 formWindowActivated(evt);
+            }
+            public void windowOpened(java.awt.event.WindowEvent evt) {
+                formWindowOpened(evt);
             }
         });
         addKeyListener(new java.awt.event.KeyAdapter() {
@@ -130,7 +140,6 @@ public class TPV extends javax.swing.JDialog {
             }
         ));
         productos.setEditingColumn(0);
-        productos.setRowSelectionAllowed(true);
         productos.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 productosMouseClicked(evt);
@@ -277,6 +286,11 @@ public class TPV extends javax.swing.JDialog {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
+        TicketMenu.setText("Menu Ticket");
+        jMenuBar1.add(TicketMenu);
+
+        setJMenuBar(jMenuBar1);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -368,7 +382,7 @@ public class TPV extends javax.swing.JDialog {
                     .addComponent(errores, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(18, 18, 18)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
@@ -388,165 +402,7 @@ public class TPV extends javax.swing.JDialog {
     }//GEN-LAST:event_volverActionPerformed
 
     private void formWindowActivated(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowActivated
-        
-        /* Desbloquear Ticket */
-        db.consultas con = new db.consultas();
-        
-        if(VTenda.codCerrarTicket != 0){
-            
-            
-            System.out.println("Ticket "+this.auxTicket+" Preparado para recuperarse");
-                
-                /********************* LIMPIAR TABLA *******************/
-
-                try{
-
-                    int a=modelo.getRowCount();
-
-                    for (int i = 0; i < a; i++) {
-                        modelo.removeRow(0);
-                    }
-
-                }catch(Exception ex){
-                    System.err.println(ex.getMessage());
-                }
-
-                /********************* LIMPIAR JTEXT *******************/
-
-                this.codProducto.setText("");
-                this.nombreProducto.setText("");
-                this.descuento.setText("");
-                this.precio.setText("");
-                this.unidades.setText("");
-                this.totalTicket.setText("");
-                this.guardaTicket.setEnabled(false);
-                this.errores.setText("Ticket Recuperado con exito");
-                
-                /* Introducir datos */
-                
-                try{
-                    
-                    /* Recuperar Ticket */
-                    ResultSet rs = con.select("productosTicket", "codTicket = "+VTenda.codCerrarTicket);
-                    
-                    double precioFin = 0;
-                    
-                    while(rs.next()){
-                        
-                        ResultSet proc = con.select("productos", "cod = '"+rs.getString("codProducto")+"'");
-                        
-                        /* Recuperar datos de Stock */
-                        while(proc.next()){
-                            
-                            Productos producto = new Productos(proc.getString("cod"), proc.getString("nombre"), proc.getDouble("PrecioSin"), rs.getInt("stock"), "");
-                            
-                            Object datos[]={producto.getCodArticulo(), producto.getNomeArticulo(), producto.getStock(), producto.getPrecioSin(), rs.getInt("descuento") + " %", rs.getDouble("precioIVA")};
-                            modelo.addRow(datos);
-                            
-                            precioFin += rs.getDouble("precioIVA");
-                            
-                        }
-                        
-                    }
-                    
-                    
-                    this.totalTicket.setText(precioFin+" €");
-                    
-                    /* Habilitar Guardado de Ticket */
-                    this.guardaTicket.setEnabled(true);
-                    
-                    /* Desabilitar Recuperacion de Ticket */
-                    this.recuperarTicket.setEnabled(false);
-                    
-                    
-                }
-                catch(SQLException ex){
-                    System.err.println("Error al conectar con la DB al recuperar Ticket no Guardado");
-                    this.errores.setText("Error al recuperar Ticket Erroneo");
-                }
-            
-        
-        }
-        
-        try {
-            
-            ResultSet rs = con.selectEspecial("count(*)", "ticket", "estado = 'Guardado'");
-            
-            while(rs.next()){
-                
-                if(rs.getInt(1) != 0){
-                    this.recuperarTicket.setEnabled(true);
-                }
-                
-            }
-            
-        } catch (SQLException ex) {
-            System.err.println("Problemas al Conectar con la DB");
-            this.errores.setText("Error al buscar Tickets Guardados");
-        }
-        
-        
-        //this.recuperarTicket.setEnabled(true);
-        
-        
-        System.out.println("Iniciando TPV");
-        
-        if(pantalla == false){
-            
-            pantalla =true;
-            
-            /* Inicializar Precio Total Ticket */
-            total = 0;
-            
-            /* Vendedor */
-            this.nomeVendedor.setText(VTenda.vendedor.getNomeVendedor());
-            this.codVendedor.setText(VTenda.vendedor.getNumVendedor()+"");
-
-            /********************* LIMPIAR TABLA *******************/
-
-            try{
-
-                int a=modelo.getRowCount();
-
-                for (int i = 0; i < a; i++) {
-                    modelo.removeRow(0);
-                }
-
-            }catch(Exception ex){
-                System.err.println(ex.getMessage());
-            }
-
-            /********************* LIMPIAR JTEXT *******************/
-
-            this.codProducto.setText("");
-            this.nombreProducto.setText("");
-            this.descuento.setText("");
-            this.precio.setText("");
-            this.unidades.setText("");
-            this.errores.setText("");
-
-            /********************* LIMPIAR ARRAYLIST ***************/
-
-            gardarCarrito.clear();
-            
-        }
-        
-        /* Fecha TPV */
-        Date fechaActual = new Date();
-        
-        String dd;
-    
-        Calendar fecha = Calendar.getInstance();
-            int año = fecha.get(Calendar.YEAR);
-            int mes = fecha.get(Calendar.MONTH) + 1;
-            int dia = fecha.get(Calendar.DAY_OF_MONTH);
-            
-        dd=dia+" / "+mes+" / "+año;
-
-        fecha1.setText(dd);
-        
-        
-        
+        // TODO add your handling code here: 
     }//GEN-LAST:event_formWindowActivated
 
     private void anadirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_anadirActionPerformed
@@ -688,10 +544,11 @@ public class TPV extends javax.swing.JDialog {
                     modelo.addRow(datos);
                                 
                     total += precioFinal;
+                    
+                    Redondear rd = new Redondear();
                         
-                    this.totalTicket.setText(total+" €");
-                    
-                    
+                    this.totalTicket.setText(rd.redondearDecimales(total)+" €");
+                                       
                     this.codProducto.setText("");
                     this.nombreProducto.setText("");
                     this.unidades.setText("");
@@ -777,22 +634,41 @@ public class TPV extends javax.swing.JDialog {
     }//GEN-LAST:event_codProductoKeyPressed
 
     private void cerrarTicketActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cerrarTicketActionPerformed
-        countProductos = 0;
-        auxTicket = 0;
-        total = 0;
-        this.totalTicket.setText("");
         
-        try{
+                
+        PaFinalizarTicket PaFinalizarTicket = new PaFinalizarTicket(new javax.swing.JDialog(), true);
+        PaFinalizarTicket.setVisible(true);
+        
+        if(auxTicket == 0){
+            
+            countProductos = 0;
+            auxTicket = 0;
+            total = 0;
+            this.totalTicket.setText("");
+        
+            try{
 
-            int a=modelo.getRowCount();
+                int a=modelo.getRowCount();
 
-            for (int i = 0; i < a; i++) {
-                modelo.removeRow(0);
+                for (int i = 0; i < a; i++) {
+                    modelo.removeRow(0);
+                }
+
+            }catch(Exception ex){
+                System.err.println(ex.getMessage());
             }
-
-        }catch(Exception ex){
-            System.err.println(ex.getMessage());
+            
+            this.guardaTicket.setEnabled(false);
+            
         }
+        else{
+            
+            this.errores.setText("Cierre de Ticket cancelado");
+            
+            
+        }
+        
+        
         
     }//GEN-LAST:event_cerrarTicketActionPerformed
 
@@ -826,6 +702,7 @@ public class TPV extends javax.swing.JDialog {
         VTenda.auxTicketGuardar = auxTicket;
         
         System.out.println("Preparandose para guardar Ticket");
+        
         guardaTicket.GuardarTicket GuardaTicket = new guardaTicket.GuardarTicket(new javax.swing.JDialog(),true);
         GuardaTicket.setVisible(true);
         
@@ -885,6 +762,7 @@ public class TPV extends javax.swing.JDialog {
     }//GEN-LAST:event_guardaTicketActionPerformed
 
     private void recuperarTicketActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_recuperarTicketActionPerformed
+
         this.recuperarTicket.setEnabled(false);
         
         /* Declarar Consultas */
@@ -904,7 +782,7 @@ public class TPV extends javax.swing.JDialog {
             break;
             
             case 1:
-                
+                this.auxTicket = VTenda.auxTicketGuardar;
                 System.out.println("Ticket "+this.auxTicket+" Preparado para recuperarse");
                 
                 /********************* LIMPIAR TABLA *******************/
@@ -947,6 +825,8 @@ public class TPV extends javax.swing.JDialog {
                         
                         /* Recuperar datos de Stock */
                         while(proc.next()){
+                            
+                            countProductos++;
                             
                             Productos producto = new Productos(proc.getString("cod"), proc.getString("nombre"), proc.getDouble("PrecioSin"), rs.getInt("stock"), "");
                             
@@ -994,6 +874,82 @@ public class TPV extends javax.swing.JDialog {
         
     }//GEN-LAST:event_recuperarTicketActionPerformed
 
+    private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
+        
+        /* Desbloquear Ticket */
+        db.consultas con = new db.consultas();
+                            
+        /* Inicializar Precio Total Ticket */
+        
+        total = 0;
+
+        /* Vendedor */
+        this.nomeVendedor.setText(VTenda.vendedor.getNomeVendedor());
+        this.codVendedor.setText(VTenda.vendedor.getNumVendedor()+"");
+
+        /********************* LIMPIAR TABLA *******************/
+
+        try{
+
+            int a=modelo.getRowCount();
+
+            for (int i = 0; i < a; i++) {
+                modelo.removeRow(0);
+            }
+
+        }catch(Exception ex){
+            System.err.println(ex.getMessage());
+        }
+
+        /********************* LIMPIAR JTEXT *******************/
+
+        this.codProducto.setText("");
+        this.nombreProducto.setText("");
+        this.descuento.setText("");
+        this.precio.setText("");
+        this.unidades.setText("");
+        this.errores.setText("");
+
+        /********************* LIMPIAR ARRAYLIST ***************/
+
+        gardarCarrito.clear();
+
+        
+        /* Fecha TPV */
+        Date fechaActual = new Date();
+        
+        String dd;
+    
+        Calendar fecha = Calendar.getInstance();
+            int año = fecha.get(Calendar.YEAR);
+            int mes = fecha.get(Calendar.MONTH) + 1;
+            int dia = fecha.get(Calendar.DAY_OF_MONTH);
+            
+        dd=dia+" / "+mes+" / "+año;
+
+        fecha1.setText(dd);
+        
+        /********* BUSCANDO TICKETS GUARDADOS ***************/
+        
+        try {
+            
+            ResultSet rs = con.selectEspecial("count(*)", "ticket", "estado = 'Guardado'");
+            
+            while(rs.next()){
+                
+                if(rs.getInt(1) != 0){
+                    this.recuperarTicket.setEnabled(true);
+                }
+                
+            }
+            
+        } catch (SQLException ex) {
+            System.err.println("Problemas al Conectar con la DB");
+            this.errores.setText("Error al buscar Tickets Guardados");
+        }
+        
+    }//GEN-LAST:event_formWindowOpened
+
     /**
      * @param args the command line arguments
      */
@@ -1037,6 +993,7 @@ public class TPV extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JMenu TicketMenu;
     private javax.swing.JButton anadir;
     private javax.swing.JButton cerrarTicket;
     private javax.swing.JTextField codProducto;
@@ -1053,6 +1010,9 @@ public class TPV extends javax.swing.JDialog {
     private javax.swing.JLabel jLTotalTicket;
     private javax.swing.JLabel jLUnidades;
     private javax.swing.JLabel jLVendedor;
+    private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenu jMenu2;
+    private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
