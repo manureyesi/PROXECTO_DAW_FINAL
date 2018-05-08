@@ -89,8 +89,6 @@ public class TPV extends javax.swing.JDialog {
         jPanel2 = new javax.swing.JPanel();
         guardaTicket = new javax.swing.JButton();
         recuperarTicket = new javax.swing.JButton();
-        jMenuBar1 = new javax.swing.JMenuBar();
-        TicketMenu = new javax.swing.JMenu();
 
         jTextArea1.setColumns(20);
         jTextArea1.setRows(5);
@@ -285,11 +283,6 @@ public class TPV extends javax.swing.JDialog {
                     .addComponent(recuperarTicket, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
-
-        TicketMenu.setText("Menu Ticket");
-        jMenuBar1.add(TicketMenu);
-
-        setJMenuBar(jMenuBar1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -744,6 +737,7 @@ public class TPV extends javax.swing.JDialog {
                 this.unidades.setText("");
                 this.totalTicket.setText("");
                 this.guardaTicket.setEnabled(false);
+                this.recuperarTicket.setEnabled(true);
                 this.errores.setText("Ticket Guardado con exito");
                 
             break;
@@ -993,7 +987,6 @@ public class TPV extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JMenu TicketMenu;
     private javax.swing.JButton anadir;
     private javax.swing.JButton cerrarTicket;
     private javax.swing.JTextField codProducto;
@@ -1012,7 +1005,6 @@ public class TPV extends javax.swing.JDialog {
     private javax.swing.JLabel jLVendedor;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
-    private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
