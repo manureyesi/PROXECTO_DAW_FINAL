@@ -29,7 +29,10 @@ public class TPV extends javax.swing.JDialog {
     public int countProductos = 0;
     public static int auxTicket = 0;
     
-    public double total = 0;
+    /* Variable para salir de TPV sin Cerrar Ticket */
+    public static boolean SalirVentana = false;
+    
+    public static double total = 0;
     
     public TPV(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
@@ -222,7 +225,7 @@ public class TPV extends javax.swing.JDialog {
 
         anadir.setBackground(new java.awt.Color(204, 204, 204));
         anadir.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
-        anadir.setText("Añadir");
+        anadir.setText("+ Añadir");
         anadir.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
         anadir.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -391,7 +394,26 @@ public class TPV extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
     
     private void volverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_volverActionPerformed
-        dispose();
+        
+        if(countProductos == 0){
+            
+            dispose();
+            
+            SalirVentana = false;
+            
+        }
+        else{
+            
+            errores.errorCerrarTicketConContenido errorCerrarTicketConContenido = new errores.errorCerrarTicketConContenido(new javax.swing.JDialog(), true);
+            errorCerrarTicketConContenido.setVisible(true);
+            
+            if(SalirVentana){
+                dispose();
+            }
+            
+        }
+        
+        
     }//GEN-LAST:event_volverActionPerformed
 
     private void formWindowActivated(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowActivated
@@ -628,39 +650,46 @@ public class TPV extends javax.swing.JDialog {
 
     private void cerrarTicketActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cerrarTicketActionPerformed
         
-                
-        PaFinalizarTicket PaFinalizarTicket = new PaFinalizarTicket(new javax.swing.JDialog(), true);
-        PaFinalizarTicket.setVisible(true);
-        
-        if(auxTicket == 0){
+        if(countProductos == 0){
             
-            countProductos = 0;
-            auxTicket = 0;
-            total = 0;
-            this.totalTicket.setText("");
-        
-            try{
-
-                int a=modelo.getRowCount();
-
-                for (int i = 0; i < a; i++) {
-                    modelo.removeRow(0);
-                }
-
-            }catch(Exception ex){
-                System.err.println(ex.getMessage());
-            }
-            
-            this.guardaTicket.setEnabled(false);
+            errores.errorCerrarTicketVacio errorCerrarTicketVacio = new errores.errorCerrarTicketVacio(new javax.swing.JDialog(), true);
+            errorCerrarTicketVacio.setVisible(true);
             
         }
         else{
-            
-            this.errores.setText("Cierre de Ticket cancelado");
-            
+        
+            PaFinalizarTicket PaFinalizarTicket = new PaFinalizarTicket(new javax.swing.JDialog(), true);
+            PaFinalizarTicket.setVisible(true);
+
+            if(auxTicket == 0){
+
+                countProductos = 0;
+                auxTicket = 0;
+                total = 0;
+                this.totalTicket.setText("");
+
+                try{
+
+                    int a=modelo.getRowCount();
+
+                    for (int i = 0; i < a; i++) {
+                        modelo.removeRow(0);
+                    }
+
+                }catch(Exception ex){
+                    System.err.println(ex.getMessage());
+                }
+
+                this.guardaTicket.setEnabled(false);
+
+            }
+            else{
+
+                this.errores.setText("Cierre de Ticket cancelado");
+
+            }
             
         }
-        
         
         
     }//GEN-LAST:event_cerrarTicketActionPerformed

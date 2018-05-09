@@ -63,7 +63,7 @@ public class darAdmin extends javax.swing.JDialog {
             }
         });
 
-        volver1.setBackground(new java.awt.Color(153, 153, 153));
+        volver1.setBackground(new java.awt.Color(204, 204, 204));
         volver1.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         volver1.setText("Volver");
         volver1.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
