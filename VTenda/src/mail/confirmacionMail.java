@@ -41,8 +41,8 @@ public class confirmacionMail {
         
         while(rs.next()){
             
-            em.enviarGMail("<h1 style='color: #620062; text-align: center;'>VTenda</h1>Para finalizar el rexistro pulse en <a href='https://beta.fiandeira.es/proxectos/proxecto_DAW2/verificar.php?mail=" + rs.getString("mail") + "&user=" + rs.getString("usuario") + "&cod=" + rs.getInt("cod") + "'>Activar la Cuenta</a> .</br>"
-                + "En caso de no haber echo este registro envie un mensaje a admin@fiandeira.es.</br></br><img class='logo' style='text-align: center; ' title='Logo Fiandeira' alt='Fiandeira' src='https://beta.fiandeira.es/proxectos/fiandeira/img/logos/logo_fiandeira.png\'>", "Confirmacion VTenda", rs.getString("mail"));
+            em.enviarGMail("<h1 style='color: #620062; text-align: center;'>VTenda</h1>Para finalizar el rexistro pulse en <a href='https://pruebas.fiandeira.es/verificar.php?mail=" + rs.getString("mail") + "&user=" + rs.getString("usuario") + "&cod=" + rs.getInt("cod") + "'>Activar la Cuenta</a> .</br>"
+                + "En caso de no haber echo este registro envie un mensaje a admin@fiandeira.es.</br></br><img class='logo' style='text-align: center; ' title='Logo Fiandeira' alt='Fiandeira' src='https://pruebas.fiandeira.es/img/logos/logo_fiandeira.png\'>", "Confirmacion VTenda", rs.getString("mail"));
             
         }
         
