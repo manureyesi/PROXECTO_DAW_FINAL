@@ -17,7 +17,7 @@ public class conexion {
     
     Connection cn = null;
     
-    final String url = "jdbc:mysql://beta.fiandeira.es:8082/";
+    final String url = "jdbc:mysql://pruebas.fiandeira.es:8082/";
     final String dbName = "proxecto_DAW2";
     final String dbUser = "proxecto";
     final String dbPass = "abc123.";

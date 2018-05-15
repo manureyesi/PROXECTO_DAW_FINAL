@@ -421,7 +421,7 @@ public class PaPrincipal extends javax.swing.JFrame {
 
     private void tpvActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tpvActionPerformed
         System.out.println("Entrando en TPV");
-        TPV TPV = new TPV(this, true);
+        TPV TPV = new TPV(new javax.swing.JDialog(), true);
         TPV.setVisible(true);
     }//GEN-LAST:event_tpvActionPerformed
 

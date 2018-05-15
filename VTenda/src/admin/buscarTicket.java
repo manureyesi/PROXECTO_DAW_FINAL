@@ -7,7 +7,6 @@ package admin;
 
 import java.awt.Image;
 import java.awt.Toolkit;
-import java.awt.datatransfer.*;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import javax.swing.DefaultListModel;
@@ -18,7 +17,10 @@ import javax.swing.JList;
  * @author DAW221
  */
 public class buscarTicket extends javax.swing.JDialog {
-
+    
+    /* Variable para Aux Ticket */
+    public static int codTicketAux = 0;
+    
     /**
      * Creates new form generarClave
      */
@@ -43,9 +45,12 @@ public class buscarTicket extends javax.swing.JDialog {
         volver = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         listaTicket = new javax.swing.JList<>();
+        recuperar = new javax.swing.JButton();
+        errores = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("VTenda - Error Ticket");
+        setTitle("VTenda - Recuperar Ticket");
+        setResizable(false);
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowActivated(java.awt.event.WindowEvent evt) {
                 formWindowActivated(evt);
@@ -65,6 +70,18 @@ public class buscarTicket extends javax.swing.JDialog {
         listaTicket.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jScrollPane1.setViewportView(listaTicket);
 
+        recuperar.setBackground(new java.awt.Color(153, 153, 153));
+        recuperar.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        recuperar.setText("Recuperar Ticket");
+        recuperar.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        recuperar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                recuperarActionPerformed(evt);
+            }
+        });
+
+        errores.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -72,19 +89,25 @@ public class buscarTicket extends javax.swing.JDialog {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(volver, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 302, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(recuperar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(volver, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 344, Short.MAX_VALUE)
+                    .addComponent(errores, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 163, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 41, Short.MAX_VALUE)
-                .addComponent(volver)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 201, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(errores, javax.swing.GroupLayout.DEFAULT_SIZE, 26, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(volver)
+                    .addComponent(recuperar))
                 .addContainerGap())
         );
 
@@ -121,6 +144,31 @@ public class buscarTicket extends javax.swing.JDialog {
         }
         
     }//GEN-LAST:event_formWindowActivated
+
+    private void recuperarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_recuperarActionPerformed
+        
+        if(this.listaTicket.getSelectedValue() == null){
+            this.errores.setText("No tiene seleccionado ningun Ticket");
+        }
+        else{
+            
+            this.errores.setText("");
+            
+            String[] numTicketAux = this.listaTicket.getSelectedValue().split(" ");
+            
+            int num = Integer.parseInt(numTicketAux[3]);
+            
+            this.codTicketAux = num;
+            
+            System.out.println("Recuperando Ticket Erroneo Numº "+this.codTicketAux);
+            vtenda.TPV TPV = new vtenda.TPV(new javax.swing.JDialog(),true);
+            TPV.setVisible(true);
+            
+            dispose();
+            
+        }
+                
+    }//GEN-LAST:event_recuperarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -166,8 +214,10 @@ public class buscarTicket extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel errores;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JList<String> listaTicket;
+    private javax.swing.JButton recuperar;
     private javax.swing.JButton volver;
     // End of variables declaration//GEN-END:variables
 }

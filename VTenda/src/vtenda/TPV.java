@@ -34,7 +34,7 @@ public class TPV extends javax.swing.JDialog {
     
     public static double total = 0;
     
-    public TPV(java.awt.Frame parent, boolean modal) {
+    public TPV(javax.swing.JDialog parent, boolean modal) {
         super(parent, modal);
         initComponents();
         
@@ -220,6 +220,12 @@ public class TPV extends javax.swing.JDialog {
 
         jLPrecio.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLPrecio.setText("Precio:");
+
+        unidades.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                unidadesKeyPressed(evt);
+            }
+        });
 
         precio.setEditable(false);
 
@@ -409,6 +415,7 @@ public class TPV extends javax.swing.JDialog {
             
             if(SalirVentana){
                 dispose();
+                admin.buscarTicket.codTicketAux = 0;
             }
             
         }
@@ -421,6 +428,12 @@ public class TPV extends javax.swing.JDialog {
     }//GEN-LAST:event_formWindowActivated
 
     private void anadirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_anadirActionPerformed
+        
+        anadirProducto();
+        
+    }//GEN-LAST:event_anadirActionPerformed
+    
+    private void anadirProducto(){
         
         int uni = 0;
         int des = 0;
@@ -448,6 +461,11 @@ public class TPV extends javax.swing.JDialog {
            }
            else if(error == true){
                this.errores.setText("Compruebe los campos numericos");
+           }
+           else if(des > 100 && des < 0){
+               this.descuento.setText("");
+               this.descuento.requestFocus();
+               this.errores.setText("Compruebe el descuento del Producto");
            }
            else{
                
@@ -482,13 +500,11 @@ public class TPV extends javax.swing.JDialog {
                 if(stock == false){
                     this.errores.setText("No tiene suficiente Stock");
                     this.unidades.setText(maxStock+"");
+                    this.unidades.requestFocus();
                 }
                 else{
                     
-                    
-                    for(int i = 0 ; i== modelo.getRowCount() ; i++){
-                    }
-                    System.out.println(modelo.getRowCount());
+                    System.out.println("Fila Numero "+modelo.getRowCount()+1);
                     
                     
                     if(countProductos == 0){
@@ -521,17 +537,31 @@ public class TPV extends javax.swing.JDialog {
                         
                     }
                     
+                    boolean compruebaProductoEsta = false;
+                    
+                    if(countProductos != 0){
+                    
+                        /* Buscar Code en Ticket */
+                        rs = con.select("productosTicket", "'codTicket' = "+ auxTicket +" and 'codProducto' = '"+ this.codProducto.getText() +"'");
+                        
+                        while(rs.next()){
+                            
+                            compruebaProductoEsta = true;
+                            
+                        }
+                        
+                    }
+                    
                     countProductos++;
                     
                     /* Iniciar Valores */
-                    
                     String cod = this.codProducto.getText();
                     String nome = this.nombreProducto.getText();
                     double precioIVA = Double.parseDouble(this.precio.getText());
                     double precioFinal = precioIVA*uni;
                     
+                    /********************************************************************** COMPROBAR ************************************************************************************/
                     /* Comprobar descuentos */
-                    
                     if(!this.descuento.getText().isEmpty()){
                         
                         double desc = 0;
@@ -541,6 +571,7 @@ public class TPV extends javax.swing.JDialog {
                         precioFinal = precioFinal - (precioFinal * desc);
                         
                     }
+                    /********************************************************************** COMPROBAR ************************************************************************************/
                     
                     /*Buscar Producto*/
                     rs = con.select("productos", "cod = "+this.codProducto.getText());
@@ -551,13 +582,32 @@ public class TPV extends javax.swing.JDialog {
                         con.update("productos", "stock = "+(rs.getInt("stock") - uni), "cod = "+this.codProducto.getText());
                         
                     }
+                    
+                    if(compruebaProductoEsta == true){
                         
-                    /*Insertar Producto*/
-                    con.insert("productosTicket", "codTicket, codProducto, stock, descuento, precioIVA", auxTicket+", '"+this.codProducto.getText()+"', "+uni+", "+des+", "+Double.parseDouble(this.precio.getText()));
-                                         
-                    Object datos[]={cod, nome, uni, precioIVA, des + " %", precioFinal};
-                    modelo.addRow(datos);
-                                
+                        /* Buscar Producto */
+                        rs = con.select("productosTicket", "'codTicket' = "+ auxTicket +" and 'codProducto' = '"+ this.codProducto.getText() +"'");
+                        
+                        while(rs.next()){
+                            
+                            uni = uni + rs.getInt("stock");
+                            
+                            /* Actualizar Producto */
+                            con.update("productosTicket", "stock = "+ uni +", descuento = "+des, "'codTicket' = "+ auxTicket +" and 'codProducto' = '"+ this.codProducto.getText() +"'");
+                        
+                        }
+                        
+                    }
+                    else{
+                    
+                        /*Insertar Producto*/
+                        con.insert("productosTicket", "codTicket, codProducto, stock, descuento, precioIVA", auxTicket+", '"+this.codProducto.getText()+"', "+uni+", "+des+", "+Double.parseDouble(this.precio.getText()));
+
+                        Object datos[]={cod, nome, uni, precioIVA, des + " %", precioFinal};
+                        modelo.addRow(datos);
+                    
+                    }
+                    
                     total += precioFinal;
                     
                     Redondear rd = new Redondear();
@@ -570,6 +620,9 @@ public class TPV extends javax.swing.JDialog {
                     this.precio.setText("");
                     this.errores.setText("");
                     
+                    /* Poner Cursor en Cod Producto */
+                    this.codProducto.requestFocus();
+                    
                 }
                 
                 
@@ -580,9 +633,9 @@ public class TPV extends javax.swing.JDialog {
            System.err.println("Acabamos de sufrir un error contra la DB");
            this.errores.setText("Lo sentimos, acabamos de sufrir un error");
        }
-        
-    }//GEN-LAST:event_anadirActionPerformed
-
+       
+    }
+    
     private void codProductoKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_codProductoKeyPressed
         
         if(evt.getKeyCode()==KeyEvent.VK_ENTER){
@@ -660,7 +713,12 @@ public class TPV extends javax.swing.JDialog {
         
             PaFinalizarTicket PaFinalizarTicket = new PaFinalizarTicket(new javax.swing.JDialog(), true);
             PaFinalizarTicket.setVisible(true);
-
+            
+            if(admin.buscarTicket.codTicketAux != 0){
+                admin.buscarTicket.codTicketAux = 0;
+                dispose();
+            }
+            
             if(auxTicket == 0){
 
                 countProductos = 0;
@@ -721,7 +779,7 @@ public class TPV extends javax.swing.JDialog {
 
     private void guardaTicketActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_guardaTicketActionPerformed
         
-        VTenda.auxTicketGuardar = auxTicket;
+        VTenda.auxTicketGuardar = this.auxTicket;
         
         System.out.println("Preparandose para guardar Ticket");
         
@@ -768,6 +826,11 @@ public class TPV extends javax.swing.JDialog {
                 this.guardaTicket.setEnabled(false);
                 this.recuperarTicket.setEnabled(true);
                 this.errores.setText("Ticket Guardado con exito");
+                
+                if(admin.buscarTicket.codTicketAux != 0){
+                    admin.buscarTicket.codTicketAux = 0;
+                    dispose();
+                }
                 
             break;
             
@@ -874,7 +937,8 @@ public class TPV extends javax.swing.JDialog {
                     /* Desabilitar Recuperacion de Ticket */
                     this.recuperarTicket.setEnabled(false);
                     
-                    
+                    /* Poner Cursor en Cod Producto */
+                    this.codProducto.requestFocus();
                     
                 }
                 catch(SQLException ex){
@@ -971,7 +1035,79 @@ public class TPV extends javax.swing.JDialog {
             this.errores.setText("Error al buscar Tickets Guardados");
         }
         
+        if(admin.buscarTicket.codTicketAux !=0){
+            
+            /********************* LIMPIAR JTEXT *******************/
+
+            this.codProducto.setText("");
+            this.nombreProducto.setText("");
+            this.descuento.setText("");
+            this.precio.setText("");
+            this.unidades.setText("");
+            this.totalTicket.setText("");
+            this.guardaTicket.setEnabled(false);
+            this.errores.setText("Ticket Recuperado con exito");
+
+            /* Introducir datos */
+
+            try{
+                
+                VTenda.auxTicketGuardar = admin.buscarTicket.codTicketAux;
+                this.auxTicket = admin.buscarTicket.codTicketAux;
+                
+                /* Recuperar Ticket */
+                ResultSet rs = con.select("productosTicket", "codTicket = "+VTenda.auxTicketGuardar);
+
+                double precioFin = 0;
+
+                while(rs.next()){
+
+                    ResultSet proc = con.select("productos", "cod = '"+rs.getString("codProducto")+"'");
+
+                    /* Recuperar datos de Stock */
+                    while(proc.next()){
+
+                        countProductos++;
+
+                        Productos producto = new Productos(proc.getString("cod"), proc.getString("nombre"), proc.getDouble("PrecioSin"), rs.getInt("stock"), "");
+
+                        Object datos[]={producto.getCodArticulo(), producto.getNomeArticulo(), producto.getStock(), producto.getPrecioSin(), rs.getInt("descuento") + " %", rs.getDouble("precioIVA")};
+                        modelo.addRow(datos);
+
+                        precioFin += rs.getDouble("precioIVA");
+
+                    }
+
+                }
+                this.total = precioFin;
+                this.totalTicket.setText(precioFin+" €");
+                    
+                /* Habilitar Guardado de Ticket */
+                this.guardaTicket.setEnabled(true);
+
+                /* Desabilitar Recuperacion de Ticket */
+                this.recuperarTicket.setEnabled(false);
+
+            }
+            catch(SQLException Ex){
+                System.err.println("Error ao conectar co DB en TIcket Erroneo, Cerrando Ventana");
+                dispose();
+            }
+        }
+        
+        /* Poner Cursor en Cod Producto */
+        this.codProducto.requestFocus();
+        
     }//GEN-LAST:event_formWindowOpened
+
+    private void unidadesKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_unidadesKeyPressed
+        
+        if(evt.getKeyCode()==KeyEvent.VK_ENTER){
+            anadirProducto();  
+        }
+        
+        
+    }//GEN-LAST:event_unidadesKeyPressed
 
     /**
      * @param args the command line arguments
@@ -1003,7 +1139,7 @@ public class TPV extends javax.swing.JDialog {
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                TPV dialog = new TPV(new javax.swing.JFrame(), true);
+                TPV dialog = new TPV(new javax.swing.JDialog(), true);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
                     public void windowClosing(java.awt.event.WindowEvent e) {
