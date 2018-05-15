@@ -557,21 +557,6 @@ public class TPV extends javax.swing.JDialog {
                     /* Iniciar Valores */
                     String cod = this.codProducto.getText();
                     String nome = this.nombreProducto.getText();
-                    double precioIVA = Double.parseDouble(this.precio.getText());
-                    double precioFinal = precioIVA*uni;
-                    
-                    /********************************************************************** COMPROBAR ************************************************************************************/
-                    /* Comprobar descuentos */
-                    if(!this.descuento.getText().isEmpty()){
-                        
-                        double desc = 0;
-                        
-                        desc = des/100;
-                        
-                        precioFinal = precioFinal - (precioFinal * desc);
-                        
-                    }
-                    /********************************************************************** COMPROBAR ************************************************************************************/
                     
                     /*Buscar Producto*/
                     rs = con.select("productos", "cod = "+this.codProducto.getText());
@@ -597,23 +582,51 @@ public class TPV extends javax.swing.JDialog {
                         
                         }
                         
-                        System.out.println(modelo.getValueAt(0, 0));
+                        /* Limpar Listas */
+                        for(int i = 0; i <= (modelo.getRowCount()-1) ; i++){
+                            
+                            if(modelo.getValueAt(i, 0).toString().compareTo(this.codProducto.getText()) == 0){
+                                modelo.removeRow(i);
+                            }
+                                                        
+                        }
                         
                     }
                     else{
                     
                         /*Insertar Producto*/
                         con.insert("productosTicket", "codTicket, codProducto, stock, descuento, precioIVA", auxTicket+", '"+this.codProducto.getText()+"', "+uni+", "+des+", "+Double.parseDouble(this.precio.getText()));
-
-                        Object datos[]={cod, nome, uni, precioIVA, des + " %", precioFinal};
-                        modelo.addRow(datos);
-                    
+                        
                     }
                     
-                    total += precioFinal;
-                    
                     Redondear rd = new Redondear();
+                    
+                    double precioIVA = rd.redondearDecimales(Double.parseDouble(this.precio.getText()));
+                    double precioFinal = rd.redondearDecimales(precioIVA*uni);
+                    
+                    /********************************************************************** COMPROBAR ************************************************************************************/
+                    /* Comprobar descuentos */
+                    if(!this.descuento.getText().isEmpty()){
+                                                
+                        double desc = 0;
                         
+                        desc = des/100;
+                        
+                        System.err.println("Precio : "+desc);
+                        
+                        precioFinal -=(precioFinal*desc);
+                        double auxFinal = precioFinal - (precioFinal*desc);
+                        System.err.println("Precio : "+auxFinal);
+                        
+                    }
+                    /********************************************************************** COMPROBAR ************************************************************************************/
+                    
+                    /* Insertar en Lista */
+                    Object datos[]={cod, nome, uni, precioIVA, des + " %", precioFinal};
+                    modelo.addRow(datos);
+                    
+                    total += precioFinal;
+                                            
                     this.totalTicket.setText(rd.redondearDecimales(total)+" €");
                                        
                     this.codProducto.setText("");
