@@ -504,7 +504,7 @@ public class TPV extends javax.swing.JDialog {
                 }
                 else{
                     
-                    System.out.println("Fila Numero "+modelo.getRowCount()+1);
+                    System.out.println("Fila Numero "+(modelo.getRowCount()+1));
                     
                     
                     if(countProductos == 0){
@@ -541,8 +541,8 @@ public class TPV extends javax.swing.JDialog {
                     
                     if(countProductos != 0){
                     
-                        /* Buscar Code en Ticket */
-                        rs = con.select("productosTicket", "'codTicket' = "+ auxTicket +" and 'codProducto' = '"+ this.codProducto.getText() +"'");
+                        /* Buscar Cod en Ticket */
+                        rs = con.select("productosTicket", "codTicket = "+ auxTicket +" and codProducto = '"+ this.codProducto.getText() +"'");
                         
                         while(rs.next()){
                             
@@ -586,16 +586,18 @@ public class TPV extends javax.swing.JDialog {
                     if(compruebaProductoEsta == true){
                         
                         /* Buscar Producto */
-                        rs = con.select("productosTicket", "'codTicket' = "+ auxTicket +" and 'codProducto' = '"+ this.codProducto.getText() +"'");
+                        rs = con.select("productosTicket", "codTicket = "+ auxTicket +" and codProducto = '"+ this.codProducto.getText() +"'");
                         
                         while(rs.next()){
                             
                             uni = uni + rs.getInt("stock");
                             
                             /* Actualizar Producto */
-                            con.update("productosTicket", "stock = "+ uni +", descuento = "+des, "'codTicket' = "+ auxTicket +" and 'codProducto' = '"+ this.codProducto.getText() +"'");
+                            con.update("productosTicket", "stock = "+ uni +", descuento = "+des, "codTicket = "+ auxTicket +" and codProducto = '"+ this.codProducto.getText() +"'");
                         
                         }
+                        
+                        System.out.println(modelo.getValueAt(0, 0));
                         
                     }
                     else{
@@ -630,7 +632,7 @@ public class TPV extends javax.swing.JDialog {
            
        }
        catch(SQLException ex){
-           System.err.println("Acabamos de sufrir un error contra la DB");
+           System.err.println("Acabamos de sufrir un error contra la DB al añadir Producto a TPV");
            this.errores.setText("Lo sentimos, acabamos de sufrir un error");
        }
        
