@@ -436,7 +436,7 @@ public class TPV extends javax.swing.JDialog {
     private void anadirProducto(){
         
         int uni = 0;
-        int des = 0;
+        double des = 0;
         
        try{
            
@@ -447,7 +447,7 @@ public class TPV extends javax.swing.JDialog {
                uni = Integer.parseInt(this.unidades.getText());
                
                if(!this.descuento.getText().isEmpty()){
-                   des = Integer.parseInt(this.descuento.getText());
+                   des = Double.parseDouble(this.descuento.getText());
                }
                
                
@@ -568,6 +568,9 @@ public class TPV extends javax.swing.JDialog {
                         
                     }
                     
+                    /* Declarar Redondeo */
+                    Redondear rd = new Redondear();
+                    
                     if(compruebaProductoEsta == true){
                         
                         /* Buscar Producto */
@@ -578,7 +581,7 @@ public class TPV extends javax.swing.JDialog {
                             uni = uni + rs.getInt("stock");
                             
                             /* Actualizar Producto */
-                            con.update("productosTicket", "stock = "+ uni +", descuento = "+des, "codTicket = "+ auxTicket +" and codProducto = '"+ this.codProducto.getText() +"'");
+                            con.update("productosTicket", "stock = "+ uni +", descuento = "+(int)((rd.redondearDecimales(des/100))*100), "codTicket = "+ auxTicket +" and codProducto = '"+ this.codProducto.getText() +"'");
                         
                         }
                         
@@ -595,11 +598,9 @@ public class TPV extends javax.swing.JDialog {
                     else{
                     
                         /*Insertar Producto*/
-                        con.insert("productosTicket", "codTicket, codProducto, stock, descuento, precioIVA", auxTicket+", '"+this.codProducto.getText()+"', "+uni+", "+des+", "+Double.parseDouble(this.precio.getText()));
+                        con.insert("productosTicket", "codTicket, codProducto, stock, descuento, precioIVA", auxTicket+", '"+this.codProducto.getText()+"', "+uni+", "+(int)((rd.redondearDecimales(des/100))*100)+", "+Double.parseDouble(this.precio.getText()));
                         
                     }
-                    
-                    Redondear rd = new Redondear();
                     
                     double precioIVA = rd.redondearDecimales(Double.parseDouble(this.precio.getText()));
                     double precioFinal = rd.redondearDecimales(precioIVA*uni);
@@ -610,19 +611,15 @@ public class TPV extends javax.swing.JDialog {
                                                 
                         double desc = 0;
                         
-                        desc = des/100;
+                        desc = rd.redondearDecimales(des/100);
                         
-                        System.err.println("Precio : "+desc);
-                        
-                        precioFinal -=(precioFinal*desc);
-                        double auxFinal = precioFinal - (precioFinal*desc);
-                        System.err.println("Precio : "+auxFinal);
+                        precioFinal = rd.redondearDecimales(precioFinal-(precioFinal*desc));
                         
                     }
                     /********************************************************************** COMPROBAR ************************************************************************************/
                     
                     /* Insertar en Lista */
-                    Object datos[]={cod, nome, uni, precioIVA, des + " %", precioFinal};
+                    Object datos[]={cod, nome, uni, precioIVA, (int)((rd.redondearDecimales(des/100))*100) + " %", precioFinal};
                     modelo.addRow(datos);
                     
                     total += precioFinal;
@@ -753,7 +750,14 @@ public class TPV extends javax.swing.JDialog {
                     System.err.println(ex.getMessage());
                 }
 
+                /* Habilitar Guardado de Ticket */
                 this.guardaTicket.setEnabled(false);
+
+                /* Desabilitar Recuperacion de Ticket */
+                this.recuperarTicket.setEnabled(true);
+
+                /* Poner Cursor en Cod Producto */
+                this.codProducto.requestFocus();
 
             }
             else{
