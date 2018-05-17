@@ -403,12 +403,14 @@ public class TPV extends javax.swing.JDialog {
         
         if(countProductos == 0){
             
-            dispose();
-            
             SalirVentana = false;
+            
+            dispose();
             
         }
         else{
+            
+            SalirVentana = false;
             
             errores.errorCerrarTicketConContenido errorCerrarTicketConContenido = new errores.errorCerrarTicketConContenido(new javax.swing.JDialog(), true);
             errorCerrarTicketConContenido.setVisible(true);
@@ -571,6 +573,7 @@ public class TPV extends javax.swing.JDialog {
                     /* Declarar Redondeo */
                     Redondear rd = new Redondear();
                     
+                    
                     if(compruebaProductoEsta == true){
                         
                         /* Buscar Producto */
@@ -578,11 +581,10 @@ public class TPV extends javax.swing.JDialog {
                         
                         while(rs.next()){
                             
-                            uni = uni + rs.getInt("stock");
+                            total -= rs.getDouble("PrecioFinProducto");
                             
-                            /* Actualizar Producto */
-                            con.update("productosTicket", "stock = "+ uni +", descuento = "+(int)((rd.redondearDecimales(des/100))*100), "codTicket = "+ auxTicket +" and codProducto = '"+ this.codProducto.getText() +"'");
-                        
+                            uni = uni + rs.getInt("stock");
+                                                    
                         }
                         
                         /* Limpar Listas */
@@ -594,13 +596,7 @@ public class TPV extends javax.swing.JDialog {
                                                         
                         }
                         
-                    }
-                    else{
-                    
-                        /*Insertar Producto*/
-                        con.insert("productosTicket", "codTicket, codProducto, stock, descuento, precioIVA", auxTicket+", '"+this.codProducto.getText()+"', "+uni+", "+(int)((rd.redondearDecimales(des/100))*100)+", "+Double.parseDouble(this.precio.getText()));
-                        
-                    }
+                    }                    
                     
                     double precioIVA = rd.redondearDecimales(Double.parseDouble(this.precio.getText()));
                     double precioFinal = rd.redondearDecimales(precioIVA*uni);
@@ -622,15 +618,30 @@ public class TPV extends javax.swing.JDialog {
                     Object datos[]={cod, nome, uni, precioIVA, (int)((rd.redondearDecimales(des/100))*100) + " %", precioFinal};
                     modelo.addRow(datos);
                     
+                    
                     total += precioFinal;
                                             
                     this.totalTicket.setText(rd.redondearDecimales(total)+" €");
-                                       
+                    
+                    if(compruebaProductoEsta == true){
+                        
+                        /* Actualizar Producto */
+                        con.update("productosTicket", "stock = "+ uni +", descuento = "+(int)((rd.redondearDecimales(des/100))*100)+", PrecioFinProducto = "+precioFinal, "codTicket = "+ auxTicket +" and codProducto = '"+ this.codProducto.getText() +"'");
+                        
+                    }
+                    else{
+                        
+                        /*Insertar Producto*/
+                        con.insert("productosTicket", "codTicket, codProducto, stock, descuento, precioIVA, PrecioFinProducto", auxTicket+", '"+this.codProducto.getText()+"', "+uni+", "+(int)((rd.redondearDecimales(des/100))*100)+", "+Double.parseDouble(this.precio.getText())+", "+precioFinal);
+                        
+                    }
+                    
                     this.codProducto.setText("");
                     this.nombreProducto.setText("");
                     this.unidades.setText("");
                     this.precio.setText("");
                     this.errores.setText("");
+                    this.descuento.setText("");
                     
                     /* Poner Cursor en Cod Producto */
                     this.codProducto.requestFocus();
@@ -935,10 +946,10 @@ public class TPV extends javax.swing.JDialog {
                             
                             Productos producto = new Productos(proc.getString("cod"), proc.getString("nombre"), proc.getDouble("PrecioSin"), rs.getInt("stock"), "");
                             
-                            Object datos[]={producto.getCodArticulo(), producto.getNomeArticulo(), producto.getStock(), producto.getPrecioSin(), rs.getInt("descuento") + " %", rs.getDouble("precioIVA")};
+                            Object datos[]={producto.getCodArticulo(), producto.getNomeArticulo(), producto.getStock(), rs.getDouble("precioIVA"), rs.getInt("descuento") + " %", rs.getDouble("PrecioFinProducto")};
                             modelo.addRow(datos);
                             
-                            precioFin += rs.getDouble("precioIVA");
+                            precioFin += rs.getDouble("PrecioFinProducto");
                             
                         }
                         
@@ -1039,7 +1050,7 @@ public class TPV extends javax.swing.JDialog {
         
         try {
             
-            ResultSet rs = con.selectEspecial("count(*)", "ticket", "estado = 'Guardado'");
+            ResultSet rs = con.selectEspecial("count(*)", "ticket", "estado = 'Guardado' and codVendedor = "+VTenda.vendedor.getNumVendedor());
             
             while(rs.next()){
                 
@@ -1090,7 +1101,7 @@ public class TPV extends javax.swing.JDialog {
 
                         Productos producto = new Productos(proc.getString("cod"), proc.getString("nombre"), proc.getDouble("PrecioSin"), rs.getInt("stock"), "");
 
-                        Object datos[]={producto.getCodArticulo(), producto.getNomeArticulo(), producto.getStock(), producto.getPrecioSin(), rs.getInt("descuento") + " %", rs.getDouble("precioIVA")};
+                        Object datos[]={producto.getCodArticulo(), producto.getNomeArticulo(), producto.getStock(), rs.getDouble("precioIVA"), rs.getInt("descuento") + " %", rs.getDouble("PrecioFinProducto")};
                         modelo.addRow(datos);
 
                         precioFin += rs.getDouble("precioIVA");

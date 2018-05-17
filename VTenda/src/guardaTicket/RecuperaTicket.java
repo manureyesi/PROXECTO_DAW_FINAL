@@ -129,7 +129,7 @@ public class RecuperaTicket extends javax.swing.JDialog {
                 
                 db.consultas con = new db.consultas();
                 
-                ResultSet rs = con.select("ticket", "estado = 'Guardado'");
+                ResultSet rs = con.select("ticket", "estado = 'Guardado' and codVendedor = "+vtenda.VTenda.vendedor.getNumVendedor());
                 
                 int cont = 0;
                 
@@ -173,7 +173,7 @@ public class RecuperaTicket extends javax.swing.JDialog {
             
             db.consultas con = new db.consultas();
             
-            ResultSet rs = con.select("ticket", "estado = 'Guardado'");
+            ResultSet rs = con.select("ticket", "estado = 'Guardado' and codVendedor = "+vtenda.VTenda.vendedor.getNumVendedor());
             
             JList listaNombres=new JList();
             DefaultListModel modelo = new DefaultListModel();
