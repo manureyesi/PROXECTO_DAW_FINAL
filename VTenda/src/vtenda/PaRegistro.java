@@ -235,12 +235,6 @@ public class PaRegistro extends javax.swing.JFrame {
 
     private void registrarseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_registrarseActionPerformed
         
-        registrate();
-        
-    }//GEN-LAST:event_registrarseActionPerformed
-    
-    private void registrate(){
-        
         try{
             
             /*Comprobar Mail*/
@@ -442,9 +436,10 @@ public class PaRegistro extends javax.swing.JFrame {
             System.err.println("Error en registro");
                     
         }
-    
-    }
-    
+        
+        
+    }//GEN-LAST:event_registrarseActionPerformed
+
     private void claveMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_claveMouseClicked
         
         Transferable t = Toolkit.getDefaultToolkit().getSystemClipboard().getContents(null);
@@ -484,7 +479,207 @@ public class PaRegistro extends javax.swing.JFrame {
         
         if(evt.getKeyCode()==KeyEvent.VK_ENTER){
             
-            registrate();
+            try{
+
+                /*Comprobar Mail*/
+                boolean comprobarMail = false;
+                int contA = 0;
+
+                for(int i = 0; i < this.email.getText().length() ; i++){
+
+                    if(this.email.getText().charAt(i) == '@'){
+                        contA++;
+                    }
+
+                }
+                if(contA == 1){
+                    comprobarMail = true;
+                }
+
+
+                this.errores.setText("");
+
+                /*Comprobacion de errores*/
+                if(this.usuario.getText().compareTo("") == 0 || this.pass.getText().compareTo("") == 0){
+                    this.errores.setText("No se permiten campos en blanco");
+                }
+                else if (this.pass.getText().compareTo("") == 0){
+                    this.errores.setText("Escriba la confirmación de la contraseña");
+                }
+                else if(this.nombre.getText().compareTo("") == 0 || this.apellidos.getText().compareTo("") == 0 ){
+                    this.errores.setText("Escriba su nombre y apellidos");
+                }
+                else if(this.email.getText().compareTo("") == 0){
+                    this.errores.setText("Escriba su correo");
+                }
+                else if(this.clave.getText() == ""){
+                    this.errores.setText("Lo sentimos introduzca una clave para crear usuario");
+                }
+                else if(comprobarMail == false){
+                    this.errores.setText("Lo sentimos el correo no es valido");
+                }
+                else if(this.pass.getText().length() <= 8){
+
+                    this.errores.setText("La contraseña tiene que ser mayor de 8 caracteres");
+
+                }
+                else{
+
+                    if((this.pass.getText().compareTo(this.pass2.getText())) == 0){
+
+                        /* Inicializar Consultas */
+                        db.consultas con = new db.consultas();
+
+                        /*Consulta usuario*/
+                        ResultSet rs = con.select("usuarios", "usuario = '"+this.usuario.getText()+"'");
+
+                        boolean comprobarUsuario = false;
+
+                        while (rs.next()){
+                            /*Comprobacion USUARIO*/
+                            if(0 == rs.getString("usuario").compareToIgnoreCase(this.usuario.getText())){
+                                comprobarUsuario = true;
+                            }
+
+                        }
+
+                        if(comprobarUsuario == true){
+                            /*Se o usuario e igual a outro*/
+                            this.errores.setText("Hai otro usuario con el mismo nombre");
+                            this.usuario.setText("");
+                            System.err.println("El usuario "+this.usuario.getText()+" se encuentra creado");
+                        }
+                        else{
+
+                            /*Consulta Serial*/
+                            rs = con.select("tablaSerial", "serial = '"+this.clave.getText()+"'");
+
+                            boolean claveEncontrada = false;
+
+                            while(rs.next()){
+
+                                /*Comprobar se o serial existe e esta usado*/
+                                if(this.clave.getText().compareTo(rs.getString("serial")) == 0 && rs.getInt("usada") == 0){
+
+                                    claveEncontrada = true;
+
+                                    String user = this.usuario.getText().toLowerCase();
+                                    Encriptar contra = new Encriptar(this.pass.getText());
+
+                                    /* mayusculas apellido */
+                                    String apellidos = "";
+
+                                    String []  apel = this.apellidos.getText().split(" ");
+
+                                    for(int i =0; i < apel.length;i++){
+
+                                        apel[i]=Character.toUpperCase(apel[i].charAt(0)) + apel[i].substring(1).toLowerCase();
+
+                                    }
+
+                                    for(int i =0; i < apel.length;i++){
+
+                                        apellidos += apel[i]+" ";
+
+                                    }
+
+                                    /* mayusculas nombre */
+                                    String nombre = "";
+
+                                    String []  nom = this.nombre.getText().split(" ");
+
+                                    for(int i =0; i < nom.length;i++){
+
+                                        nom[i]=Character.toUpperCase(nom[i].charAt(0)) + nom[i].substring(1).toLowerCase();
+
+                                    }
+
+                                    for(int i =0; i < nom.length;i++){
+
+                                        nombre += nom[i]+" ";
+
+                                    }
+
+                                    /* Crear usuario en BD */
+                                    con.insert("usuarios", "usuario, nombre, apellidos, mail, contrasena", "'"+user+"','"+nombre+"','"+apellidos+"','"+this.email.getText()+"','"+contra.cifer+"'");
+
+                                    System.out.println("Creando usuario: "+user);
+
+                                    VTenda.usuario = this.usuario.getText();
+                                    VTenda.contrasena = contra.cifer;
+
+                                    this.errores.setText("Usuario creado");
+
+                                    /* Envio de Correo */
+                                    userEmail = this.usuario.getText();
+
+                                    Thread thread = new Thread(){
+                                        public void run(){
+
+                                            try{
+
+                                                System.out.println("Preparando envio para "+userEmail);
+
+                                                mail.confirmacionMail email = new mail.confirmacionMail(userEmail);
+
+                                                email.enviaMail();
+
+                                                System.out.println("Enviando mail a: "+userEmail);
+
+                                            }
+                                            catch(Exception ex){
+
+                                                System.err.println("Error al enviar correo");
+
+                                            }
+
+                                        }
+                                    };
+
+                                    thread.start();
+
+
+                                    /*Modificar Tabla Serial*/
+                                    con.update("tablaSerial", "usada = 1", "serial = '"+this.clave.getText()+"'");
+
+                                    /*Borrar datos*/
+                                    this.usuario.setText("");
+                                    this.pass.setText("");
+                                    this.pass2.setText("");
+                                    this.clave.setText("");
+                                    this.email.setText("");
+                                    this.nombre.setText("");
+                                    this.apellidos.setText("");
+                                    this.errores.setText("Verifique su buzon de correo");
+
+                                }
+                                else{
+
+                                    claveEncontrada = false;
+
+                                }
+
+                            }
+
+                            if(claveEncontrada == false){
+                                /*Se non existe un serial*/
+                                this.clave.setText("");
+                                this.errores.setText("No tiene clave para crear usuario");
+                                System.err.println("Error de clave usada");
+                            }
+
+                        }
+
+                    }
+                }
+
+            } catch (SQLException e){
+
+                this.clave.setText("");
+                this.errores.setText("Lo sentimos no podemos acceder a la Base de Datos");
+                System.err.println("Error en registro");
+
+            }
         
         }
         

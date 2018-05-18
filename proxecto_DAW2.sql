@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: localhost
--- Tiempo de generación: 17-05-2018 a las 17:32:50
+-- Tiempo de generación: 26-04-2018 a las 16:58:45
 -- Versión del servidor: 5.5.59-0+deb8u1
 -- Versión de PHP: 5.6.33-0+deb8u1
 
@@ -34,12 +34,6 @@ CREATE TABLE IF NOT EXISTS `categorias` (
 ) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=latin1;
 
 
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `productos`
---
-
 CREATE TABLE IF NOT EXISTS `productos` (
   `cod` varchar(40) NOT NULL COMMENT 'Codigo de producto',
   `nombre` varchar(100) NOT NULL COMMENT 'Nombre de producto',
@@ -51,27 +45,14 @@ CREATE TABLE IF NOT EXISTS `productos` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `productosTicket`
---
-
 CREATE TABLE IF NOT EXISTS `productosTicket` (
   `codTicket` int(11) NOT NULL COMMENT 'Codigo refernciado de Ticket',
   `codProducto` varchar(40) NOT NULL COMMENT 'Codigo referenciado de Productos',
   `stock` int(11) NOT NULL COMMENT 'stock',
   `descuento` int(11) NOT NULL COMMENT 'Descuento en producto',
-  `precioIVA` double NOT NULL COMMENT 'Precio sin IVA',
-  `PrecioFinProducto` double NOT NULL COMMENT 'Precio Calculado de Precio Producto'
+  `precioIVA` double NOT NULL COMMENT 'Precio sin IVA'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `tablaSerial`
---
 
 CREATE TABLE IF NOT EXISTS `tablaSerial` (
   `serial` varchar(50) NOT NULL,
@@ -79,6 +60,13 @@ CREATE TABLE IF NOT EXISTS `tablaSerial` (
   `usada` tinyint(4) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+--
+-- Volcado de datos para la tabla `tablaSerial`
+--
+
+INSERT INTO `tablaSerial` (`serial`, `fechaCreacion`, `usada`) VALUES
+('8TNL-68M7-7Q27-8D62', '2018-04-25 14:59:35', 1),
+('X15R-RN46-52PC-02L4', '2018-04-25 14:50:19', 0);
 
 -- --------------------------------------------------------
 
@@ -114,14 +102,8 @@ CREATE TABLE IF NOT EXISTS `ticket` (
   `modoPago` varchar(10) DEFAULT NULL COMMENT 'Tarjeta/Contado',
   `precioFinal` double DEFAULT NULL COMMENT 'Precio con IVA Final',
   `fecha` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB AUTO_INCREMENT=136 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=45 DEFAULT CHARSET=latin1;
 
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `usuarios`
---
 
 CREATE TABLE IF NOT EXISTS `usuarios` (
 `cod` int(11) NOT NULL COMMENT 'Codigo de usuario',
@@ -132,14 +114,15 @@ CREATE TABLE IF NOT EXISTS `usuarios` (
   `contrasena` varchar(128) NOT NULL COMMENT 'Campo contraseña',
   `verificado` tinyint(4) NOT NULL DEFAULT '0' COMMENT 'Usuario Verificado',
   `admin` tinyint(4) NOT NULL DEFAULT '0' COMMENT 'Admin de programa'
-) ENGINE=InnoDB AUTO_INCREMENT=32 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=latin1;
 
 --
 -- Volcado de datos para la tabla `usuarios`
 --
 
 INSERT INTO `usuarios` (`cod`, `usuario`, `nombre`, `apellidos`, `mail`, `contrasena`, `verificado`, `admin`) VALUES
-(22, 'admin', 'admin', 'admin', 'admin@fiandeira.es', '1325f04d75d9a455279e45fdceb19dcc59286b26', 1, 1);
+(22, 'admin', 'admin', 'admin', 'admin@fiandeira.es', '1325f04d75d9a455279e45fdceb19dcc59286b26', 1, 1),
+(24, 'manu', 'Manuel ', 'Reyes ', 'manureyesi@outlook.es', '1325f04d75d9a455279e45fdceb19dcc59286b26', 1, 1);
 
 --
 -- Índices para tablas volcadas
@@ -205,12 +188,12 @@ MODIFY `cod` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Codigo Tenda',AUTO_INCREME
 -- AUTO_INCREMENT de la tabla `ticket`
 --
 ALTER TABLE `ticket`
-MODIFY `cod` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Código de Ticket',AUTO_INCREMENT=136;
+MODIFY `cod` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Código de Ticket',AUTO_INCREMENT=45;
 --
 -- AUTO_INCREMENT de la tabla `usuarios`
 --
 ALTER TABLE `usuarios`
-MODIFY `cod` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Codigo de usuario',AUTO_INCREMENT=32;
+MODIFY `cod` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Codigo de usuario',AUTO_INCREMENT=26;
 --
 -- Restricciones para tablas volcadas
 --

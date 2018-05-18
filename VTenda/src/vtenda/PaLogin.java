@@ -144,12 +144,6 @@ public class PaLogin extends javax.swing.JFrame {
 
     private void entrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_entrarActionPerformed
 
-        entrar();
-
-    }//GEN-LAST:event_entrarActionPerformed
-    
-    private void entrar(){
-    
         try{
             
             VTenda.entrar = false;
@@ -224,9 +218,9 @@ public class PaLogin extends javax.swing.JFrame {
 
             this.errores.setText("Lo sentimos acabamos de sufrir un error");
         }
-        
-    }
-    
+
+    }//GEN-LAST:event_entrarActionPerformed
+
     private void registroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_registroActionPerformed
         
         System.out.println("Entrando en registro");
@@ -247,7 +241,80 @@ public class PaLogin extends javax.swing.JFrame {
         
         if(evt.getKeyCode()==KeyEvent.VK_ENTER){
             
-           entrar();
+            try{
+
+                VTenda.entrar = false;
+                VTenda.admin = false;
+                this.errores.setText("");
+
+                if((this.usuario.getText().compareTo("") == 0) || this.contrasena.getText().compareTo("") == 0){
+                    this.errores.setText("No se permiten campos vacios");
+                }
+                else{
+
+                    db.buscarUser bu = new db.buscarUser();
+
+                    int numErro = bu.consultaUser(this.usuario.getText(), this.contrasena.getText());
+
+                    switch(numErro){
+
+                        /* Tipos de errores */
+
+                        case 0:
+
+                        this.errores.setText("Lo sentimos no encontramos el usuario indicado");
+                        this.usuario.setText("");
+                        this.contrasena.setText("");
+                        this.usuario.requestFocus();
+
+                        break;
+
+                        case 1:
+
+                        this.errores.setText("Lo sentimos la contraseña no es correcta");
+                        this.contrasena.setText("");
+                        this.contrasena.requestFocus();
+                        break;
+
+                        case 2:
+
+                        this.errores.setText("Porfavor verifique su correo electronico");
+                        this.contrasena.requestFocus();
+
+                        break;
+
+                        case 3:
+                        
+                        System.out.println("Entrando con el usuario: "+this.usuario.getText());
+                        
+                        VTenda.PaLogin.setVisible(false);
+                        VTenda.PaPrincipal.setVisible(true);
+
+                        this.errores.setText("");
+                        this.usuario.setText("");
+                        this.contrasena.setText("");
+                        this.usuario.requestFocus();
+
+                        break;
+
+                        case 4:
+
+                        this.errores.setText("No podemos conectar con el servidor");
+                        this.usuario.setText("");
+                        this.contrasena.setText("");
+                        this.usuario.requestFocus();
+
+                        break;
+
+                    }
+
+
+                }
+
+            }catch (Exception e){
+
+                this.errores.setText("Lo sentimos acabamos de sufrir un error");
+            }
             
         }
         
