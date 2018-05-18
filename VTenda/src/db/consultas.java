@@ -64,4 +64,15 @@ public class consultas {
             
     }
     
+    public void delete(String tabla, String cadena) throws SQLException{
+        
+        db.conexion con= new db.conexion();
+            
+        /* Insert */
+        PreparedStatement delete = con.getCn().prepareStatement("DELETE FROM "+ tabla +" WHERE "+cadena);
+
+        delete.executeUpdate();
+    
+    }
+    
 }

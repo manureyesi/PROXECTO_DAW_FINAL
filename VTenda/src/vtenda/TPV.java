@@ -660,10 +660,59 @@ public class TPV extends javax.swing.JDialog {
     }
     
     private void borrarProducto(){
+                
+        int row = this.productos.getSelectedRow();
         
-        if(){
+        if(row == -1){
+            
+            this.errores.setText("Seleccione una producto para eliminar");
         
         }
+        else{
+            
+            System.err.println("Preparadose para eliminar un producto");
+            
+            //Variable para guardar CodProducto
+            String codProcAux = "";
+            
+            //Encontrar CodProducto para eliminar de DB
+            codProcAux = this.modelo.getValueAt(row, 0).toString();
+            modelo.removeRow(row);
+            
+            try{
+                
+                //Declara consultas
+                db.consultas con = new db.consultas();
+                
+                //Buscar Precio de Producto
+                ResultSet rs = con.select("productosTicket", "codTicket = "+VTenda.auxTicketGuardar+" and codProducto = '"+codProcAux+"'");
+                
+                double varTotalAux = 0;
+                
+                while(rs.next()){
+                    
+                    varTotalAux = total-rs.getDouble("PrecioFinProducto");
+                    
+                }
+                                
+                //Eliminar Producto de DB
+                con.delete("productosTicket", "codTicket = "+VTenda.auxTicketGuardar+" and codProducto = '"+codProcAux+"'");
+                
+                total = varTotalAux;
+                countProductos--;
+                if(total!=0){
+                    this.totalTicket.setText(varTotalAux+" €");
+                }
+                
+            }
+            catch(SQLException ex){
+                this.errores.setText("Lo sentimos, acabamos de sufrir un error al borrar producto");
+                System.err.println("Error al conectar con DB al eliminar producto");
+            }
+            
+            
+        }
+        
     
     }
     
@@ -803,7 +852,7 @@ public class TPV extends javax.swing.JDialog {
     private void productosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_productosMouseClicked
         
         int row = this.productos.getSelectedRow();
-        System.err.println("Clicando a fila "+row+" da tabla");
+        System.out.println("Clicando a fila "+row+" da tabla");
         
     }//GEN-LAST:event_productosMouseClicked
 
@@ -864,6 +913,8 @@ public class TPV extends javax.swing.JDialog {
                 this.guardaTicket.setEnabled(false);
                 this.recuperarTicket.setEnabled(true);
                 this.errores.setText("Ticket Guardado con exito");
+                
+                this.countProductos = 0;
                 
                 if(admin.buscarTicket.codTicketAux != 0){
                     admin.buscarTicket.codTicketAux = 0;
