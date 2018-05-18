@@ -92,6 +92,7 @@ public class TPV extends javax.swing.JDialog {
         jPanel2 = new javax.swing.JPanel();
         guardaTicket = new javax.swing.JButton();
         recuperarTicket = new javax.swing.JButton();
+        borrar = new javax.swing.JButton();
 
         jTextArea1.setColumns(20);
         jTextArea1.setRows(5);
@@ -293,6 +294,16 @@ public class TPV extends javax.swing.JDialog {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
+        borrar.setBackground(new java.awt.Color(204, 204, 204));
+        borrar.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        borrar.setText("- Borrar");
+        borrar.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        borrar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                borrarActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -338,7 +349,9 @@ public class TPV extends javax.swing.JDialog {
                                 .addComponent(fecha1))))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(anadir, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(39, 39, 39)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(borrar, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(errores, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(cerrarTicket, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -381,7 +394,8 @@ public class TPV extends javax.swing.JDialog {
                 .addGap(13, 13, 13)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(anadir, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(errores, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(errores, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(borrar, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
@@ -504,30 +518,16 @@ public class TPV extends javax.swing.JDialog {
                 }
                 else{
                     
-                    System.out.println("Fila Numero "+(modelo.getRowCount()+1));
-                    
-                    
                     if(countProductos == 0){
                         
                         this.guardaTicket.setEnabled(true);
                         this.recuperarTicket.setEnabled(false);
                         
-                        int codVendedor = 0;
-                        
-                        /*Buscar Codigo Usuario*/
-                        rs = con.select("usuarios", "usuario = '"+VTenda.usuario+"'");
-                        
-                        while(rs.next()){
-                            
-                            codVendedor = rs.getInt("cod");
-                            
-                        }
-                        
                         /*Iniciar Ticket*/
-                        con.insert("ticket", "codVendedor, estado", "'"+codVendedor+"', 'Iniciado'");
+                        con.insert("ticket", "codVendedor, estado", VTenda.vendedor.getNumVendedor()+", 'Iniciado'");
                         
                         /*Buscar cod Ticket*/
-                        rs = con.selectEspecial("MAX(`cod`)CodMax", "ticket", "codVendedor = "+codVendedor+" and estado = 'Iniciado'");
+                        rs = con.selectEspecial("MAX(`cod`)CodMax", "ticket", "codVendedor = "+VTenda.vendedor.getNumVendedor()+" and estado = 'Iniciado'");
                         
                         while(rs.next()){
                             
@@ -646,6 +646,14 @@ public class TPV extends javax.swing.JDialog {
            this.errores.setText("Lo sentimos, acabamos de sufrir un error");
        }
        
+    }
+    
+    private void borrarProducto(){
+        
+        if(){
+        
+        }
+    
     }
     
     private void codProductoKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_codProductoKeyPressed
@@ -1128,6 +1136,12 @@ public class TPV extends javax.swing.JDialog {
         
     }//GEN-LAST:event_unidadesKeyPressed
 
+    private void borrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_borrarActionPerformed
+        
+        borrarProducto();
+        
+    }//GEN-LAST:event_borrarActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -1172,6 +1186,7 @@ public class TPV extends javax.swing.JDialog {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton anadir;
+    private javax.swing.JButton borrar;
     private javax.swing.JButton cerrarTicket;
     private javax.swing.JTextField codProducto;
     private javax.swing.JTextField codVendedor;
