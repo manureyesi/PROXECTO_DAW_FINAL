@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: localhost
--- Tiempo de generación: 17-05-2018 a las 17:32:50
+-- Tiempo de generación: 20-05-2018 a las 17:08:30
 -- Versión del servidor: 5.5.59-0+deb8u1
 -- Versión de PHP: 5.6.33-0+deb8u1
 
@@ -31,8 +31,7 @@ USE `proxecto_DAW2`;
 CREATE TABLE IF NOT EXISTS `categorias` (
 `cod` int(11) NOT NULL COMMENT 'Codigo de categoria',
   `nombre` varchar(50) NOT NULL COMMENT 'Codigo de nome de categoria'
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=latin1;
-
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -47,9 +46,9 @@ CREATE TABLE IF NOT EXISTS `productos` (
   `codCategoria` int(11) NOT NULL COMMENT 'Codigo de categoria',
   `precioSin` double NOT NULL COMMENT 'Precio IVA',
   `stock` int(11) NOT NULL COMMENT 'Cantidad de Stock',
-  `img` varchar(100) DEFAULT NULL COMMENT 'Direccion de IMG'
+  `img1` varchar(100) DEFAULT NULL COMMENT 'Imagen de Producto 1',
+  `img2` varchar(100) DEFAULT NULL COMMENT 'Imagen de Producto 2'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
 
 -- --------------------------------------------------------
 
@@ -66,7 +65,6 @@ CREATE TABLE IF NOT EXISTS `productosTicket` (
   `PrecioFinProducto` double NOT NULL COMMENT 'Precio Calculado de Precio Producto'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
-
 -- --------------------------------------------------------
 
 --
@@ -78,7 +76,6 @@ CREATE TABLE IF NOT EXISTS `tablaSerial` (
   `fechaCreacion` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `usada` tinyint(4) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
 
 -- --------------------------------------------------------
 
@@ -114,8 +111,7 @@ CREATE TABLE IF NOT EXISTS `ticket` (
   `modoPago` varchar(10) DEFAULT NULL COMMENT 'Tarjeta/Contado',
   `precioFinal` double DEFAULT NULL COMMENT 'Precio con IVA Final',
   `fecha` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB AUTO_INCREMENT=136 DEFAULT CHARSET=latin1;
-
+) ENGINE=InnoDB AUTO_INCREMENT=150 DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -132,14 +128,15 @@ CREATE TABLE IF NOT EXISTS `usuarios` (
   `contrasena` varchar(128) NOT NULL COMMENT 'Campo contraseña',
   `verificado` tinyint(4) NOT NULL DEFAULT '0' COMMENT 'Usuario Verificado',
   `admin` tinyint(4) NOT NULL DEFAULT '0' COMMENT 'Admin de programa'
-) ENGINE=InnoDB AUTO_INCREMENT=32 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=33 DEFAULT CHARSET=latin1;
 
 --
 -- Volcado de datos para la tabla `usuarios`
 --
 
 INSERT INTO `usuarios` (`cod`, `usuario`, `nombre`, `apellidos`, `mail`, `contrasena`, `verificado`, `admin`) VALUES
-(22, 'admin', 'admin', 'admin', 'admin@fiandeira.es', '1325f04d75d9a455279e45fdceb19dcc59286b26', 1, 1);
+(22, 'admin', 'admin', 'admin', 'admin@fiandeira.es', '1325f04d75d9a455279e45fdceb19dcc59286b26', 1, 1),
+(32, 'manu', 'Manuel ', 'Reyes ', 'manureyesi@outlook.es', '1325f04d75d9a455279e45fdceb19dcc59286b26', 1, 1);
 
 --
 -- Índices para tablas volcadas
@@ -195,7 +192,7 @@ ALTER TABLE `usuarios`
 -- AUTO_INCREMENT de la tabla `categorias`
 --
 ALTER TABLE `categorias`
-MODIFY `cod` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Codigo de categoria',AUTO_INCREMENT=10;
+MODIFY `cod` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Codigo de categoria',AUTO_INCREMENT=12;
 --
 -- AUTO_INCREMENT de la tabla `tendas`
 --
@@ -205,12 +202,12 @@ MODIFY `cod` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Codigo Tenda',AUTO_INCREME
 -- AUTO_INCREMENT de la tabla `ticket`
 --
 ALTER TABLE `ticket`
-MODIFY `cod` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Código de Ticket',AUTO_INCREMENT=136;
+MODIFY `cod` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Código de Ticket',AUTO_INCREMENT=150;
 --
 -- AUTO_INCREMENT de la tabla `usuarios`
 --
 ALTER TABLE `usuarios`
-MODIFY `cod` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Codigo de usuario',AUTO_INCREMENT=32;
+MODIFY `cod` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Codigo de usuario',AUTO_INCREMENT=33;
 --
 -- Restricciones para tablas volcadas
 --
