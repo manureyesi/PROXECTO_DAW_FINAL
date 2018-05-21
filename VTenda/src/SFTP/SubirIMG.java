@@ -11,8 +11,6 @@ import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.Session;
 import com.jcraft.jsch.SftpException;
 import com.jcraft.jsch.UserInfo;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -20,12 +18,12 @@ import java.util.logging.Logger;
  */
 public class SubirIMG {
     
-    private static final String user = "admin";
-    private static final String host = "beta.fiandeira.es";
+    private static final String user = "prueba";
+    private static final String host = "pruebas.fiandeira.es";
     private static final Integer port = 22;
-    private static final String pass = "Maindon11";
+    private static final String pass = "Maindo.11";
     
-    private static final String directorio_servidor = "/beta-server/IMG/";
+    private static final String directorio_servidor = "/pruebas-server/img/pruebas/";
     
     public String nombre_producto;
     public String directorio_equipo;
@@ -34,14 +32,15 @@ public class SubirIMG {
 
     public SubirIMG(String nombre_producto, String directorio_equipo) {
         try {
+            
             this.nombre_producto = nombre_producto;
             this.directorio_equipo = directorio_equipo;
             
             UploadIMG();
-        } catch (JSchException ex) {
+            
+        } catch (JSchException | SftpException ex) {
             System.err.println("Error al Subir IMG");
-        } catch (SftpException ex) {
-            System.err.println("Error al Subir IMG");
+            ex.printStackTrace();
         }
         
     }
@@ -79,7 +78,8 @@ public class SubirIMG {
  
         sftp.cd(this.directorio_servidor);
         
-        sftp.put(this.directorio_equipo, this.nombre_producto);
+        sftp.put("C:/Users/MANU/Pictures/harry-popoter.jpg", "hoola.png");
+        //sftp.put(this.directorio_equipo, this.nombre_producto);
  
         System.out.println("Archivos subidos.");
  

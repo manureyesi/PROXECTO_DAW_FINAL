@@ -11,6 +11,8 @@ import java.awt.event.KeyEvent;
 import java.io.File;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
@@ -85,6 +87,9 @@ public class PaAnadirProductos extends javax.swing.JDialog {
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowActivated(java.awt.event.WindowEvent evt) {
                 formWindowActivated(evt);
+            }
+            public void windowOpened(java.awt.event.WindowEvent evt) {
+                formWindowOpened(evt);
             }
         });
 
@@ -341,13 +346,6 @@ public class PaAnadirProductos extends javax.swing.JDialog {
 
     private void formWindowActivated(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowActivated
         
-        this.errores.setText("");
-        this.codArticulo.setText("");
-        this.nomArticulo.setText("");
-        this.precio.setText("");
-        this.stock.setValue(0);
-        this.descripcion.setText("");
-        
         try{
             System.out.println("Buscando Categorias");
             
@@ -489,19 +487,41 @@ public class PaAnadirProductos extends javax.swing.JDialog {
                     
                     case 0:
                         
-                        // Subir IMG
-                        
+                        // Subir IMG                    
                         if(!this.img1.getText().isEmpty()){
+                            
+                            this.nombre_img = this.nomArticulo.getText().replace(' ', '_');
+                            
+                            this.dir_img1 = this.img1.getText();
+                            
+                            if(!this.img2.getText().isEmpty()){
+                            
+                                this.dir_img2 = this.img2.getText();
+                            
+                            }
+                            
+                            SFTP.SFTP subirArchivo = new SFTP.SFTP();
+                                    try {
+                                        subirArchivo.subirArchivo();
+                                    } catch (Exception ex) {
+                                        System.err.println("Error");
+                                    }
                             
                             Thread thread = new Thread(){
                                 public void run(){
                                         
-                                    
-                                        
+                                   SFTP.SubirIMG img1 = new SFTP.SubirIMG("_1.png", "C:/Users/MANU/Pictures/harry-popoter.jpg");
+                                   
+                                   if(!dir_img2.equalsIgnoreCase("")){
+                                       
+                                       //SFTP.SubirIMG img2 = new SFTP.SubirIMG(nombre_img+"_2.png", dir_img2);
+                                       
+                                   }
+                                       
                                 }
                             };
                                 
-                                thread.start();
+                            thread.start();
                         
                         }
                         
@@ -552,6 +572,8 @@ public class PaAnadirProductos extends javax.swing.JDialog {
                         this.precio.setText("");
                         this.stock.setValue(0);
                         this.descripcion.setText("");
+                        this.img1.setText("");
+                        this.img2.setText("");
                         
                     break;
                     
@@ -703,6 +725,8 @@ public class PaAnadirProductos extends javax.swing.JDialog {
                             this.precio.setText("");
                             this.stock.setValue(0);
                             this.descripcion.setText("");
+                            this.img1.setText("");
+                            this.img2.setText("");
 
                         break;
 
@@ -789,6 +813,19 @@ public class PaAnadirProductos extends javax.swing.JDialog {
         buscarIMG(2);
 
     }//GEN-LAST:event_btn_img2ActionPerformed
+
+    private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
+        
+        this.errores.setText("");
+        this.codArticulo.setText("");
+        this.nomArticulo.setText("");
+        this.precio.setText("");
+        this.stock.setValue(0);
+        this.descripcion.setText("");
+        this.img1.setText("");
+        this.img2.setText("");
+        
+    }//GEN-LAST:event_formWindowOpened
 
     /**
      * @param args the command line arguments
