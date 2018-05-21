@@ -8,8 +8,11 @@ package vtenda;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
+import java.io.File;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import javax.swing.JFileChooser;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -20,6 +23,11 @@ public class PaAnadirProductos extends javax.swing.JDialog {
 
     public DefaultTableModel modelo;
     public static int salir = 0;
+    
+    public static String dir_img1;
+    public static String dir_img2;
+    public static String nombre_img;
+
     
     public PaAnadirProductos(javax.swing.JDialog parent, boolean modal) {
         super(parent, modal);
@@ -480,6 +488,24 @@ public class PaAnadirProductos extends javax.swing.JDialog {
                 switch (error) {
                     
                     case 0:
+                        
+                        // Subir IMG
+                        
+                        if(!this.img1.getText().isEmpty()){
+                            
+                            Thread thread = new Thread(){
+                                public void run(){
+                                        
+                                    
+                                        
+                                }
+                            };
+                                
+                                thread.start();
+                        
+                        }
+                        
+                        
                         /* Consulta codCategoria */
                         rs = con.select("categorias", "nombre = '"+(String)categoria.getSelectedItem()+"'");
                         
@@ -712,18 +738,56 @@ public class PaAnadirProductos extends javax.swing.JDialog {
     private void volverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_volverActionPerformed
         dispose();
     }//GEN-LAST:event_volverActionPerformed
-
+    
+    private void buscarIMG(int numero_btn){
+        
+        //Mostrar la ventana para abrir archivo y recoger la respuesta
+        JFileChooser fc = new JFileChooser();
+        
+        //Crear filtro para Imagenes 
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("Imágenes", "bmp", "gif", "jpg", "png");
+        fc.setFileFilter(filter);
+                
+        int respuesta = fc.showOpenDialog(this);
+        
+        //Comprobar si se ha pulsado Aceptar
+        if (respuesta == JFileChooser.APPROVE_OPTION) {
+            
+            File archivoElegido = fc.getSelectedFile();
+            System.out.println("Seleccionando o archivo: "+archivoElegido);
+            
+            //Colocar Dir en Campo de Texto
+            if(this.img1.getText().isEmpty()){
+                this.img1.setText(" "+archivoElegido);
+            }
+            else if(this.img2.getText().isEmpty()){
+                this.img2.setText(" "+archivoElegido);
+            }
+            else{
+                
+                if(numero_btn==1){
+                    this.img1.setText(" "+archivoElegido);
+                }
+                else{
+                    this.img2.setText(" "+archivoElegido);
+                }
+            
+            }
+               
+        }
+        
+    }
+    
     private void btn_img1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_img1ActionPerformed
         
-        System.out.println("Seleccionando IMG 1");
-        
-        SFTP.PaElegirArchivo PaElegirArchivo = new SFTP.PaElegirArchivo(new javax.swing.JDialog(), true);
-        PaElegirArchivo.setVisible(true);
+        buscarIMG(1);
         
     }//GEN-LAST:event_btn_img1ActionPerformed
-
+        
     private void btn_img2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_img2ActionPerformed
-        // TODO add your handling code here:
+        
+        buscarIMG(2);
+
     }//GEN-LAST:event_btn_img2ActionPerformed
 
     /**
