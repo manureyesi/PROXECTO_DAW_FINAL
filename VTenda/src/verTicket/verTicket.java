@@ -7,16 +7,18 @@ package verTicket;
 
 import java.awt.Image;
 import java.awt.Toolkit;
-import java.awt.event.KeyEvent;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
  * @author DAW221
  */
 public class verTicket extends javax.swing.JDialog {
-
+    
+    public DefaultTableModel modelo;
+    
     /**
      * Creates new form generarClave
      */
@@ -27,6 +29,13 @@ public class verTicket extends javax.swing.JDialog {
         Image icono = Toolkit.getDefaultToolkit().getImage(vtenda.VTenda.dirIMG);
         this.setIconImage(icono);
         this.setLocationRelativeTo(null);
+        
+        String cabecera[]={"Articulo", "Nombre", "Unidades", "Pre Unidad", "%", "Precio"};
+        String datos[][]={};
+        
+        modelo = new DefaultTableModel(datos, cabecera);
+        this.productosTicketTabla.setModel(modelo);
+        
     }
 
     /**
@@ -43,19 +52,25 @@ public class verTicket extends javax.swing.JDialog {
         jLabelCodTicket = new javax.swing.JLabel();
         codTicket = new javax.swing.JTextField();
         jLabelModoPago = new javax.swing.JLabel();
-        modoPago = new javax.swing.JTextField();
+        fechaTicket = new javax.swing.JTextField();
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         productosTicketTabla = new javax.swing.JTable();
         jLabelTotal = new javax.swing.JLabel();
         total = new javax.swing.JTextField();
         volver1 = new javax.swing.JButton();
+        errores = new javax.swing.JLabel();
+        jLabelFecha = new javax.swing.JLabel();
+        modoPago1 = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("VTenda - Ver Ticket");
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowActivated(java.awt.event.WindowEvent evt) {
                 formWindowActivated(evt);
+            }
+            public void windowOpened(java.awt.event.WindowEvent evt) {
+                formWindowOpened(evt);
             }
         });
 
@@ -74,8 +89,8 @@ public class verTicket extends javax.swing.JDialog {
         jLabelModoPago.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabelModoPago.setText("Modo de Pago:");
 
-        modoPago.setEditable(false);
-        modoPago.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        fechaTicket.setEditable(false);
+        fechaTicket.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
 
         jPanel1.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
 
@@ -114,6 +129,7 @@ public class verTicket extends javax.swing.JDialog {
 
         total.setEditable(false);
         total.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        total.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
 
         volver1.setBackground(new java.awt.Color(153, 153, 153));
         volver1.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
@@ -125,6 +141,14 @@ public class verTicket extends javax.swing.JDialog {
             }
         });
 
+        errores.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+
+        jLabelFecha.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLabelFecha.setText("Fecha Ticket:");
+
+        modoPago1.setEditable(false);
+        modoPago1.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -132,21 +156,7 @@ public class verTicket extends javax.swing.JDialog {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabelNombreVendedor)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(nombreVendedor, javax.swing.GroupLayout.PREFERRED_SIZE, 282, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabelCodTicket)
-                                    .addComponent(codTicket, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(69, 69, 69)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(modoPago, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabelModoPago))))
-                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(errores, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
@@ -155,7 +165,26 @@ public class verTicket extends javax.swing.JDialog {
                                 .addComponent(jLabelTotal)
                                 .addGap(18, 18, 18)
                                 .addComponent(total, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(volver1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(volver1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLabelNombreVendedor)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(nombreVendedor, javax.swing.GroupLayout.PREFERRED_SIZE, 301, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabelCodTicket)
+                                    .addComponent(codTicket, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(69, 69, 69)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabelModoPago)
+                                    .addComponent(modoPago1, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(101, 101, 101)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabelFecha)
+                                    .addComponent(fechaTicket, javax.swing.GroupLayout.PREFERRED_SIZE, 212, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -168,20 +197,24 @@ public class verTicket extends javax.swing.JDialog {
                 .addGap(28, 28, 28)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabelCodTicket)
-                    .addComponent(jLabelModoPago))
+                    .addComponent(jLabelModoPago)
+                    .addComponent(jLabelFecha))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(codTicket, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(modoPago, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(modoPago1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(fechaTicket, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(total, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabelTotal))
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(errores, javax.swing.GroupLayout.DEFAULT_SIZE, 23, Short.MAX_VALUE)
+                .addGap(17, 17, 17)
                 .addComponent(volver1)
-                .addContainerGap(13, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         pack();
@@ -189,12 +222,44 @@ public class verTicket extends javax.swing.JDialog {
     
     
     private void formWindowActivated(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowActivated
-        
+        // TODO add your handling code here:
     }//GEN-LAST:event_formWindowActivated
 
     private void volver1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_volver1ActionPerformed
         dispose();
     }//GEN-LAST:event_volver1ActionPerformed
+
+    private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
+       
+        try{
+            
+            //Crear consultas
+            db.consultas con = new db.consultas();
+            
+            ResultSet rs = con.select("ticket", "cod = "+buscarTicket.codTicketAux);
+            
+            while(rs.next()){
+                
+                this.fechaTicket.setText(" "+rs.getString("modoPago"));
+                this.codTicket.setText(" "+buscarTicket.codTicketAux);
+                this.total.setText(rs.getDouble("precioFinal")+" € ");
+                this.fechaTicket.setText(rs.getTimestamp("fecha")+" ");
+                
+                ResultSet cod = con.select("usuarios", "cod = "+rs.getInt("codVendedor"));
+                
+                while(cod.next()){
+                    this.nombreVendedor.setText(" "+cod.getString("nombre")+" "+cod.getString("apellidos"));
+                }
+                
+            }
+            
+        }
+        catch(SQLException ex){
+            System.err.println("Error al conectar con la DB en Ver Ticket");
+            this.errores.setText("Error al buscar Ticket");
+        }
+        
+    }//GEN-LAST:event_formWindowOpened
 
     /**
      * @param args the command line arguments
@@ -247,13 +312,16 @@ public class verTicket extends javax.swing.JDialog {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField codTicket;
+    private javax.swing.JLabel errores;
+    private javax.swing.JTextField fechaTicket;
     private javax.swing.JLabel jLabelCodTicket;
+    private javax.swing.JLabel jLabelFecha;
     private javax.swing.JLabel jLabelModoPago;
     private javax.swing.JLabel jLabelNombreVendedor;
     private javax.swing.JLabel jLabelTotal;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextField modoPago;
+    private javax.swing.JTextField modoPago1;
     private javax.swing.JTextField nombreVendedor;
     private javax.swing.JTable productosTicketTabla;
     private javax.swing.JTextField total;

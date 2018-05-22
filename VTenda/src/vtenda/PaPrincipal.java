@@ -5,8 +5,12 @@
  */
 package vtenda;
 
+import java.awt.Desktop;
 import java.awt.Image;
 import java.awt.Toolkit;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 
 /**
  *
@@ -220,7 +224,7 @@ public class PaPrincipal extends javax.swing.JFrame {
 
         verPedidos.setBackground(new java.awt.Color(204, 204, 204));
         verPedidos.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
-        verPedidos.setText("Ver Pedidos");
+        verPedidos.setText("Ver Web");
         verPedidos.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         verPedidos.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -402,9 +406,15 @@ public class PaPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_anadirCategoriasActionPerformed
 
     private void verPedidosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_verPedidosActionPerformed
-        System.out.println("Entrando en Ver Pedidos");
-        errores.errorVentanaNula errorVentanaNula = new errores.errorVentanaNula(new javax.swing.JDialog(), true);
-        errorVentanaNula.setVisible(true);
+        System.out.println("Entrando en Web");
+        if(java.awt.Desktop.isDesktopSupported()){
+        try{
+            Desktop dk = Desktop.getDesktop();
+            dk.browse(new URI("https://pruebas.fiandeira.es"));
+        }catch(IOException | URISyntaxException e){
+            System.out.println("Error al abrir URL: "+e.getMessage());
+        }
+}
     }//GEN-LAST:event_verPedidosActionPerformed
 
     private void verTicketActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_verTicketActionPerformed

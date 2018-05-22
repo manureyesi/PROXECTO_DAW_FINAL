@@ -16,7 +16,9 @@ import java.sql.SQLException;
  * @author DAW221
  */
 public class buscarTicket extends javax.swing.JDialog {
-
+    
+    public static int codTicketAux;
+    
     /**
      * Creates new form generarClave
      */
@@ -56,7 +58,7 @@ public class buscarTicket extends javax.swing.JDialog {
         jLTexto1.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLTexto1.setText("Introduce un numero de Ticket:");
 
-        numTicket.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        numTicket.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         numTicket.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 numTicketKeyPressed(evt);
@@ -115,7 +117,7 @@ public class buscarTicket extends javax.swing.JDialog {
                 .addContainerGap()
                 .addComponent(jLTexto1, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(numTicket, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(numTicket, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(ultimoNumTicket, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 9, Short.MAX_VALUE)
@@ -156,8 +158,12 @@ public class buscarTicket extends javax.swing.JDialog {
                 
                 if(cont == 1){
                     
+                    codTicketAux = cod;
+                    
                     verTicket verTicket= new verTicket(new javax.swing.JDialog(),true);
                     verTicket.setVisible(true);
+                    
+                    this.numTicket.setText("");
                     
                 }
                 else{
