@@ -510,7 +510,7 @@ public class PaAnadirProductos extends javax.swing.JDialog {
                             Thread thread = new Thread(){
                                 public void run(){
                                         
-                                   SFTP.SubirIMG img1 = new SFTP.SubirIMG("_1.png", "C:/Users/MANU/Pictures/harry-popoter.jpg");
+                                   SFTP.SubirIMG img1 = new SFTP.SubirIMG("_1.png", "C:/z/harry-popoter.jpg");
                                    
                                    if(!dir_img2.equalsIgnoreCase("")){
                                        

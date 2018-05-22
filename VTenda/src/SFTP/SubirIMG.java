@@ -78,7 +78,7 @@ public class SubirIMG {
  
         sftp.cd(this.directorio_servidor);
         
-        sftp.put("C:/Users/MANU/Pictures/harry-popoter.jpg", "hoola.png");
+        sftp.put(this.directorio_equipo, this.nombre_producto);
         //sftp.put(this.directorio_equipo, this.nombre_producto);
  
         System.out.println("Archivos subidos.");
