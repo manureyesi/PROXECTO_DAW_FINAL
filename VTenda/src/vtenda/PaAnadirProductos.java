@@ -463,8 +463,8 @@ public class PaAnadirProductos extends javax.swing.JDialog {
                         // Subir IMG                    
                         if(!this.img1.getText().isEmpty()){
                             
-                            cod_producto = this.codArticulo.toString().trim();
-                            nombre_img = nomArticulo.getText().replace(' ', '_')+"_"+this.codArticulo.toString().trim();
+                            cod_producto = this.codArticulo.getText().trim();
+                            nombre_img = nomArticulo.getText().replace(' ', '_') + "_" + this.codArticulo.getText().trim();
                             
                             if(!this.img2.getText().isEmpty()){
                                 segunda_img = true;
@@ -494,7 +494,7 @@ public class PaAnadirProductos extends javax.swing.JDialog {
                                             SFTP.SubirIMG img2 = new SFTP.SubirIMG(nombre_img+"_2.png", dir_img2);
                                             try{
                                                 //Insertar nombre file
-                                                con.update("productos", "img1 = '"+nombre_img+"_2.png'", "cod = '"+cod_producto+"'");
+                                                con.update("productos", "img2 = '"+nombre_img+"_2.png'", "cod = '"+cod_producto+"'");
                                             }
                                             catch(SQLException ex){
                                                 System.err.println("Error con DB al actualizar nombre IMG");

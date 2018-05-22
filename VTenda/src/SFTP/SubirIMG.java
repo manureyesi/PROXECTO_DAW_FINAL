@@ -55,11 +55,11 @@ public class SubirIMG {
         return directorio_equipo;
     }
             
-    public void UploadIMG(){
+    private void UploadIMG(){
         
         try{
 
-            System.out.println("------------------- INICIO");
+            System.out.println("--------- INICIO TRANSFERENCIA ARCHIVO -------");
 
             JSch jsch = new JSch();
             Session session = jsch.getSession(this.user, this.host, this.port);
@@ -71,18 +71,17 @@ public class SubirIMG {
 
             ChannelSftp sftp = (ChannelSftp)session.openChannel("sftp");
             sftp.connect();
-
+            
             sftp.cd(this.directorio_servidor);
+            sftp.put(this.directorio_equipo+"", this.nombre_producto);
 
-            sftp.put(this.directorio_equipo.toString(), this.nombre_producto);
-
-            System.out.println("Archivos subidos.");
+            System.out.println("Archivos " + this.nombre_producto + " subidos.");
 
             sftp.exit();
             sftp.disconnect();
             session.disconnect();
 
-            System.out.println("----------------- FIN");
+            System.out.println("---------  FIN TRANSFERENCIA ARCHIVO ---------");
         
         }
         catch(Exception ex){
