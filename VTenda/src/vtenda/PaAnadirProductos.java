@@ -26,10 +26,12 @@ public class PaAnadirProductos extends javax.swing.JDialog {
     public DefaultTableModel modelo;
     public static int salir = 0;
     
-    public static String dir_img1;
-    public static String dir_img2;
-    public static String nombre_img;
-
+    /************** VARIABLES PARA UPLOAD *************************************/
+    public File dir_img1;
+    public File dir_img2;
+    public String nombre_img="";
+    public String cod_producto = "";
+    public boolean segunda_img = false;
     
     public PaAnadirProductos(javax.swing.JDialog parent, boolean modal) {
         super(parent, modal);
@@ -346,73 +348,6 @@ public class PaAnadirProductos extends javax.swing.JDialog {
 
     private void formWindowActivated(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowActivated
         
-        try{
-            System.out.println("Buscando Categorias");
-            
-            int itemCount = categoria.getItemCount();
-
-            for(int i=0;i<itemCount;i++){
-                categoria.removeItemAt(0);
-            }
-            
-            /* Introducir categoria */
-            this.categoria.addItem("Seleccione:");            
-            
-            /* Consulta */
-            db.consultas con = new db.consultas();
-            
-            ResultSet rs = con.select("categorias", "1 ORDER BY 'cod' ASC");
-            
-            int cont = 0;
-            
-            while(rs.next()){
-                this.categoria.addItem(rs.getString("nombre"));
-                cont++;
-            }
-            
-            if(cont == 0){
-                
-                System.err.println("No existen categorias");
-                this.errores.setText("Lo sentimos no tiene ninguna categoria creada.");
-                
-                switch(PaAnadirProductos.salir){
-                    
-                    case 0:
-                        errores.errorCategoria PaAvisoCategoria = new errores.errorCategoria(new javax.swing.JDialog(), true);
-                        PaAvisoCategoria.setVisible(true);
-                    break;
-                    
-                    case 1:
-                        PaAnadirProductos.salir =0;
-                        PaAnadirCategoria PaAnadirCategoria = new PaAnadirCategoria(new javax.swing.JDialog(), true);
-                        PaAnadirCategoria.setVisible(true);                     
-                    break;
-                    
-                    case 2:
-                        PaAnadirProductos.salir =0;
-                        dispose();
-                    break;
-                
-                }
-                
-               
-            }
-            else{
-                this.anadir.setEnabled(true);
-            }
-            
-        }
-        catch(SQLException ex){
-            
-            System.err.println("Error de Base de Datos");
-            
-            errores.errorConexion errorConexion = new errores.errorConexion(new javax.swing.JDialog(), true);
-            errorConexion.setVisible(true);
-            
-            dispose();
-            
-        }
-        
     }//GEN-LAST:event_formWindowActivated
 
     private void anadirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_anadirActionPerformed
@@ -487,45 +422,6 @@ public class PaAnadirProductos extends javax.swing.JDialog {
                     
                     case 0:
                         
-                        // Subir IMG                    
-                        if(!this.img1.getText().isEmpty()){
-                            
-                            this.nombre_img = this.nomArticulo.getText().replace(' ', '_');
-                            
-                            this.dir_img1 = this.img1.getText();
-                            
-                            if(!this.img2.getText().isEmpty()){
-                            
-                                this.dir_img2 = this.img2.getText();
-                            
-                            }
-                            
-                            SFTP.SFTP subirArchivo = new SFTP.SFTP();
-                                    try {
-                                        subirArchivo.subirArchivo();
-                                    } catch (Exception ex) {
-                                        System.err.println("Error");
-                                    }
-                            
-                            Thread thread = new Thread(){
-                                public void run(){
-                                        
-                                   SFTP.SubirIMG img1 = new SFTP.SubirIMG("_1.png", "C:/z/harry-popoter.jpg");
-                                   
-                                   if(!dir_img2.equalsIgnoreCase("")){
-                                       
-                                       //SFTP.SubirIMG img2 = new SFTP.SubirIMG(nombre_img+"_2.png", dir_img2);
-                                       
-                                   }
-                                       
-                                }
-                            };
-                                
-                            thread.start();
-                        
-                        }
-                        
-                        
                         /* Consulta codCategoria */
                         rs = con.select("categorias", "nombre = '"+(String)categoria.getSelectedItem()+"'");
                         
@@ -562,7 +458,67 @@ public class PaAnadirProductos extends javax.swing.JDialog {
                         System.out.println("Insertando producto en DB");
                         
                         con.insert("productos", "cod, nombre, descripcion, codCategoria, precioSin, stock", "'"+cod+"', "+"'"+nome+"', "+"'"+this.descripcion.getText()+"', "+" "+codCategoria+", "+SinIVA+", "+Stock);
+                        
+                        // Thread para Upload IMG
+                        // Subir IMG                    
+                        if(!this.img1.getText().isEmpty()){
+                            
+                            cod_producto = this.codArticulo.toString().trim();
+                            nombre_img = nomArticulo.getText().replace(' ', '_')+"_"+this.codArticulo.toString().trim();
+                            
+                            if(!this.img2.getText().isEmpty()){
+                                segunda_img = true;
+                            }
+                            
+                            Thread thread = new Thread(){
+                                public void run(){
+                                    
+                                    // Declarar conexion
+                                    db.consultas con = new db.consultas();
 
+                                    if(dir_img1.exists()){
+                                        SFTP.SubirIMG img1 = new SFTP.SubirIMG(nombre_img+"_1.png", dir_img1);
+                                        try{
+                                            //Insertar nombre file
+                                            con.update("productos", "img1 = '"+nombre_img+"_1.png'", "cod = '"+cod_producto+"'");
+                                        }
+                                        catch(SQLException ex){
+                                            System.err.println("Error con DB al actualizar nombre IMG");
+                                        }
+                                    }
+                                    else{
+                                        System.err.println("La IMG 1 no existe");
+                                    }
+                                    if(segunda_img){
+                                        if(dir_img2.exists()){
+                                            SFTP.SubirIMG img2 = new SFTP.SubirIMG(nombre_img+"_2.png", dir_img2);
+                                            try{
+                                                //Insertar nombre file
+                                                con.update("productos", "img1 = '"+nombre_img+"_2.png'", "cod = '"+cod_producto+"'");
+                                            }
+                                            catch(SQLException ex){
+                                                System.err.println("Error con DB al actualizar nombre IMG");
+                                            }
+                                        }
+                                        else{
+                                            System.err.println("La IMG 2 no existe");
+                                        }
+                                    }
+
+                                    segunda_img = false;
+                                    nombre_img = "";
+                                    cod_producto = "";
+                                       
+                                }
+                            };
+                                
+                            thread.start();
+                            
+                            
+                        }
+                        
+                        
+                        
                         Object Datos[]={cod, nome,(String)categoria.getSelectedItem(), Stock, SinIVA, iva, ConIVA};
                         modelo.addRow(Datos);
                         
@@ -783,17 +739,21 @@ public class PaAnadirProductos extends javax.swing.JDialog {
             //Colocar Dir en Campo de Texto
             if(this.img1.getText().isEmpty()){
                 this.img1.setText(" "+archivoElegido);
+                dir_img1 = archivoElegido;
             }
             else if(this.img2.getText().isEmpty()){
                 this.img2.setText(" "+archivoElegido);
+                dir_img2 = archivoElegido;
             }
             else{
                 
                 if(numero_btn==1){
                     this.img1.setText(" "+archivoElegido);
+                    dir_img2 = archivoElegido;
                 }
                 else{
                     this.img2.setText(" "+archivoElegido);
+                    dir_img2 = archivoElegido;
                 }
             
             }
@@ -815,6 +775,73 @@ public class PaAnadirProductos extends javax.swing.JDialog {
     }//GEN-LAST:event_btn_img2ActionPerformed
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
+        
+        try{
+            System.out.println("Buscando Categorias");
+            
+            int itemCount = categoria.getItemCount();
+
+            for(int i=0;i<itemCount;i++){
+                categoria.removeItemAt(0);
+            }
+            
+            /* Introducir categoria */
+            this.categoria.addItem("Seleccione:");            
+            
+            /* Consulta */
+            db.consultas con = new db.consultas();
+            
+            ResultSet rs = con.select("categorias", "1 ORDER BY 'cod' ASC");
+            
+            int cont = 0;
+            
+            while(rs.next()){
+                this.categoria.addItem(rs.getString("nombre"));
+                cont++;
+            }
+            
+            if(cont == 0){
+                
+                System.err.println("No existen categorias");
+                this.errores.setText("Lo sentimos no tiene ninguna categoria creada.");
+                
+                switch(PaAnadirProductos.salir){
+                    
+                    case 0:
+                        errores.errorCategoria PaAvisoCategoria = new errores.errorCategoria(new javax.swing.JDialog(), true);
+                        PaAvisoCategoria.setVisible(true);
+                    break;
+                    
+                    case 1:
+                        PaAnadirProductos.salir =0;
+                        PaAnadirCategoria PaAnadirCategoria = new PaAnadirCategoria(new javax.swing.JDialog(), true);
+                        PaAnadirCategoria.setVisible(true);                     
+                    break;
+                    
+                    case 2:
+                        PaAnadirProductos.salir =0;
+                        dispose();
+                    break;
+                
+                }
+                
+               
+            }
+            else{
+                this.anadir.setEnabled(true);
+            }
+            
+        }
+        catch(SQLException ex){
+            
+            System.err.println("Error de Base de Datos");
+            
+            errores.errorConexion errorConexion = new errores.errorConexion(new javax.swing.JDialog(), true);
+            errorConexion.setVisible(true);
+            
+            dispose();
+            
+        }
         
         this.errores.setText("");
         this.codArticulo.setText("");
