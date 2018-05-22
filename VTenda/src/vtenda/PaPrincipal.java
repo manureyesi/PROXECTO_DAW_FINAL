@@ -409,8 +409,8 @@ public class PaPrincipal extends javax.swing.JFrame {
 
     private void verTicketActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_verTicketActionPerformed
         System.out.println("Entrando en Ver Ticket");
-        errores.errorVentanaNula errorVentanaNula = new errores.errorVentanaNula(new javax.swing.JDialog(), true);
-        errorVentanaNula.setVisible(true);
+        verTicket.buscarTicket buscarTicket = new verTicket.buscarTicket(new javax.swing.JDialog(), true);
+        buscarTicket.setVisible(true);
     }//GEN-LAST:event_verTicketActionPerformed
 
     private void administrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_administrarActionPerformed
