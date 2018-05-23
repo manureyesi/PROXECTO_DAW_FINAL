@@ -85,7 +85,7 @@ public class SubirIMG {
         
         }
         catch(Exception ex){
-            ex.printStackTrace();
+            System.err.println("Error al subir IMG a SFTP");
         }
         
         

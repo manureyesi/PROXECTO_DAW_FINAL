@@ -138,6 +138,8 @@ public class buscarTicket extends javax.swing.JDialog {
     
     private void verTicket(){
         
+        this.errores.setText("");
+        
         try{
             
             int cod = Integer.parseInt(this.numTicket.getText());
@@ -193,6 +195,8 @@ public class buscarTicket extends javax.swing.JDialog {
     }//GEN-LAST:event_numTicketKeyPressed
 
     private void formWindowActivated(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowActivated
+        
+        this.errores.setText("");
         
         //Crear consulta
         db.consultas con = new db.consultas();

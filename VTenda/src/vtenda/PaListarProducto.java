@@ -198,14 +198,7 @@ public class PaListarProducto extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
-        // TODO add your handling code here:        
-    }//GEN-LAST:event_formWindowOpened
-
-    private void volverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_volverActionPerformed
-        dispose();
-    }//GEN-LAST:event_volverActionPerformed
-
-    private void formWindowActivated(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowActivated
+        
         try{
             /*Limpar Lista*/
             int a=modelo.getRowCount();
@@ -282,7 +275,14 @@ public class PaListarProducto extends javax.swing.JDialog {
             this.errores.setText("Lo sentimos no podemos conectar con la base de datos");
             System.err.println("Problemas al conectar con la DB");
         }
-        
+    }//GEN-LAST:event_formWindowOpened
+
+    private void volverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_volverActionPerformed
+        dispose();
+    }//GEN-LAST:event_volverActionPerformed
+
+    private void formWindowActivated(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowActivated
+        // TODO add your handling code here:          
     }//GEN-LAST:event_formWindowActivated
 
     private void buscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buscarActionPerformed
