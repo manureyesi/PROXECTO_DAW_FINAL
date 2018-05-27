@@ -22,7 +22,7 @@ public class SubirIMG {
     private static final Integer port = 22;
     private static final String pass = "Maindo.11";
     
-    private static final String directorio_servidor = "/pruebas-server/img/pruebas/";
+    private static final String directorio_servidor = "/pruebas-server/img/catalogo/";
     
     public String nombre_producto;
     public File directorio_equipo;

@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: localhost
--- Tiempo de generación: 20-05-2018 a las 17:08:30
+-- Tiempo de generación: 27-05-2018 a las 23:57:31
 -- Versión del servidor: 5.5.59-0+deb8u1
 -- Versión de PHP: 5.6.33-0+deb8u1
 
@@ -36,6 +36,35 @@ CREATE TABLE IF NOT EXISTS `categorias` (
 -- --------------------------------------------------------
 
 --
+-- Estructura de tabla para la tabla `formularioContacto`
+--
+
+CREATE TABLE IF NOT EXISTS `formularioContacto` (
+`cod` int(11) NOT NULL COMMENT 'Codigo de Contacto',
+  `nombre` varchar(100) NOT NULL COMMENT 'Nombre de Persona de Contacto',
+  `mail` varchar(100) NOT NULL COMMENT 'Correo de Respuesta',
+  `telefono` int(11) DEFAULT NULL COMMENT 'Número de telefono no obligatorio',
+  `pregunta` text NOT NULL COMMENT 'Pregunta',
+  `fecha` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Fecha de consulta',
+  `contestado` tinyint(1) NOT NULL DEFAULT '0'
+) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `newsleter`
+--
+
+CREATE TABLE IF NOT EXISTS `newsleter` (
+`cod` int(11) NOT NULL COMMENT 'Cod de newsletter',
+  `mail` varchar(100) NOT NULL COMMENT 'Dir de correo electronico',
+  `fecha` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Fecha',
+  `permitir` tinyint(1) NOT NULL DEFAULT '1' COMMENT 'Permitir enviar Correo'
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
 -- Estructura de tabla para la tabla `productos`
 --
 
@@ -47,7 +76,8 @@ CREATE TABLE IF NOT EXISTS `productos` (
   `precioSin` double NOT NULL COMMENT 'Precio IVA',
   `stock` int(11) NOT NULL COMMENT 'Cantidad de Stock',
   `img1` varchar(100) DEFAULT NULL COMMENT 'Imagen de Producto 1',
-  `img2` varchar(100) DEFAULT NULL COMMENT 'Imagen de Producto 2'
+  `img2` varchar(100) DEFAULT NULL COMMENT 'Imagen de Producto 2',
+  `fecha` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Fecha'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -90,13 +120,6 @@ CREATE TABLE IF NOT EXISTS `tendas` (
   `dir2` varchar(100) NOT NULL COMMENT 'Campo direccion 2'
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 
---
--- Volcado de datos para la tabla `tendas`
---
-
-INSERT INTO `tendas` (`cod`, `nomeTenda`, `dir1`, `dir2`) VALUES
-(1, 'FIANDEIRA A Estrada', 'Calvo Sotelo Nº 29 BAIXO', '36680 Pontevedra');
-
 -- --------------------------------------------------------
 
 --
@@ -111,7 +134,7 @@ CREATE TABLE IF NOT EXISTS `ticket` (
   `modoPago` varchar(10) DEFAULT NULL COMMENT 'Tarjeta/Contado',
   `precioFinal` double DEFAULT NULL COMMENT 'Precio con IVA Final',
   `fecha` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB AUTO_INCREMENT=150 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=151 DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -131,14 +154,6 @@ CREATE TABLE IF NOT EXISTS `usuarios` (
 ) ENGINE=InnoDB AUTO_INCREMENT=33 DEFAULT CHARSET=latin1;
 
 --
--- Volcado de datos para la tabla `usuarios`
---
-
-INSERT INTO `usuarios` (`cod`, `usuario`, `nombre`, `apellidos`, `mail`, `contrasena`, `verificado`, `admin`) VALUES
-(22, 'admin', 'admin', 'admin', 'admin@fiandeira.es', '1325f04d75d9a455279e45fdceb19dcc59286b26', 1, 1),
-(32, 'manu', 'Manuel ', 'Reyes ', 'manureyesi@outlook.es', '1325f04d75d9a455279e45fdceb19dcc59286b26', 1, 1);
-
---
 -- Índices para tablas volcadas
 --
 
@@ -147,6 +162,18 @@ INSERT INTO `usuarios` (`cod`, `usuario`, `nombre`, `apellidos`, `mail`, `contra
 --
 ALTER TABLE `categorias`
  ADD PRIMARY KEY (`cod`), ADD UNIQUE KEY `nombre` (`nombre`);
+
+--
+-- Indices de la tabla `formularioContacto`
+--
+ALTER TABLE `formularioContacto`
+ ADD PRIMARY KEY (`cod`);
+
+--
+-- Indices de la tabla `newsleter`
+--
+ALTER TABLE `newsleter`
+ ADD PRIMARY KEY (`cod`);
 
 --
 -- Indices de la tabla `productos`
@@ -194,6 +221,16 @@ ALTER TABLE `usuarios`
 ALTER TABLE `categorias`
 MODIFY `cod` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Codigo de categoria',AUTO_INCREMENT=12;
 --
+-- AUTO_INCREMENT de la tabla `formularioContacto`
+--
+ALTER TABLE `formularioContacto`
+MODIFY `cod` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Codigo de Contacto',AUTO_INCREMENT=20;
+--
+-- AUTO_INCREMENT de la tabla `newsleter`
+--
+ALTER TABLE `newsleter`
+MODIFY `cod` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Cod de newsletter',AUTO_INCREMENT=9;
+--
 -- AUTO_INCREMENT de la tabla `tendas`
 --
 ALTER TABLE `tendas`
@@ -202,7 +239,7 @@ MODIFY `cod` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Codigo Tenda',AUTO_INCREME
 -- AUTO_INCREMENT de la tabla `ticket`
 --
 ALTER TABLE `ticket`
-MODIFY `cod` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Código de Ticket',AUTO_INCREMENT=150;
+MODIFY `cod` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Código de Ticket',AUTO_INCREMENT=151;
 --
 -- AUTO_INCREMENT de la tabla `usuarios`
 --
