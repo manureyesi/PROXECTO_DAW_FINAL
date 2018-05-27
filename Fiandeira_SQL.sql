@@ -19,8 +19,8 @@ SET time_zone = "+00:00";
 --
 -- Base de datos: `proxecto_DAW2`
 --
-CREATE DATABASE IF NOT EXISTS `proxecto_DAW2` DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci;
-USE `proxecto_DAW2`;
+CREATE DATABASE IF NOT EXISTS `Fiandeira` DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci;
+USE `Fiandeira`;
 
 -- --------------------------------------------------------
 
@@ -120,6 +120,13 @@ CREATE TABLE IF NOT EXISTS `tendas` (
   `dir2` varchar(100) NOT NULL COMMENT 'Campo direccion 2'
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 
+--
+-- Volcado de datos para la tabla `tendas`
+--
+
+INSERT INTO `tendas` (`cod`, `nomeTenda`, `dir1`, `dir2`) VALUES
+(1, 'FIANDEIRA A Estrada', 'Calvo Sotelo Nº 29 BAIXO', '36680 Pontevedra');
+
 -- --------------------------------------------------------
 
 --
@@ -152,6 +159,14 @@ CREATE TABLE IF NOT EXISTS `usuarios` (
   `verificado` tinyint(4) NOT NULL DEFAULT '0' COMMENT 'Usuario Verificado',
   `admin` tinyint(4) NOT NULL DEFAULT '0' COMMENT 'Admin de programa'
 ) ENGINE=InnoDB AUTO_INCREMENT=33 DEFAULT CHARSET=latin1;
+
+--
+-- Volcado de datos para la tabla `usuarios`
+--
+
+INSERT INTO `usuarios` (`cod`, `usuario`, `nombre`, `apellidos`, `mail`, `contrasena`, `verificado`, `admin`) VALUES
+(22, 'admin', 'admin', 'admin', 'admin@fiandeira.es', '1325f04d75d9a455279e45fdceb19dcc59286b26', 1, 1),
+(32, 'manu', 'Manuel ', 'Reyes ', 'manureyesi@outlook.es', '1325f04d75d9a455279e45fdceb19dcc59286b26', 1, 1);
 
 --
 -- Índices para tablas volcadas
