@@ -541,7 +541,7 @@ public class PaAnadirProductos extends javax.swing.JDialog {
                         if(!this.img1.getText().isEmpty()){
                             
                             cod_producto = this.codArticulo.getText().trim();
-                            nombre_img = nomArticulo.getText().replace(' ', '_') + "_" + this.codArticulo.getText().trim();
+                            nombre_img = this.nomArticulo.getText().replace(' ', '_') + "_" + this.codArticulo.getText().trim();
                             
                             if(!this.img2.getText().isEmpty()){
                                 segunda_img = true;
