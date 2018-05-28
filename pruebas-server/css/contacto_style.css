@@ -1,0 +1,97 @@
+/* Ocultar Contenedor*/
+div#contenedor_oculto{
+	display: none;
+}
+main{
+	padding-top: 100px;
+	padding-right: 10%;
+	padding-left: 10%;
+}
+
+/* Estilo Horario */
+.negrita{
+ 	font-weight: bold;
+}
+
+#tel{
+	display: block;
+	margin-top: 20px;
+	color: black;
+	font-size: 30px;
+	text-decoration: none;
+}
+div#info{
+    width: 100%;
+}
+div#info h1, div#info p, div#info a{
+    display: block;
+    text-align: center;
+}
+div#info h1{
+    padding-bottom: 20px;
+}
+div#info p:last-child{
+    padding-bottom: 30px;
+}
+div#info p + h1{
+    padding: 10px 0 10px 0;
+}
+/* Estilo Formulario */
+input{
+  padding: 5px 2.5px 5px 2.5px;
+  width: 100%;
+  font-size: 20px;
+}
+textarea{
+    width: 100%;
+    height: 300px;
+    font-size: 20px;
+}
+span.errores{
+	margin-top: 10px;
+	margin-bottom: 5px;
+	display: block;
+	width: 100%;
+}
+input[type=button]{
+	width: 200px;
+    margin-top: 20px;
+    margin-bottom: 30px;
+	border-radius: 5px;
+	font-weight: bold;
+}
+label{
+	font-size: 20px;
+	display: block;
+    padding-top: 20px;
+	padding-bottom: 3px;
+}
+div#info a#tel:hover{
+	transition:all 3s;
+	transform: scale(1.2);
+	background-color: #800080;
+	color: white;
+	border-radius: 5px;
+}
+form{
+	text-align: center;
+}
+
+@media screen and (min-width: 850px){
+
+	/* Dividir formulario */
+	div#coloca{
+		display: flex;
+		justify-content: space-around;
+	}
+	div#coloca1{
+		width: 40%;
+	}
+	div#coloca2{
+		width: 40%;
+	}
+	input[type=submit]{
+	    width: 200px;
+	}
+
+}

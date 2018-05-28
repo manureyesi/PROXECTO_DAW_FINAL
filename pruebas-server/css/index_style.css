@@ -1,0 +1,161 @@
+#contenedor_oculto{
+	display: none;
+}
+#contenedor{
+	width: 100%;
+	height: 100%;
+}
+div#slider{
+	background-image: url(../img/fondos/fondo_index_hilos.png);
+	background-repeat: no-repeat;
+	background-position: left center;
+	height: 500px;
+	width: 100%;
+}
+main{
+	width: 100%;
+	background-color: white;
+}
+
+/************ banner *****************/
+
+div#info_tenda{
+	padding: 20px;
+	text-align: center;
+	z-index: 50;
+	position: relative;
+	display: block;
+	width: 600px;
+	margin: auto auto;
+	top: 40%;
+	background: rgba(255,255,255,0.5);
+}
+
+div#info_tenda h2{
+	font-size: 30px;
+	padding-bottom: 30px;
+	color: #620062;
+	font-weight: bold;
+}
+div#info_tenda p{
+	font-size: 25px;
+	color: #620062;
+}
+div#info_tenda span{
+	margin: 0 auto;
+	margin-top: 30px;
+	background-color: #620062;
+	border-radius: 5px;
+	display: block;
+	width: 200px;
+	height: 50px;
+}
+div#info_tenda span:hover{
+	transform: scale(1.2,1.2) rotate(-5deg);
+	-moz-transform: scale(1.2,1.2) rotate(-5deg);
+	-webkit-transform: scale(1.2,1.2) rotate(-5deg);
+	-o-transform: scale(1.2,1.2) rotate(-5deg);
+	transition: all 1s;
+	-moz-transition: all 1s;
+	-webkit-transition: all 1s;
+	-o-transition: all 1s;
+}
+div#info_tenda span a{
+	padding-top: 15px;
+	color: white;
+	text-decoration: none;
+	display: block;
+	width: 100%;
+	height: 100%;
+}
+
+@media screen and (max-width: 700px){
+
+	div#info_tenda{
+		width: 80%;
+		top: 20%;
+	}
+
+}
+
+/* Muestra */
+h1.feito{
+	padding-top: 20px;
+	color: #800080;
+	text-align: center;
+	font-size: 40px;
+	font-weight: bold;
+}
+div#muestra{
+	width: 80%;
+	margin: 30px auto;
+}
+/* Ejemplos */
+div.ejemplos{
+	width: 100%;
+	height: auto;
+	position: relative;
+	margin-bottom: 5px;
+}
+div.ejemplos img{
+	width: 100%;
+}
+div.ejemplos img:hover{
+	transition: all 1s;
+	-moz-transition: all 1s;
+	-webkit-transition: all 1s;
+	-o-transition: all 1s;
+    filter: grayscale(100%) blur(1px);
+}
+
+/* Texto */
+div.ejemplos div.texto{
+	background-color: rgba(0,0,0,.5);
+	color: white;
+	width: 100%;
+	position: absolute;
+	padding-bottom: 5px;
+	bottom: 3px;
+}
+div.ejemplos div.texto h1{
+	margin-left: 10px;
+}
+div.ejemplos div.texto p{
+	margin-left: 10px;
+}
+/* Ocultar flex */
+div#muestra .flex:nth-child(3){
+	display: none;
+}
+/* Muestras en grid */
+@media screen and (min-width: 800px){
+
+	div#muestra{
+		padding: 0;
+		display: flex;
+		flex-wrap: wrap;
+		align-self: stretch;
+	}
+	div#muestra .flex{
+		display: flex;
+		flex-direction: column;
+		width: 49%;
+		align-self: stretch;
+	}
+	div#muestra .flex:nth-child(1){
+		margin-right: 2%;
+	}
+
+}
+@media screen and (min-width: 1300px){
+
+	div#muestra .flex:nth-child(3){
+		display: block;
+	}
+	div#muestra .flex{
+		width: 32%;
+	}
+	div#muestra .flex:nth-child(1), div#muestra .flex:nth-child(2){
+		margin-right: 1%;
+	}
+}

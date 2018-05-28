@@ -1,0 +1,155 @@
+/* FOOTER */
+footer{
+	padding: 0 5% 0 5%;
+	width: 90%;
+	display: grid;
+	grid-template-columns: 1fr 1fr 1fr;
+	grid-template-rows: 330px 80px;
+	background-color: #BDBDBD;
+}
+footer h2{
+	padding-bottom: 20px;
+}
+address#informacion{
+	grid-column-start: 1;
+	grid-column-end: 2;
+	grid-row-start: 1;
+	grid-row-end: 2;
+	margin: 10px;
+}
+address#informacion a{
+	color: black;
+	text-decoration: none;
+}
+address#informacion .negrita{
+	font-weight: bold;
+}
+/* icos */
+address#informacion img{
+	width: 15px;
+	padding-right: 5px;
+}
+address#informacion a img{
+	width: 30px;
+	padding: 10px;
+}
+div#estamos{
+	grid-column-start: 2;
+	grid-column-end: 3;
+	grid-row-start: 1;
+	grid-row-end: 2;
+	margin: 10px;
+}
+div#newsletter{
+	grid-column-start: 3;
+	grid-column-end: 4;
+	grid-row-start: 1;
+	grid-row-end: 2;
+	margin: 10px;
+}
+/* Copy */
+span#copy{
+	height: 25px;
+	padding: 20px 0 20px 20px;
+	border-top: 1px solid grey;
+	grid-column-start: 1;
+	grid-column-end: 4;
+	grid-row-start: 2;
+	grid-row-end: 3;
+}
+span#copy a{
+	color: grey;
+	text-decoration: none;
+	font-size: 20px;
+	width: 100px;
+}
+span#copy img{
+	padding-right: 10px;
+	width: 17px;
+}
+
+
+/* newsletter */
+div#newsletter form{
+	text-align: center;
+}
+div#newsletter form input, div#newsletter form label{
+	display: inline;
+	font-weight: normal;
+	font-size: 17px;
+	padding-bottom: 10px;
+}
+div#newsletter form span#erroresnewsletter{
+	margin-top: 10px;
+	margin-bottom: 5px;
+	display: block;
+}
+div#newsletter form input[type=button]{
+	font-weight: bold;
+	font-size: 20px;
+	margin-top: 20px;
+	width: 100px;
+	color: white;
+	border-radius: 5px;
+	background-color: grey;
+	border: 0;
+	padding: 10px 20px;
+}
+div#newsletter form input[type=text]{
+	margin-top: 20px;
+	padding: 10px;
+	font-size: 17px;
+	width: 80%;
+}
+
+
+@media screen and (max-width: 1000px){
+
+	footer{
+		display: grid;
+		grid-template-columns: 1fr;
+		grid-template-rows: 300px 300px 150px 200px;
+		padding-bottom: 20px;
+	}
+
+	address#informacion{
+		grid-column-start: 1;
+		grid-column-end: 2;
+		grid-row-start: 1;
+		grid-row-end: 2;
+	}
+	div#estamos{
+		grid-column-start: 1;
+		grid-column-end: 2;
+		grid-row-start: 2;
+		grid-row-end: 3;
+	}
+	div#newsletter{
+		grid-column-start: 1;
+		grid-column-end: 2;
+		grid-row-start: 3;
+		grid-row-end: 4;
+	}
+	span#copy{
+		grid-column-start: 1;
+		grid-column-end: 2;
+		grid-row-start: 5;
+		grid-row-end: 6;
+	}
+
+}
+@media screen and (max-width: 370px){
+	span#copy a{
+		font-size: 15px;
+	}
+	address#informacion span a{
+		font-size: 12px;
+	}
+
+}
+
+/* Mapa */
+iframe{
+	width: 100%;
+	height: 200px;
+}

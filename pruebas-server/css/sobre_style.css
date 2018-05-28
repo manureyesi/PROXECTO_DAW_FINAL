@@ -1,0 +1,131 @@
+/* Ocultar Contenedor*/
+div#contenedor_oculto{
+	display: none;
+}
+main{
+	padding-top: 100px;
+	padding-right: 10%;
+	padding-left: 10%;
+}
+img#foto_sobrenos{
+	width: 100%;
+}
+main p{
+	font-size: 20px;
+	padding-bottom: 20px;
+}
+/* Marcas */
+main h1{
+	text-align: center;
+	padding-top: 20px;
+	padding-bottom: 40px;
+	color: #800080;
+}
+main div.marcas{
+	text-align: center;
+	position: relative;
+}
+main div.marcas img{
+	width: 80%;
+	padding-bottom: 20px;
+	padding-top: 20px;
+}
+main div.marcas{
+	border: 1px solid rgba(0,0,0,.5);
+	margin-bottom: 30px;
+}
+main div.marcas h2{
+	font-size: 30px;
+	color:  white;
+	padding-top: 10px;
+	background-color: rgba(0,0,0,.5);
+	height: 50px;
+}
+/* Video Audio */
+audio{
+	margin: 10px 0 30px 0;
+	width: 100%;
+}
+video{
+	margin: 10px 0 30px 0;
+	width: 100%;
+}
+section.marcas + section h2{
+	text-align: left;
+}
+section video{
+	border: 2px solid rgba(0,0,0,.5);
+}
+@media screen and (min-width: 750px){
+
+	main section{
+		position: relative;
+	}
+	main section.testo_descripcion{
+		height: 340px;
+	}
+	main section.testo_descripcion img#foto_sobrenos{
+		width: 40%;
+		float: left;
+		padding-right: 20px;
+		margin: 0;
+	}
+	main section.marcas{
+		display: flex;
+		justify-content: space-around;
+		flex-direction: row;
+		flex-wrap: wrap;
+		width: 100%;
+	}
+	main .marcas div.marcas{
+		width: 40%;
+		display: block;
+		margin: 0 10px 20px 10px;
+	}
+	main .marcas div.marcas h2{
+		position: absolute;
+		bottom: 0;
+		width: 100%;
+	}
+	section.marcas + section {
+		text-align: left;
+	}
+
+}
+@media screen and (min-width: 1250px){
+	/* Texto Sobre nos */
+
+	main section.testo_descripcion{
+		height: 280px;
+	}
+	main section.testo_descripcion img#foto_sobrenos{
+		width: 456px;
+	}
+
+	/* Flex de Marcas */
+	main section.marcas{
+		flex-wrap: nowrap;
+	}
+	main .marcas div.marcas{
+		width: 22%;
+		display: block;
+		margin: 0 10px 20px 10px;
+	}
+
+	/* Audio e Video */
+	section#audio-video{
+		display: flex;
+		width: 100%;
+		justify-content: space-around;
+	}
+	div.audio{
+		width: 40%;
+	}
+	div.video{
+		width: 40%;
+	}
+	audio, video{
+		margin-top: 30px;
+	}
+
+}

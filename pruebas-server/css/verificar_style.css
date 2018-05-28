@@ -1,0 +1,30 @@
+@import url('https://fonts.googleapis.com/css?family=Encode+Sans+Expanded');
+
+*{
+	margin: 0;
+	padding: 0;
+	font-family: 'Encode Sans Expanded', sans-serif;
+}
+/* Ocultar Contenedor*/
+main{
+	width: 80%;
+	margin: 0 auto;
+}
+/* Non Dispoñemos de Productos */
+main div#mensaxe{
+	text-align: center;
+	display: block;
+	padding-top: 130px;
+	padding-bottom: 50px;
+	color: #800080;
+}
+main div#mensaxe h1.primeiroError{
+	font-size: 50px;
+}
+main div#mensaxe h1{
+	margin-bottom: 20px;
+}
+main div#mensaxe .user{
+    font-weight: bold;
+    font-size: 28px;
+}
