@@ -346,6 +346,85 @@ public class PaAnadirProductos extends javax.swing.JDialog {
 
     private void formWindowActivated(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowActivated
         
+        try{
+            System.out.println("Comprobando Categorias");
+            
+            /* Consulta */
+            db.consultas con = new db.consultas();
+            
+            ResultSet rs = con.select("categorias", "1 ORDER BY 'cod' ASC");
+            
+            int cont = 0;
+            
+            while(rs.next()){
+                cont++;
+            }
+            
+            if(cont == 0){
+                
+                System.err.println("No existen categorias");
+                this.errores.setText("Lo sentimos no tiene ninguna categoria creada.");
+                
+                switch(PaAnadirProductos.salir){
+                    
+                    case 0:
+                        errores.errorCategoria PaAvisoCategoria = new errores.errorCategoria(new javax.swing.JDialog(), true);
+                        PaAvisoCategoria.setVisible(true);
+                    break;
+                    
+                    case 1:
+                        PaAnadirProductos.salir =0;
+                        PaAnadirCategoria PaAnadirCategoria = new PaAnadirCategoria(new javax.swing.JDialog(), true);
+                        PaAnadirCategoria.setVisible(true);
+                        
+                        int itemCount = categoria.getItemCount();
+
+                        for(int i=0;i<itemCount;i++){
+                            categoria.removeItemAt(0);
+                        }
+
+                        /* Introducir categoria */
+                        this.categoria.addItem("Seleccione:");            
+
+                        /* Consulta */            
+                        rs = con.select("categorias", "1 ORDER BY 'cod' ASC");
+
+                        cont = 0;
+
+                        while(rs.next()){
+                            this.categoria.addItem(rs.getString("nombre"));
+                            cont++;
+                        }
+                        
+                        this.errores.setText("");
+                        
+                    break;
+                    
+                    case 2:
+                        PaAnadirProductos.salir =0;
+                        dispose();
+                    break;
+                
+                }
+                
+               
+            }
+            else{
+                this.anadir.setEnabled(true);
+            }
+            
+        }
+        catch(SQLException ex){
+            
+            System.err.println("Error de Base de Datos");
+            
+            errores.errorConexion errorConexion = new errores.errorConexion(new javax.swing.JDialog(), true);
+            errorConexion.setVisible(true);
+            
+            dispose();
+            
+        }
+        
     }//GEN-LAST:event_formWindowActivated
 
     private void anadirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_anadirActionPerformed
@@ -450,7 +529,7 @@ public class PaAnadirProductos extends javax.swing.JDialog {
                         double fin =rd.redondearDecimales(iv);
                         String iva=fin+"";
                         double SinIVA=Double.parseDouble(this.precio.getText());
-                        String ConIVA=(Double.parseDouble(this.precio.getText())+fin)+"";
+                        String ConIVA=rd.redondearDecimales(Double.parseDouble(this.precio.getText())+fin)+"";
                         
                         /*Insertar datos Productos*/
                         System.out.println("Insertando producto en DB");
