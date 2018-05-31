@@ -526,15 +526,19 @@ public class PaAnadirProductos extends javax.swing.JDialog {
                         
                         Redondear rd = new Redondear();
                         
-                        double fin =rd.redondearDecimales(iv);
-                        String iva=fin+"";
-                        double SinIVA=Double.parseDouble(this.precio.getText());
-                        String ConIVA=rd.redondearDecimales(Double.parseDouble(this.precio.getText())+fin)+"";
+                        Productos pro = new Productos();
                         
+                        double precioSin = rd.redondearDecimales(Double.parseDouble(this.precio.getText()));
+                        pro.setPrecioSin(precioSin);
+                        
+                        double iva = rd.redondearDecimales(pro.getIVA());
+                        
+                        double precioCon = rd.redondearDecimales(iva+precioSin);
+
                         /*Insertar datos Productos*/
                         System.out.println("Insertando producto en DB");
                         
-                        con.insert("productos", "cod, nombre, descripcion, codCategoria, precioSin, stock", "'"+cod+"', "+"'"+nome+"', "+"'"+this.descripcion.getText()+"', "+" "+codCategoria+", "+SinIVA+", "+Stock);
+                        con.insert("productos", "cod, nombre, descripcion, codCategoria, precioSin, stock", "'"+cod+"', "+"'"+nome+"', "+"'"+this.descripcion.getText()+"', "+" "+codCategoria+", "+precioSin+", "+Stock);
                         
                         // Thread para Upload IMG
                         // Subir IMG                    
@@ -596,7 +600,7 @@ public class PaAnadirProductos extends javax.swing.JDialog {
                         
                         
                         
-                        Object Datos[]={cod, nome,(String)categoria.getSelectedItem(), Stock, SinIVA, iva, ConIVA};
+                        Object Datos[]={cod, nome,(String)categoria.getSelectedItem(), Stock, precioSin, iva, precioCon};
                         modelo.addRow(Datos);
                         
                         this.errores.setText("");
