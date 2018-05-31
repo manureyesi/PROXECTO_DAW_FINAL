@@ -52,7 +52,7 @@ public class PaCambioContrasena extends javax.swing.JDialog {
         volver = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("VTenda - Contraseña");
+        setTitle("VTenda - Cambio Contraseña");
         setResizable(false);
 
         jLPassA.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N

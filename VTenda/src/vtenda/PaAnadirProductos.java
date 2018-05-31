@@ -82,7 +82,7 @@ public class PaAnadirProductos extends javax.swing.JDialog {
         volver = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("VTenda - Añadir");
+        setTitle("VTenda - Añadir Productos");
         setResizable(false);
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowActivated(java.awt.event.WindowEvent evt) {

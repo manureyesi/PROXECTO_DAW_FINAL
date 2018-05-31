@@ -10,7 +10,6 @@ import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import javax.swing.table.DefaultTableModel;
@@ -22,10 +21,7 @@ import javax.swing.table.DefaultTableModel;
 public class TPV extends javax.swing.JDialog {
 
     public DefaultTableModel modelo;
-    
-    public static CarritoCompra CCompra;
-    public static ArrayList<CarritoCompra> gardarCarrito = new ArrayList<CarritoCompra>();
-    
+        
     public int countProductos = 0;
     public static int auxTicket = 0;
     
@@ -104,6 +100,7 @@ public class TPV extends javax.swing.JDialog {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("VTenda - TPV");
+        setResizable(false);
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowActivated(java.awt.event.WindowEvent evt) {
                 formWindowActivated(evt);
@@ -444,9 +441,7 @@ public class TPV extends javax.swing.JDialog {
     }//GEN-LAST:event_formWindowActivated
 
     private void anadirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_anadirActionPerformed
-        
         anadirProducto();
-        
     }//GEN-LAST:event_anadirActionPerformed
     
     private void anadirProducto(){
@@ -938,7 +933,7 @@ public class TPV extends javax.swing.JDialog {
 
     private void recuperarTicketActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_recuperarTicketActionPerformed
 
-        this.recuperarTicket.setEnabled(false);
+        this.recuperarTicket.setEnabled(true);
         
         /* Declarar Consultas */
         db.consultas con = new db.consultas();
@@ -982,7 +977,8 @@ public class TPV extends javax.swing.JDialog {
                 this.precio.setText("");
                 this.unidades.setText("");
                 this.totalTicket.setText("");
-                this.guardaTicket.setEnabled(false);
+                this.guardaTicket.setEnabled(true);
+                this.recuperarTicket.setEnabled(false);
                 this.errores.setText("Ticket Recuperado con exito");
                 
                 /* Introducir datos */
@@ -1088,9 +1084,6 @@ public class TPV extends javax.swing.JDialog {
 
         /********************* LIMPIAR ARRAYLIST ***************/
 
-        gardarCarrito.clear();
-
-        
         /* Fecha TPV */
         Date fechaActual = new Date();
         

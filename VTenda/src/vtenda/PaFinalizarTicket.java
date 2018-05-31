@@ -187,7 +187,7 @@ public class PaFinalizarTicket extends javax.swing.JDialog{
 
         jLabelManual3.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabelManual3.setForeground(new java.awt.Color(0, 204, 204));
-        jLabelManual3.setText("<F8> Cerrar Ticket  || <F10> Cerrar Ticket e Imprimir");
+        jLabelManual3.setText("<F10> Cerrar Ticket");
 
         jLabelManual1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabelManual1.setForeground(new java.awt.Color(0, 204, 204));
@@ -209,12 +209,9 @@ public class PaFinalizarTicket extends javax.swing.JDialog{
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabelManual1)
                     .addComponent(jLabel3)
-                    .addComponent(jLabelManual2))
+                    .addComponent(jLabelManual2)
+                    .addComponent(jLabelManual3))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabelManual3)
-                .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -223,11 +220,11 @@ public class PaFinalizarTicket extends javax.swing.JDialog{
                 .addComponent(jLabelManual1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabelManual2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabelManual3)
-                .addGap(37, 37, 37))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel3)
+                .addGap(61, 61, 61))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -263,7 +260,7 @@ public class PaFinalizarTicket extends javax.swing.JDialog{
                                     .addComponent(totalPagar, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(pago, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(pagado, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                        .addGap(0, 0, Short.MAX_VALUE))
+                        .addGap(0, 42, Short.MAX_VALUE))
                     .addComponent(errores, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)

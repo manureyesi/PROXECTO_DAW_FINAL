@@ -46,6 +46,7 @@ public class generarClave extends javax.swing.JDialog {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("VTenda - Generar Clave");
+        setResizable(false);
 
         jLInfo1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLInfo1.setText("Genera la clave:");

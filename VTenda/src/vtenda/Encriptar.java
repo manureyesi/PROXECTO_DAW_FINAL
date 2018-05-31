@@ -8,12 +8,19 @@ package vtenda;
 import org.apache.commons.codec.digest.DigestUtils;
 /**
  *
- * @author MANU
+ * @author ManuReyesI
  */
 public class Encriptar {
     
+    /**
+     *
+     */
     public String cifer;
 
+    /**
+     *
+     * @param pal
+     */
     public Encriptar(String pal) {
         
         String textoSinEncriptar=pal;
@@ -24,6 +31,10 @@ public class Encriptar {
         
     }
 
+    /**
+     *
+     * @return Devuelve la contraseña cifrada
+     */
     public String getCifer() {
         return cifer;
     }

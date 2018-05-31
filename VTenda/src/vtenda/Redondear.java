@@ -7,12 +7,20 @@ package vtenda;
 
 /**
  *
- * @author MANU
+ * @author ManuReyesI
  */
 public class Redondear {
     
+    /**
+     *
+     */
     public double num;
 
+    /**
+     *
+     * @param num
+     * @return Valor de Decimal con dos cifras decimales
+     */
     public double redondearDecimales(double num) {
         double parteEntera, resultado;
         resultado = num;

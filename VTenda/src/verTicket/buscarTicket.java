@@ -49,6 +49,7 @@ public class buscarTicket extends javax.swing.JDialog {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("VTenda - Buscar Ticket");
+        setResizable(false);
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowActivated(java.awt.event.WindowEvent evt) {
                 formWindowActivated(evt);
@@ -204,7 +205,7 @@ public class buscarTicket extends javax.swing.JDialog {
         try{
             
             // Consultar cod ultimo Ticket
-            ResultSet rs = con.select("ticket", "1 ORDER BY cod ASC limit 1");
+            ResultSet rs = con.select("ticket", "1 ORDER BY cod DESC limit 1");
             
             while(rs.next()){
                 
