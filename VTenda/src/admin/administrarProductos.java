@@ -103,11 +103,13 @@ public class administrarProductos extends javax.swing.JDialog {
         jLNombre.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLNombre.setText("Nombre Producto:");
 
+        nombre.setEditable(false);
         nombre.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
 
         jLDescripcion.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLDescripcion.setText("Descripcion:");
 
+        descripcion.setEditable(false);
         descripcion.setColumns(20);
         descripcion.setRows(5);
         jScrollPane1.setViewportView(descripcion);
@@ -116,10 +118,12 @@ public class administrarProductos extends javax.swing.JDialog {
         jLStock.setText("Stock:");
 
         stock.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        stock.setEnabled(false);
 
         jLSinIva.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLSinIva.setText("Precio Sin Iva:");
 
+        precio.setEditable(false);
         precio.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
 
         jLImagenes.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
@@ -131,6 +135,7 @@ public class administrarProductos extends javax.swing.JDialog {
         btn_img1.setBackground(new java.awt.Color(204, 204, 204));
         btn_img1.setText("Seleccionar");
         btn_img1.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btn_img1.setEnabled(false);
         btn_img1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btn_img1ActionPerformed(evt);
@@ -143,6 +148,7 @@ public class administrarProductos extends javax.swing.JDialog {
         btn_img2.setBackground(new java.awt.Color(204, 204, 204));
         btn_img2.setText("Seleccionar");
         btn_img2.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        btn_img2.setEnabled(false);
         btn_img2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btn_img2ActionPerformed(evt);
@@ -305,7 +311,16 @@ public class administrarProductos extends javax.swing.JDialog {
                     this.nombre.setText(rs.getString("nombre"));
                     this.descripcion.setText(rs.getString("descripcion"));
                     this.stock.setValue(rs.getInt("stock"));
-                    this.precio.setText(rs.getDouble("precioSin")+"");
+                    this.precio.setText((rs.getDouble("precioSin")+"").replace('.', ','));
+                    this.errores.setText("");
+                    
+                    this.nombre.setEditable(true);
+                    this.descripcion.setEditable(true);
+                    this.stock.setEnabled(true);
+                    this.precio.setEditable(true);
+                    
+                    this.btn_img1.setEnabled(true);
+                    this.btn_img2.setEnabled(true);
                     
                 }
                 
@@ -355,7 +370,7 @@ public class administrarProductos extends javax.swing.JDialog {
             if(this.precio.getText().isEmpty()){
                 rs = con.select("productos", "cod = '"+this.codigo.getText()+"'");
                 while(rs.next()){
-                    this.precio.setText(rs.getDouble("precioSin")+"");
+                    this.precio.setText((rs.getDouble("precioSin")+"").replace('.', ','));
                 }
             }
             
@@ -364,15 +379,17 @@ public class administrarProductos extends javax.swing.JDialog {
             try{
                 
                 /* Pasar texto a double */
-                precioSin = Double.parseDouble(this.precio.getText());
+                precioSin = Double.parseDouble(this.precio.getText().replace(',', '.'));
                 
-                Redondear redondear = new Redondear();
+                Redondear rd = new Redondear();
                 
                 /* Actualizar datos */
-                con.update("productos", "nombre = '"+this.nombre.getText()+"', descripcion = '"+this.descripcion.getText()+"', precioSin = "+redondear.redondearDecimales(precioSin)+",stock = "+this.stock.getValue(), "cod = '"+this.codigo.getText()+"'");
+                con.update("productos", "nombre = '"+this.nombre.getText()+"', descripcion = '"+this.descripcion.getText()+"', precioSin = "+rd.redondearDecimales(precioSin)+",stock = "+this.stock.getValue(), "cod = '"+this.codigo.getText()+"'");
                 
                 // Thread para Upload IMG
-                // Subir IMG                    
+                // Subir IMG
+                cod_producto = this.codigo.getText().trim();
+                
                 if(!this.img1.getText().isEmpty()){
 
                     cod_producto = this.codigo.getText().trim();
@@ -412,8 +429,14 @@ public class administrarProductos extends javax.swing.JDialog {
                                         System.err.println("Error con DB al actualizar nombre IMG");
                                     }
                                 }
-                                else{
-                                    System.err.println("La IMG 2 no existe");
+                            }
+                            else{
+                                try{
+                                    //Insertar valor nulo
+                                    con.update("productos", "img2 = NULL", "cod = '"+cod_producto+"'");
+                                }
+                                catch(SQLException ex){
+                                    System.err.println("Error con DB al actualizar nombre IMG");
                                 }
                             }
 
@@ -425,8 +448,40 @@ public class administrarProductos extends javax.swing.JDialog {
                     };
 
                     thread.start();
-                
+                    
                 }
+                else{
+                    try{
+                        //Insertar valor nulo
+                        con.update("productos", "img1 = NULL", "cod = '"+cod_producto+"'");
+                    }
+                    catch(SQLException ex){
+                        System.err.println("Error con DB al actualizar nombre IMG");
+                    }
+                }
+                
+                this.codigo.setEditable(true);
+                this.codigo.setText("");
+
+                this.codigo.requestFocus();
+
+                this.nombre.setText("");
+                this.descripcion.setText("");
+                this.stock.setValue(0);
+                this.precio.setText("");
+
+                this.errores.setText("Producto actualizado con exito");
+
+                this.nombre.setEditable(false);
+                this.descripcion.setEditable(false);
+                this.stock.setEnabled(false);
+                this.precio.setEditable(false);
+
+                this.btn_img1.setEnabled(false);
+                this.btn_img2.setEnabled(false);
+                this.img1.setText("");
+                this.img2.setText("");
+                
             }
             catch(NumberFormatException ex){
                 this.errores.setText("Introduce un precio correcto");
@@ -447,7 +502,7 @@ public class administrarProductos extends javax.swing.JDialog {
         JFileChooser fc = new JFileChooser();
         
         //Crear filtro para Imagenes 
-        FileNameExtensionFilter filter = new FileNameExtensionFilter("Imágenes", "bmp", "gif", "jpg", "png");
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("Imágenes", "jpg", "png");
         fc.setFileFilter(filter);
                 
         int respuesta = fc.showOpenDialog(this);
@@ -462,10 +517,6 @@ public class administrarProductos extends javax.swing.JDialog {
             if(this.img1.getText().isEmpty()){
                 this.img1.setText(" "+archivoElegido);
                 dir_img1 = archivoElegido;
-            }
-            else if(this.img2.getText().isEmpty()){
-                this.img2.setText(" "+archivoElegido);
-                dir_img2 = archivoElegido;
             }
             else{
                 

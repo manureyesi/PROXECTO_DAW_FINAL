@@ -5,15 +5,27 @@
  */
 package vtenda;
 
+import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
+import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
+import net.sourceforge.barbecue.Barcode;
+import net.sourceforge.barbecue.BarcodeFactory;
+import net.sourceforge.barbecue.BarcodeImageHandler;
+import net.sourceforge.barbecue.output.OutputException;
 
 /**
  *
@@ -76,6 +88,7 @@ public class PaAnadirProductos extends javax.swing.JDialog {
         btn_img1 = new javax.swing.JButton();
         img2 = new javax.swing.JTextField();
         btn_img2 = new javax.swing.JButton();
+        codigoBarras = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         productos = new javax.swing.JTable();
@@ -99,6 +112,11 @@ public class PaAnadirProductos extends javax.swing.JDialog {
         jLCArticulo.setText("Codigo Artículo:");
 
         codArticulo.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        codArticulo.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                codArticuloFocusLost(evt);
+            }
+        });
 
         jLNArticulo.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLNArticulo.setText("Nombre Artículo:");
@@ -213,9 +231,12 @@ public class PaAnadirProductos extends javax.swing.JDialog {
                                 .addGap(0, 0, Short.MAX_VALUE)))
                         .addContainerGap())
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(img1, javax.swing.GroupLayout.PREFERRED_SIZE, 208, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(btn_img1)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(img1, javax.swing.GroupLayout.DEFAULT_SIZE, 208, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(btn_img1))
+                            .addComponent(codigoBarras, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(img2, javax.swing.GroupLayout.PREFERRED_SIZE, 208, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -256,7 +277,9 @@ public class PaAnadirProductos extends javax.swing.JDialog {
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(btn_img1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(img1, javax.swing.GroupLayout.DEFAULT_SIZE, 28, Short.MAX_VALUE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 13, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(codigoBarras, javax.swing.GroupLayout.DEFAULT_SIZE, 94, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(anadir, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(errores, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -595,6 +618,41 @@ public class PaAnadirProductos extends javax.swing.JDialog {
                             
                         }
                         
+                        //Generar codigo de Barras
+                        Barcode barcode = null;
+                        try {
+                            barcode = BarcodeFactory.createCode39(this.codArticulo.getText(), true);
+                        } 
+                        catch (Exception e) {
+                        }
+                        barcode.setDrawingText(false);
+
+                        barcode.setBarWidth(2);
+                        barcode.setBarHeight(60);
+                        try {
+                            
+                            File folder = new File("Etiquetas");
+                            
+                            if(!folder.exists()){
+                                folder.mkdir();
+                            }
+                            
+                            FileOutputStream fos = new FileOutputStream("Etiquetas/"+this.codArticulo.getText().trim()+".png");
+                            
+                            try {
+                                BarcodeImageHandler.writePNG(barcode, fos);
+                            } 
+                            catch (OutputException ex) {
+                                System.err.println("Error al crear codigo de barras");
+                            }
+                            
+                            fos.close();
+                        } 
+                        catch (IOException  ex) {
+                            System.err.println("Error al crear codigo de barras");
+                        }
+                        
+                        
                         Object Datos[]={cod, nome,(String)categoria.getSelectedItem(), Stock, (precioSIN+"").replace('.', ',') , (IVA+"").replace('.', ','), (precioCON+"").replace('.', ',')};
 
                         modelo.addRow(Datos);
@@ -661,7 +719,7 @@ public class PaAnadirProductos extends javax.swing.JDialog {
         JFileChooser fc = new JFileChooser();
         
         //Crear filtro para Imagenes 
-        FileNameExtensionFilter filter = new FileNameExtensionFilter("Imágenes", "bmp", "gif", "jpg", "png");
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("Imágenes", "jpg", "png");
         fc.setFileFilter(filter);
                 
         int respuesta = fc.showOpenDialog(this);
@@ -676,10 +734,6 @@ public class PaAnadirProductos extends javax.swing.JDialog {
             if(this.img1.getText().isEmpty()){
                 this.img1.setText(" "+archivoElegido);
                 dir_img1 = archivoElegido;
-            }
-            else if(this.img2.getText().isEmpty()){
-                this.img2.setText(" "+archivoElegido);
-                dir_img2 = archivoElegido;
             }
             else{
                 
@@ -786,6 +840,55 @@ public class PaAnadirProductos extends javax.swing.JDialog {
         
     }//GEN-LAST:event_formWindowOpened
 
+    private void codArticuloFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_codArticuloFocusLost
+        
+        if(!this.codArticulo.getText().isEmpty()){
+            
+            try{
+                
+                Barcode barcode = null;
+
+                try {
+                    barcode = BarcodeFactory.createCode39(this.codArticulo.getText(), true);
+                } 
+                catch (Exception e) {
+                }
+
+                barcode.setDrawingText(false);
+
+                barcode.setBarWidth(2);
+                barcode.setBarHeight(60);
+                BufferedImage image = new BufferedImage(300, 100, BufferedImage.TYPE_INT_ARGB);
+                Graphics2D g = (Graphics2D) image.getGraphics();
+
+                try {
+                    barcode.draw(g, 5, 20);
+                } 
+                catch (Exception e) {
+                }
+
+                ImageIcon icon = new ImageIcon(image);
+                this.codigoBarras.setIcon(icon);
+                
+            
+            }
+            catch(Exception ex){
+                
+                this.errores.setText("El cod de producto solo puede ser numerico");
+                
+                System.err.println("Error al generar codigo de barras");
+                
+                this.codArticulo.setText("");
+                this.codArticulo.requestFocus();
+
+                
+                
+            }
+        
+        }
+        
+    }//GEN-LAST:event_codArticuloFocusLost
+
     /**
      * @param args the command line arguments
      */
@@ -834,6 +937,7 @@ public class PaAnadirProductos extends javax.swing.JDialog {
     private javax.swing.JButton btn_img2;
     private javax.swing.JComboBox<String> categoria;
     private javax.swing.JTextField codArticulo;
+    private javax.swing.JLabel codigoBarras;
     private javax.swing.JTextField descripcion;
     private javax.swing.JLabel errores;
     private javax.swing.JTextField img1;
