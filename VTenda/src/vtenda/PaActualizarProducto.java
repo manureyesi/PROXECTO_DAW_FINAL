@@ -239,9 +239,9 @@ public class PaActualizarProducto extends javax.swing.JDialog {
             double precioSin = 0;
             
             try{
-                
+                                
                 /* Pasar texto a double */
-                precioSin = Double.parseDouble(this.precio.getText());
+                precioSin = Double.parseDouble(this.precio.getText().replace(',', '.'));
                 
                 Redondear redondear = new Redondear();
                 
@@ -283,7 +283,7 @@ public class PaActualizarProducto extends javax.swing.JDialog {
                 this.nombre.setText(rs.getString("nombre"));
                 this.descripcion.setText(rs.getString("descripcion"));
                 this.stock.setValue(rs.getInt("stock"));
-                this.precio.setText(rs.getDouble("precioSin")+"");
+                this.precio.setText((rs.getDouble("precioSin")+"").replace('.', ','));
                 
             }
             

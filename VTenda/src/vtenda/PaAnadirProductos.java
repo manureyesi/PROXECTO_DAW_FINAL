@@ -426,14 +426,14 @@ public class PaAnadirProductos extends javax.swing.JDialog {
         }
         
     }//GEN-LAST:event_formWindowActivated
-
-    private void anadirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_anadirActionPerformed
+    
+    private void añadirProducto() {
         
         try{
             double preci = 0;
             try{
                 /*Introducir datos en clase*/
-                preci = Double.parseDouble(this.precio.getText());
+                preci = Double.parseDouble(this.precio.getText().replace(',', '.'));
             }
             catch(NumberFormatException ex){
                 this.errores.setText("Lo sentimos, compruebe los campos numericos");
@@ -465,7 +465,7 @@ public class PaAnadirProductos extends javax.swing.JDialog {
                 /*Introducir datos en clase*/
                         p1.setCodArticulo(this.codArticulo.getText());
                         p1.setNomeArticulo(this.nomArticulo.getText());
-                        p1.setPrecioSin(Double.parseDouble(this.precio.getText()));
+                        p1.setPrecioSin(Double.parseDouble(this.precio.getText().replace(',', '.')));
                 }
                 catch(NumberFormatException ex){
                     this.errores.setText("Lo sentimos, compruebe los campos numericos");
@@ -522,19 +522,16 @@ public class PaAnadirProductos extends javax.swing.JDialog {
                             Stock=val+"";
                         }   
                         
-                        double iv=Double.parseDouble(this.precio.getText())*0.21;
-                        
                         Redondear rd = new Redondear();
                         
-                        double fin =rd.redondearDecimales(iv);
-                        String iva=fin+"";
-                        double SinIVA=Double.parseDouble(this.precio.getText());
-                        String ConIVA=rd.redondearDecimales(Double.parseDouble(this.precio.getText())+fin)+"";
+                        double precioSIN = rd.redondearDecimales(p1.getPrecioSin());
+                        double iva = rd.redondearDecimales(p1.getIVA());
+                        double precioCON = rd.redondearDecimales(iva+precioSIN);
                         
                         /*Insertar datos Productos*/
                         System.out.println("Insertando producto en DB");
                         
-                        con.insert("productos", "cod, nombre, descripcion, codCategoria, precioSin, stock", "'"+cod+"', "+"'"+nome+"', "+"'"+this.descripcion.getText()+"', "+" "+codCategoria+", "+SinIVA+", "+Stock);
+                        con.insert("productos", "cod, nombre, descripcion, codCategoria, precioSin, stock", "'"+cod+"', "+"'"+nome+"', "+"'"+this.descripcion.getText()+"', "+" "+codCategoria+", "+precioSIN+", "+Stock);
                         
                         // Thread para Upload IMG
                         // Subir IMG                    
@@ -596,7 +593,7 @@ public class PaAnadirProductos extends javax.swing.JDialog {
                         
                         
                         
-                        Object Datos[]={cod, nome,(String)categoria.getSelectedItem(), Stock, SinIVA, iva, ConIVA};
+                        Object Datos[]={cod, nome,(String)categoria.getSelectedItem(), Stock, (precioSIN+"").replace('.', ',') , (iva+"").replace('.', ','), (precioCON+"").replace('.', ',')};
                         modelo.addRow(Datos);
                         
                         this.errores.setText("");
@@ -635,6 +632,10 @@ public class PaAnadirProductos extends javax.swing.JDialog {
             System.err.println("Error en Añadir Productos");
         }
         
+    }
+    
+    private void anadirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_anadirActionPerformed
+        añadirProducto();
     }//GEN-LAST:event_anadirActionPerformed
 
     private void stockKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_stockKeyPressed
@@ -642,152 +643,7 @@ public class PaAnadirProductos extends javax.swing.JDialog {
         /*Evento para tecla ENTER*/
         
         if(evt.getKeyCode()==KeyEvent.VK_ENTER){
-        
-            try{
-                double preci = 0;
-                try{
-                    /*Introducir datos en clase*/
-                    preci = Double.parseDouble(this.precio.getText());
-                }
-                catch(NumberFormatException ex){
-                    this.errores.setText("Lo sentimos, compruebe los campos numericos");
-                    System.err.println("Error de campos numericos");
-                }
-
-                Productos p1 = new Productos();
-
-                /*Comprobar errores*/
-                if(this.codArticulo.getText().isEmpty()||this.nomArticulo.getText().isEmpty()||this.precio.getText().isEmpty()||this.descripcion.getText().isEmpty()){
-
-                    this.errores.setText("Comprueba que relleno todos los campos");
-
-                }
-                else if((String)categoria.getSelectedItem() == "Seleccione:"){
-                    this.errores.setText("Elija una categoria para este producto");
-                }
-                else if(preci <= 0){
-                    this.errores.setText("Lo sentimos, el precio tiene que ser superior a 0");
-                }
-                else{
-
-                    System.out.println("Pasada comprobación de errores");
-
-                    int error = 0;
-
-                    /* Controlar error de paso a Double */
-                    try{
-                    /*Introducir datos en clase*/
-                            p1.setCodArticulo(this.codArticulo.getText());
-                            p1.setNomeArticulo(this.nomArticulo.getText());
-                            p1.setPrecioSin(Double.parseDouble(this.precio.getText()));
-                    }
-                    catch(NumberFormatException ex){
-                        this.errores.setText("Lo sentimos, compruebe los campos numericos");
-                        error = 1;
-                    }
-
-                    int value=(int)this.stock.getValue();
-
-                    if(value==0){
-                        p1.setStock(1);
-                    }
-                    else{
-                        p1.setStock(value);
-                    }
-
-                    /* Declarar clase para consultas */
-                    db.consultas con = new db.consultas();
-
-                    /*Consulta buscar codigo repetido productos da tenda*/
-                    ResultSet rs = con.select("productos", "cod = '"+this.codArticulo.getText()+"'");
-
-                    while(rs.next()){
-
-                        if(this.codArticulo.getText().compareTo(rs.getString("cod")) == 0 ){
-                            error = 2;
-                        }
-
-                    }
-
-                    switch (error) {
-
-                        case 0:
-                            /* Consulta codCategoria */
-                            rs = con.select("categorias", "nombre = '"+(String)categoria.getSelectedItem()+"'");
-
-                            int codCategoria = 0;
-
-                            while(rs.next()){
-
-                                codCategoria = rs.getInt("cod");
-
-                            }   
-
-                            String cod=this.codArticulo.getText();
-                            String nome=this.nomArticulo.getText();
-                            int val=(int)this.stock.getValue();
-                            String Stock;
-
-                            if(val<=0){
-                                Stock="1";
-                            }
-                            else{
-                                Stock=val+"";
-                            }   
-
-                            double iv=Double.parseDouble(this.precio.getText())*0.21;
-
-                            Redondear rd = new Redondear();
-
-                            double fin =rd.redondearDecimales(iv);
-                            String iva=fin+"";
-                            double SinIVA=Double.parseDouble(this.precio.getText());
-                            String ConIVA=(Double.parseDouble(this.precio.getText())+fin)+"";
-
-                            /*Insertar datos Productos*/
-                            System.out.println("Insertando producto en DB");
-
-                            con.insert("productos", "cod, nombre, descripcion, codCategoria, precioSin, stock", "'"+cod+"', "+"'"+nome+"', "+"'"+this.descripcion.getText()+"', "+" "+codCategoria+", "+SinIVA+", "+Stock);
-
-                            Object Datos[]={cod, nome,(String)categoria.getSelectedItem(), Stock, SinIVA, iva, ConIVA};
-                            modelo.addRow(Datos);
-
-                            this.errores.setText("");
-                            this.codArticulo.setText("");
-                            this.nomArticulo.setText("");
-                            this.precio.setText("");
-                            this.stock.setValue(0);
-                            this.descripcion.setText("");
-                            this.img1.setText("");
-                            this.img2.setText("");
-
-                        break;
-
-                        case 1:
-
-                            this.errores.setText("Lo sentimos, compruebe los campos númerico");
-                            System.err.println("Error de campos numericos");
-
-                        break;
-
-                        case 2:
-
-                            this.errores.setText("El código de artículo se encuentra repetido");
-                            this.codArticulo.setText("");
-                            System.err.println("El cod Articulo esta repetido");
-
-                        break;
-
-
-                    }
-
-                }
-
-            }catch(SQLException ex){
-                this.errores.setText("Lo sentimos, acabamos de sufrir un error");
-                System.err.println("Error en Añadir Productos");
-            }
-        
+            añadirProducto();
         }
         
     }//GEN-LAST:event_stockKeyPressed
@@ -840,15 +696,11 @@ public class PaAnadirProductos extends javax.swing.JDialog {
     }
     
     private void btn_img1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_img1ActionPerformed
-        
-        buscarIMG(1);
-        
+        buscarIMG(1); 
     }//GEN-LAST:event_btn_img1ActionPerformed
         
     private void btn_img2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_img2ActionPerformed
-        
         buscarIMG(2);
-
     }//GEN-LAST:event_btn_img2ActionPerformed
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened

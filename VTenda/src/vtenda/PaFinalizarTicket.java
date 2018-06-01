@@ -454,8 +454,8 @@ public class PaFinalizarTicket extends javax.swing.JDialog{
         
         valorTicket = TPV.total;
         
-        this.pago.setText(valorTicket +" €");
-        this.totalPagar.setText(valorTicket +" €");
+        this.pago.setText((valorTicket +" €").replace('.', ','));
+        this.totalPagar.setText((valorTicket +" €").replace('.', ','));
         
     }//GEN-LAST:event_formWindowOpened
 
@@ -480,7 +480,7 @@ public class PaFinalizarTicket extends javax.swing.JDialog{
                 
                 this.tipoPago.setText("T");
                 this.pagado.setEditable(false);
-                this.diferencia.setText(" 0.0 €");
+                this.diferencia.setText(" 0,0 €");
                 this.requestFocus();
                 
             break;
@@ -491,7 +491,7 @@ public class PaFinalizarTicket extends javax.swing.JDialog{
                 this.tipoPago.setText("");
                 this.tipoPago.requestFocus();
                 this.pagado.setEditable(false);
-                this.diferencia.setText(" 0.0 €");
+                this.diferencia.setText(" 0,0 €");
                 
             break;
         
@@ -507,7 +507,7 @@ public class PaFinalizarTicket extends javax.swing.JDialog{
         if(evt.getKeyCode()==KeyEvent.VK_ENTER){
             
             if(this.pagado.getText().isEmpty()){
-                this.pagado.setText(this.valorTicket +" €");
+                this.pagado.setText((this.valorTicket +" €").replace('.', ','));
                 this.requestFocus();
                 this.errores.setText("");
             }
@@ -515,11 +515,11 @@ public class PaFinalizarTicket extends javax.swing.JDialog{
             
                 try{
 
-                    CanpoPagado = Double.parseDouble(this.pagado.getText());
+                    CanpoPagado = Double.parseDouble(this.pagado.getText().replace(',', '.'));
 
                     if(CanpoPagado < this.valorTicket){
                         this.errores.setText("El valor Pagado tiene que ser mas alto");
-                        this.diferencia.setText(" 0.0 €");
+                        this.diferencia.setText(" 0,0 €");
                     }
                     else{
 
@@ -528,8 +528,8 @@ public class PaFinalizarTicket extends javax.swing.JDialog{
                         Redondear rd = new Redondear();
                         resultado = rd.redondearDecimales(resultado);
 
-                        this.pagado.setText(CanpoPagado+" €");
-                        this.diferencia.setText(resultado + " €");
+                        this.pagado.setText((CanpoPagado+" €").replace('.', ','));
+                        this.diferencia.setText((resultado + " €").replace('.', ','));
                         
                         this.errores.setText("");
                         
@@ -542,7 +542,7 @@ public class PaFinalizarTicket extends javax.swing.JDialog{
 
                     this.pagado.setText("");
                     this.pagado.requestFocus();
-                    this.diferencia.setText(" 0.0 €");
+                    this.diferencia.setText(" 0,0 €");
                     this.errores.setText("Comprueba el valor de Pagado");
 
                 }

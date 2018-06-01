@@ -246,9 +246,9 @@ public class PaListarProducto extends javax.swing.JDialog {
                 Productos p1 = new Productos(rs.getString("cod"), rs.getString("nombre"), rs.getDouble("precioSin"), rs.getInt("stock"), NombreCategoria);
                 
                 /* Redondear */
-                Redondear redondear = new Redondear();
+                Redondear rd = new Redondear();
                 
-                Object Datos[]={p1.getCodArticulo() ,p1.getNomeArticulo(), p1.getCategoria(), p1.getStock(), p1.getPrecioSin(), p1.getIVA(), redondear.redondearDecimales(p1.getPrecioSin()+p1.getIVA()) };
+                Object Datos[]={p1.getCodArticulo() ,p1.getNomeArticulo(), p1.getCategoria(), p1.getStock(), (rd.redondearDecimales(p1.getPrecioSin())+"").replace('.', ','), (rd.redondearDecimales(p1.getIVA())+"").replace('.', ','), (rd.redondearDecimales(p1.getPrecioSin()+p1.getIVA())+"").replace('.', ',') };
                 modelo.addRow(Datos);
                 
             }

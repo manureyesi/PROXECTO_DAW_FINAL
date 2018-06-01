@@ -5,6 +5,8 @@
  */
 package vtenda;
 
+import java.text.DecimalFormat;
+
 /**
  *
  * @author ManuReyesI
@@ -22,13 +24,13 @@ public class Redondear {
      * @return Valor de Decimal con dos cifras decimales
      */
     public double redondearDecimales(double num) {
-        double parteEntera, resultado;
-        resultado = num;
-        parteEntera = Math.floor(resultado);
-        resultado=(resultado-parteEntera)*Math.pow(10, 2);
-        resultado=Math.round(resultado);
-        resultado=(resultado/Math.pow(10, 2))+parteEntera;
+        
+        DecimalFormat df = new DecimalFormat("#.00");
+        
+        double resultado = Double.parseDouble(df.format(num).replace(',', '.'));
+        
         return resultado;
+        
     }
     
 }
