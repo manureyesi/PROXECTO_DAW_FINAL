@@ -91,7 +91,7 @@
 
                     $mostrar .= '<div class="texto">
                         <h1>'. $row["nombre"] .'</h1>
-                        <p>Prezo: '. ($row["precioSin"]*1.21) .' €</p>
+                        <p>Prezo: '. str_replace(".", ",", (round($row["precioSin"]*1.21, 2))) .' €</p>
                         </div>
                         </div>';
 
@@ -163,8 +163,7 @@
         if($error === true){
 
             $mostrar = "";
-            $cont = -1;
-            $cont2 = 0;
+            $cont = 0;
 
         	foreach ($resultado as $row){
 
@@ -206,7 +205,7 @@
         }
 
 
-        if($error == false){
+        if($error == false || $numPax == 0){
             echo '  <a href="#" title="Anterior"><span class="icon-angle-circled-left"></span></a>
                     <a class="seleccionado" href="#" title="Página 1">1</a>
                     <a href="#" title="Siguiente"><span class="icon-angle-circled-right"></span></a>';
@@ -337,15 +336,13 @@
         if($error === true){
 
             $mostrar = "";
-            $cont = -1;
+            $cont = 0;
             $cont2 = 0;
             //Comprobacion por pax
             $comprobacion1 = (int)(($num_por_pagina*$pagina)-$num_por_pagina);
             $comprobacion2 = (int)($num_por_pagina*$pagina);
 
         	foreach ($resultado as $row){
-
-                $cont++;
 
                 if( $comprobacion1 <= $cont && $comprobacion2 > $cont){
 
@@ -359,11 +356,11 @@
 
                     $mostrar .= '<div class="texto">
                         <h1>'. $row["nombre"] .'</h1>
-                        <p>Prezo: '. ($row["precioSin"]*1.21) .' €</p>
+                        <p>Prezo: '. str_replace(".", ",", (round($row["precioSin"]*1.21, 2))) .' €</p>
                         </div>
                         </div>';
-
                 }
+                $cont++;
 
             }
 
@@ -402,7 +399,7 @@
         if($nombre == "novidades"){
 
             try{
-                $resultado = selectPreparado("productos", "img1 is not null and stock != 0 ORDER BY productos.fecha  ASC");
+                $resultado = selectPreparado("productos", "img1 is not null and stock != 0 ORDER BY productos.fecha  DESC");
             }
             catch(PDOException $e){
                 $error = false;
@@ -421,7 +418,7 @@
                         $mostrar .= '<img class="segunda_foto" src="img/catalogo/'.$row["img1"].'" alt="'.$row["nombre"].'" title="'.$row["nombre"].'">';
                     $mostrar .= '<div class="texto">
                         <h1>'. $row["nombre"] .'</h1>
-                        <p>Prezo: '. ($row["precioSin"]*1.21) .' €</p>
+                        <p>Prezo: '. str_replace(".", ",", (round($row["precioSin"]*1.21, 2))) .' €</p>
                         </div>
                         </div>';
 
@@ -461,7 +458,7 @@
                         $mostrar .= '<img class="segunda_foto" src="img/catalogo/'.$row["img1"].'" alt="'.$row["nombre"].'" title="'.$row["nombre"].'">';
                     $mostrar .= '<div class="texto">
                         <h1>'. $row["nombre"] .'</h1>
-                        <p>Prezo: '. ($row["precioSin"]*1.21) .' €</p>
+                        <p>Prezo: '. str_replace(".", ",", (round($row["precioSin"]*1.21, 2))) .' €</p>
                         </div>
                         </div>';
 
