@@ -524,14 +524,29 @@ public class PaAnadirProductos extends javax.swing.JDialog {
                         
                         Redondear rd = new Redondear();
                         
+<<<<<<< HEAD
                         double precioSIN = rd.redondearDecimales(p1.getPrecioSin());
                         double iva = rd.redondearDecimales(p1.getIVA());
                         double precioCON = rd.redondearDecimales(iva+precioSIN);
+=======
+                        Productos pro = new Productos();
+>>>>>>> 032776c61b0ec10cfc8b0f6aef6f41396ed5dee1
                         
+                        double precioSin = rd.redondearDecimales(Double.parseDouble(this.precio.getText()));
+                        pro.setPrecioSin(precioSin);
+                        
+                        double iva = rd.redondearDecimales(pro.getIVA());
+                        
+                        double precioCon = rd.redondearDecimales(iva+precioSin);
+
                         /*Insertar datos Productos*/
                         System.out.println("Insertando producto en DB");
                         
+<<<<<<< HEAD
                         con.insert("productos", "cod, nombre, descripcion, codCategoria, precioSin, stock", "'"+cod+"', "+"'"+nome+"', "+"'"+this.descripcion.getText()+"', "+" "+codCategoria+", "+precioSIN+", "+Stock);
+=======
+                        con.insert("productos", "cod, nombre, descripcion, codCategoria, precioSin, stock", "'"+cod+"', "+"'"+nome+"', "+"'"+this.descripcion.getText()+"', "+" "+codCategoria+", "+precioSin+", "+Stock);
+>>>>>>> 032776c61b0ec10cfc8b0f6aef6f41396ed5dee1
                         
                         // Thread para Upload IMG
                         // Subir IMG                    
@@ -593,7 +608,11 @@ public class PaAnadirProductos extends javax.swing.JDialog {
                         
                         
                         
+<<<<<<< HEAD
                         Object Datos[]={cod, nome,(String)categoria.getSelectedItem(), Stock, (precioSIN+"").replace('.', ',') , (iva+"").replace('.', ','), (precioCON+"").replace('.', ',')};
+=======
+                        Object Datos[]={cod, nome,(String)categoria.getSelectedItem(), Stock, precioSin, iva, precioCon};
+>>>>>>> 032776c61b0ec10cfc8b0f6aef6f41396ed5dee1
                         modelo.addRow(Datos);
                         
                         this.errores.setText("");
