@@ -8,22 +8,27 @@ package admin;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Toolkit;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.StringSelection;
+import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import javax.swing.ImageIcon;
 import net.sourceforge.barbecue.Barcode;
 import net.sourceforge.barbecue.BarcodeFactory;
+import net.sourceforge.barbecue.BarcodeImageHandler;
+import net.sourceforge.barbecue.output.OutputException;
 
 /**
  *
  * @author DAW221
  */
 public class generarCodigoBarras extends javax.swing.JDialog {
-    
-    /* Variable para Aux Ticket */
-    public static int codTicketAux = 0;
-    
+
     /**
-     * Creates new form generarClave
+     * Creates new form darAdmin
      */
     public generarCodigoBarras(javax.swing.JDialog parent, boolean modal) {
         super(parent, modal);
@@ -43,14 +48,16 @@ public class generarCodigoBarras extends javax.swing.JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        volver = new javax.swing.JButton();
-        jLCodProducto = new javax.swing.JLabel();
-        numProducto = new javax.swing.JTextField();
+        volver1 = new javax.swing.JButton();
+        jLCodPro = new javax.swing.JLabel();
+        codArticulo = new javax.swing.JTextField();
         codigoBarras = new javax.swing.JLabel();
         errores = new javax.swing.JLabel();
+        guardarPNG = new javax.swing.JButton();
+        portapapeles = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("VTenda - Recuperar Ticket");
+        setTitle("VTenda - Administracion");
         setResizable(false);
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowActivated(java.awt.event.WindowEvent evt) {
@@ -58,27 +65,52 @@ public class generarCodigoBarras extends javax.swing.JDialog {
             }
         });
 
-        volver.setBackground(new java.awt.Color(153, 153, 153));
-        volver.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
-        volver.setText("Volver");
-        volver.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        volver.addActionListener(new java.awt.event.ActionListener() {
+        volver1.setBackground(new java.awt.Color(204, 204, 204));
+        volver1.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        volver1.setText("Volver");
+        volver1.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        volver1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                volverActionPerformed(evt);
+                volver1ActionPerformed(evt);
             }
         });
 
-        jLCodProducto.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jLCodProducto.setText("Número de Producto:");
+        jLCodPro.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        jLCodPro.setText("Código de Producto:");
 
-        numProducto.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        numProducto.addFocusListener(new java.awt.event.FocusAdapter() {
+        codArticulo.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        codArticulo.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusLost(java.awt.event.FocusEvent evt) {
-                numProductoFocusLost(evt);
+                codArticuloFocusLost(evt);
+            }
+        });
+        codArticulo.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                codArticuloKeyPressed(evt);
             }
         });
 
         errores.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+
+        guardarPNG.setBackground(new java.awt.Color(204, 204, 204));
+        guardarPNG.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        guardarPNG.setText("Guardar PNG");
+        guardarPNG.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        guardarPNG.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                guardarPNGActionPerformed(evt);
+            }
+        });
+
+        portapapeles.setBackground(new java.awt.Color(204, 204, 204));
+        portapapeles.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        portapapeles.setText("Copiar Portapapeles");
+        portapapeles.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        portapapeles.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                portapapelesActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -88,59 +120,67 @@ public class generarCodigoBarras extends javax.swing.JDialog {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(errores, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(0, 193, Short.MAX_VALUE)
-                        .addComponent(volver, javax.swing.GroupLayout.PREFERRED_SIZE, 151, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(codigoBarras, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLCodProducto)
-                            .addComponent(numProducto, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(codigoBarras, javax.swing.GroupLayout.PREFERRED_SIZE, 188, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                            .addComponent(jLCodPro)
+                            .addComponent(codArticulo, javax.swing.GroupLayout.PREFERRED_SIZE, 205, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(guardarPNG, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(portapapeles, javax.swing.GroupLayout.DEFAULT_SIZE, 194, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(volver1, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLCodProducto)
+                .addComponent(jLCodPro)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(numProducto, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(codigoBarras, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 62, Short.MAX_VALUE)
-                .addComponent(errores, javax.swing.GroupLayout.PREFERRED_SIZE, 23, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(codArticulo, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(codigoBarras, javax.swing.GroupLayout.DEFAULT_SIZE, 103, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(guardarPNG)
+                    .addComponent(portapapeles))
+                .addGap(8, 8, 8)
+                .addComponent(errores, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(volver)
+                .addComponent(volver1)
                 .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void volverActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_volverActionPerformed
+    private void volver1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_volver1ActionPerformed
         dispose();
-    }//GEN-LAST:event_volverActionPerformed
+    }//GEN-LAST:event_volver1ActionPerformed
 
     private void formWindowActivated(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowActivated
-        
+        // TODO add your handling code here:
     }//GEN-LAST:event_formWindowActivated
 
-    private void numProductoFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_numProductoFocusLost
+    private void codArticuloFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_codArticuloFocusLost
         
-        if(!this.numProducto.getText().isEmpty()){
+        if(!this.codArticulo.getText().isEmpty()){
             
             try{
                 
                 Barcode barcode = null;
 
                 try {
-                    barcode = BarcodeFactory.createCode39(this.numProducto.getText(), true);
+                    barcode = BarcodeFactory.createCode39(this.codArticulo.getText(), true);
                 } 
                 catch (Exception e) {
                 }
 
-                barcode.setDrawingText(false);
+                barcode.setDrawingText(true);
 
                 barcode.setBarWidth(2);
                 barcode.setBarHeight(60);
@@ -164,16 +204,126 @@ public class generarCodigoBarras extends javax.swing.JDialog {
                 
                 System.err.println("Error al generar codigo de barras");
                 
-                this.numProducto.setText("");
-                this.numProducto.requestFocus();
+                this.codArticulo.setText("");
+                this.codArticulo.requestFocus();
+
+                
                 
             }
         
-    }//GEN-LAST:event_numProductoFocusLost
+        }
+        
+    }//GEN-LAST:event_codArticuloFocusLost
+
+    private void guardarPNGActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_guardarPNGActionPerformed
+        
+        if(!this.codArticulo.getText().isEmpty()){
+            
+            //Generar codigo de Barras
+            Barcode barcode = null;
+            try {
+                barcode = BarcodeFactory.createCode39(this.codArticulo.getText(), true);
+            } 
+            catch (Exception e) {
+            }
+            barcode.setDrawingText(true);
+
+            barcode.setBarWidth(2);
+            barcode.setBarHeight(60);
+            try {
+
+                File folder = new File("Etiquetas");
+
+                if(!folder.exists()){
+                    folder.mkdir();
+                }
+
+                FileOutputStream fos = new FileOutputStream("Etiquetas/"+this.codArticulo.getText().trim()+".png");
+
+                try {
+                    BarcodeImageHandler.writePNG(barcode, fos);
+                } 
+                catch (OutputException ex) {
+                    System.err.println("Error al crear codigo de barras");
+                }
+                
+                this.errores.setText("La etiqueta "+this.codArticulo.getText()+" fue generada con exito");
+                
+                fos.close();
+                
+            } 
+            catch (IOException  ex) {
+                System.err.println("Error al crear codigo de barras");
+            }
+            
+        }
+         
+    }//GEN-LAST:event_guardarPNGActionPerformed
+
+    private void portapapelesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_portapapelesActionPerformed
+        
+        
+        
+    }//GEN-LAST:event_portapapelesActionPerformed
+
+    private void codArticuloKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_codArticuloKeyPressed
+        
+        /*Evento para tecla ENTER*/
+        if(evt.getKeyCode()==KeyEvent.VK_ENTER){
+            
+            if(!this.codArticulo.getText().isEmpty()){
+
+                try{
+
+                    Barcode barcode = null;
+
+                    try {
+                        barcode = BarcodeFactory.createCode39(this.codArticulo.getText(), true);
+                    } 
+                    catch (Exception e) {
+                    }
+
+                    barcode.setDrawingText(true);
+
+                    barcode.setBarWidth(2);
+                    barcode.setBarHeight(60);
+                    BufferedImage image = new BufferedImage(300, 100, BufferedImage.TYPE_INT_ARGB);
+                    Graphics2D g = (Graphics2D) image.getGraphics();
+
+                    try {
+                        barcode.draw(g, 5, 20);
+                    } 
+                    catch (Exception e) {
+                    }
+
+                    ImageIcon icon = new ImageIcon(image);
+                    this.codigoBarras.setIcon(icon);
+
+
+                }
+                catch(Exception ex){
+
+                    this.errores.setText("El cod de producto solo puede ser numerico");
+
+                    System.err.println("Error al generar codigo de barras");
+
+                    this.codArticulo.setText("");
+                    this.codArticulo.requestFocus();
+
+
+
+                }
+
+            }
+            
+        }
+        
+    }//GEN-LAST:event_codArticuloKeyPressed
 
     /**
      * @param args the command line arguments
      */
+    public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
@@ -197,8 +347,6 @@ public class generarCodigoBarras extends javax.swing.JDialog {
         }
         //</editor-fold>
         //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
 
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
@@ -216,10 +364,12 @@ public class generarCodigoBarras extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTextField codArticulo;
     private javax.swing.JLabel codigoBarras;
     private javax.swing.JLabel errores;
-    private javax.swing.JLabel jLCodProducto;
-    private javax.swing.JTextField numProducto;
-    private javax.swing.JButton volver;
+    private javax.swing.JButton guardarPNG;
+    private javax.swing.JLabel jLCodPro;
+    private javax.swing.JButton portapapeles;
+    private javax.swing.JButton volver1;
     // End of variables declaration//GEN-END:variables
 }

@@ -622,7 +622,7 @@ public class PaAnadirProductos extends javax.swing.JDialog {
                         } 
                         catch (Exception e) {
                         }
-                        barcode.setDrawingText(false);
+                        barcode.setDrawingText(true);
 
                         barcode.setBarWidth(2);
                         barcode.setBarHeight(60);
@@ -851,7 +851,7 @@ public class PaAnadirProductos extends javax.swing.JDialog {
                 catch (Exception e) {
                 }
 
-                barcode.setDrawingText(false);
+                barcode.setDrawingText(true);
 
                 barcode.setBarWidth(2);
                 barcode.setBarHeight(60);
