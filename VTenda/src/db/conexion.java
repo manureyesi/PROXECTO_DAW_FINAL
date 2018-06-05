@@ -17,31 +17,19 @@ public class conexion {
     
     Connection cn = null;
     
-    final String dbdir = "xxxxxxxxxxxx/";
-    final String dbName = "xxxxxxxxxx";
-    final String dbUser = "xxxxxxxxx";
-    final String dbPass = "xxxxxxxxxx";
+    final String dbdir = "***********";
+    final String dbName = "******************";
+    final String dbUser = "**************";
+    final String dbPass = "************";
     
-    final String urlssl = "jdbc:mysql://"+dbdir+""+dbName+"?verifyServerCertificate=true"+"&useSSL=true"+"&requireSSL=true";
-    final String url = "jdbc:mysql://"+dbdir+""+dbName;
+    final String urlssl = "jdbc:mysql://"+dbdir+"/"+dbName+"?verifyServerCertificate=false"+"&useSSL=true"+"&requireSSL=true";
+    final String url = "jdbc:mysql://"+dbdir+"/"+dbName;
 
     public conexion() throws SQLException {
         
-        try{
-            cn = DriverManager.getConnection(urlssl,dbUser,dbPass);
-        }
-        catch(SQLException ex){
-            System.err.println("Error al conectarse por SSL");
-        }
-        finally{
-            try{
-                cn = DriverManager.getConnection(url,dbUser,dbPass);
-            }
-            catch(SQLException ex){
-                System.err.println("Error al conectarse");
-            }
-        }
-                
+        cn = DriverManager.getConnection(url,dbUser,dbPass);
+        
+           
     }
 
     public Connection getCn() {

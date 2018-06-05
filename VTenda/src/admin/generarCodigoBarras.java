@@ -9,7 +9,6 @@ import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
-import java.awt.datatransfer.StringSelection;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -261,9 +260,16 @@ public class generarCodigoBarras extends javax.swing.JDialog {
     }//GEN-LAST:event_guardarPNGActionPerformed
 
     private void portapapelesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_portapapelesActionPerformed
-        
-        
-        
+        try{
+            Clipboard cb = Toolkit.getDefaultToolkit().getSystemClipboard();
+            ImageIcon image = (ImageIcon) codigoBarras.getIcon();
+            ImageSelection dh = new ImageSelection(image.getImage());
+            cb.setContents(dh, null);
+        }
+        catch(Exception ex){
+            this.errores.setText("Implosible copiar al Portapapeles");
+            System.err.println("Error al copiar en Portapapeles");
+        }
     }//GEN-LAST:event_portapapelesActionPerformed
 
     private void codArticuloKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_codArticuloKeyPressed
