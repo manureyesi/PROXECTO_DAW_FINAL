@@ -194,6 +194,11 @@ public class TPV extends javax.swing.JDialog {
         jLProducto.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLProducto.setText("COD. PRODUCTO:");
 
+        codProducto.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                codProductoFocusLost(evt);
+            }
+        });
         codProducto.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 codProductoKeyPressed(evt);
@@ -446,6 +451,8 @@ public class TPV extends javax.swing.JDialog {
     }//GEN-LAST:event_anadirActionPerformed
     
     private void anadirProducto(){
+        
+        this.errores.setText("");
         
         int uni = 0;
         double des = 0;
@@ -706,73 +713,76 @@ public class TPV extends javax.swing.JDialog {
                 System.err.println("Error al conectar con DB al eliminar producto");
             }
             
-            
         }
         
+    }
+    
+    private void buscarCodPro(){
+        
+        this.descuento.setText("");
+            
+        try{
+
+            /*Conexion contra DB*/
+            db.consultas con = new db.consultas();
+
+            /*Consulta Producto*/
+            ResultSet rs = con.select("productos", "cod = '"+this.codProducto.getText()+"'");
+
+            boolean encontrado = false;
+
+            while(rs.next()){
+
+                if(rs.getInt("stock") == 0){
+                    this.errores.setText("El producto no se encuentra disponible");
+                    encontrado = true;
+
+                    this.nombreProducto.setText("");
+                    this.precio.setText("");
+                    this.unidades.setText("");
+                    this.descuento.setText("");
+
+
+                }
+                else if(rs.getString("cod").compareTo(this.codProducto.getText()) == 0){
+
+                    Productos p1= new Productos();
+                    p1.setCodArticulo(this.codProducto.getText());
+                    p1.setPrecioSin(rs.getDouble("precioSin"));
+                    p1.setNomeArticulo(rs.getString("nombre"));
+                    
+                    Redondear rd = new Redondear();
+
+                    this.nombreProducto.setText(p1.getNomeArticulo());
+
+                    this.precio.setText(rd.redondearDecimales(p1.getPrecioSin() + p1.getIVA()) + "");
+
+                    this.unidades.setText("1");
+                    encontrado = true;
+
+                    this.errores.setText("");
+
+                    this.descuento.requestFocus();
+
+                }
+
+            }
+
+            if(encontrado == false){
+                this.errores.setText("No se encontro el producto");
+            }
+
+        }catch(SQLException ex){
+            System.err.println("Problemas al conectar con la DB");
+            this.errores.setText("Lo sentimos, acabamos de sufrir un error");
+        }
     
     }
     
     private void codProductoKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_codProductoKeyPressed
         
         if(evt.getKeyCode()==KeyEvent.VK_ENTER){
-            
-            this.descuento.setText("");
-            
-            try{
-
-                /*Conexion contra DB*/
-                db.consultas con = new db.consultas();
-
-                /*Consulta Producto*/
-                ResultSet rs = con.select("productos", "cod = '"+this.codProducto.getText()+"'");
-                
-                boolean encontrado = false;
-                
-                while(rs.next()){
-                    
-                    if(rs.getInt("stock") == 0){
-                        this.errores.setText("El producto no se encuentra disponible");
-                        encontrado = true;
-                        
-                        this.nombreProducto.setText("");
-                        this.precio.setText("");
-                        this.unidades.setText("");
-                        this.descuento.setText("");
-                        
-                        
-                    }
-                    else if(rs.getString("cod").compareTo(this.codProducto.getText()) == 0){
-                    
-                        Productos p1= new Productos();
-                        p1.setCodArticulo(this.codProducto.getText());
-                        p1.setPrecioSin(rs.getDouble("precioSin"));
-                        p1.setNomeArticulo(rs.getString("nombre"));
-
-
-                        this.nombreProducto.setText(p1.getNomeArticulo());
-
-                        this.precio.setText((p1.getPrecioSin() + p1.getIVA()) + "");
-
-                        this.unidades.setText("1");
-                        encontrado = true;
-                        
-                        this.errores.setText("");
-                        
-                        this.descuento.requestFocus();
-                        
-                    }
-
-                }
-                
-                if(encontrado == false){
-                    this.errores.setText("No se encontro el producto");
-                }
-                
-            }catch(SQLException ex){
-                System.err.println("Problemas al conectar con la DB");
-                this.errores.setText("Lo sentimos, acabamos de sufrir un error");
-            }
-        
+            buscarCodPro();
         }
         
     }//GEN-LAST:event_codProductoKeyPressed
@@ -813,13 +823,15 @@ public class TPV extends javax.swing.JDialog {
                 }catch(Exception ex){
                     System.err.println(ex.getMessage());
                 }
-
+                
+                this.errores.setText("");
+                
                 /* Habilitar Guardado de Ticket */
                 this.guardaTicket.setEnabled(false);
 
                 /* Desabilitar Recuperacion de Ticket */
-                this.recuperarTicket.setEnabled(true);
-
+                comprobarRecuperarTicket();
+                
                 /* Poner Cursor en Cod Producto */
                 this.codProducto.requestFocus();
 
@@ -832,15 +844,12 @@ public class TPV extends javax.swing.JDialog {
             
         }
         
-        
     }//GEN-LAST:event_cerrarTicketActionPerformed
 
     private void descuentoKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_descuentoKeyPressed
         
         if(evt.getKeyCode()==KeyEvent.VK_ENTER){
-            
             this.unidades.requestFocus();
-        
         }
         
     }//GEN-LAST:event_descuentoKeyPressed
@@ -926,9 +935,7 @@ public class TPV extends javax.swing.JDialog {
                 
             break;
             
-            
         }
-        
         
     }//GEN-LAST:event_guardaTicketActionPerformed
 
@@ -980,6 +987,7 @@ public class TPV extends javax.swing.JDialog {
                 this.totalTicket.setText("");
                 this.guardaTicket.setEnabled(true);
                 this.recuperarTicket.setEnabled(false);
+                total = 0;
                 this.errores.setText("Ticket Recuperado con exito");
                 
                 /* Introducir datos */
@@ -1011,10 +1019,10 @@ public class TPV extends javax.swing.JDialog {
                         
                     }
                     
-                    
                     /* Cambio de estado Ticket */
                     con.update("ticket", "estado = 'Iniciado'", "cod = "+VTenda.auxTicketGuardar);
                     
+                    total = precioFin;
                     this.totalTicket.setText(precioFin+" €");
                     
                     /* Habilitar Guardado de Ticket */
@@ -1046,7 +1054,31 @@ public class TPV extends javax.swing.JDialog {
         
         
     }//GEN-LAST:event_recuperarTicketActionPerformed
-
+    
+    private void comprobarRecuperarTicket(){
+        
+        try {
+            
+            /* Desbloquear Ticket */
+            db.consultas con = new db.consultas();
+            
+            ResultSet rs = con.selectEspecial("count(*)", "ticket", "estado = 'Guardado' and codVendedor = "+VTenda.vendedor.getNumVendedor());
+            
+            while(rs.next()){
+                
+                if(rs.getInt(1) != 0){
+                    this.recuperarTicket.setEnabled(true);
+                }
+                
+            }
+            
+        } catch (SQLException ex) {
+            System.err.println("Problemas al Conectar con la DB");
+            this.errores.setText("Error al buscar Tickets Guardados");
+        }
+        
+    }
+    
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
         
         /* Desbloquear Ticket */
@@ -1083,8 +1115,6 @@ public class TPV extends javax.swing.JDialog {
         this.unidades.setText("");
         this.errores.setText("");
 
-        /********************* LIMPIAR ARRAYLIST ***************/
-
         /* Fecha TPV */
         Date fechaActual = new Date();
         
@@ -1100,23 +1130,8 @@ public class TPV extends javax.swing.JDialog {
         fecha1.setText(dd);
         
         /********* BUSCANDO TICKETS GUARDADOS ***************/
+        comprobarRecuperarTicket();
         
-        try {
-            
-            ResultSet rs = con.selectEspecial("count(*)", "ticket", "estado = 'Guardado' and codVendedor = "+VTenda.vendedor.getNumVendedor());
-            
-            while(rs.next()){
-                
-                if(rs.getInt(1) != 0){
-                    this.recuperarTicket.setEnabled(true);
-                }
-                
-            }
-            
-        } catch (SQLException ex) {
-            System.err.println("Problemas al Conectar con la DB");
-            this.errores.setText("Error al buscar Tickets Guardados");
-        }
         
         if(admin.buscarTicket.codTicketAux !=0){
             
@@ -1197,6 +1212,14 @@ public class TPV extends javax.swing.JDialog {
         borrarProducto();
         
     }//GEN-LAST:event_borrarActionPerformed
+
+    private void codProductoFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_codProductoFocusLost
+        
+        if(!this.codProducto.getText().isEmpty()){
+            buscarCodPro();
+        }
+        
+    }//GEN-LAST:event_codProductoFocusLost
 
     /**
      * @param args the command line arguments

@@ -293,7 +293,7 @@ public class PaAnadirCategoria extends javax.swing.JDialog {
             
             /* Contar Categorias */
             System.out.println("Buscando Categorias");
-            ResultSet rs = con.select("categorias", "1 ORDER BY 'cod' ASC");
+            ResultSet rs = con.select("categorias", "1 ORDER BY categorias.cod ASC");
             
             while(rs.next()){
                 
