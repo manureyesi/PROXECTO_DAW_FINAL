@@ -17,11 +17,13 @@ import java.io.File;
  */
 public class SubirIMG {
     
-    private static final String user = "prueba";
-    private static final String host = "pruebas.fiandeira.es";
+    /* Datos de Conexion a SFTP */
+    private static final String user = "XXXXXXXXX";
+    private static final String host = "localhost";
     private static final Integer port = 22;
-    private static final String pass = "Maindo.11";
+    private static final String pass = "XXXXXXXXX";
     
+    /* Carpeta de almacenamiento de Archivos */
     private static final String directorio_servidor = "/pruebas-server/img/catalogo/";
     
     public String nombre_producto;
@@ -60,7 +62,8 @@ public class SubirIMG {
         try{
 
             System.out.println("--------- INICIO TRANSFERENCIA ARCHIVO -------");
-
+            
+            /* Preparando Conexion SFTP */
             JSch jsch = new JSch();
             Session session = jsch.getSession(this.user, this.host, this.port);
             UserInfo ui = new SUserInfo(this.pass, null);
