@@ -1,6 +1,4 @@
-# Created by https://www.gitignore.io/api/java,netbeans
-
 ### PHP ###
 
 img/catalogo
-
+php/config.php

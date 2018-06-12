@@ -35,5 +35,10 @@ nbactions.xml
 manifest.mf
 build.xml
 
+### Contraseñas ###
+
+src/db/conexion.java
+src/SFTP/SubirIMG.java
+
 
 # End of https://www.gitignore.io/api/java,netbeans
