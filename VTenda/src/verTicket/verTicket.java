@@ -108,6 +108,7 @@ public class verTicket extends javax.swing.JDialog {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        productosTicketTabla.setEnabled(false);
         jScrollPane1.setViewportView(productosTicketTabla);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);

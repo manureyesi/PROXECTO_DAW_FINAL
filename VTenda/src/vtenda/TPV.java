@@ -139,6 +139,7 @@ public class TPV extends javax.swing.JDialog {
             }
         ));
         productos.setEditingColumn(0);
+        productos.setEnabled(false);
         productos.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 productosMouseClicked(evt);
