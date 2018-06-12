@@ -18,10 +18,10 @@ import java.io.File;
 public class SubirIMG {
     
     /* Datos de Conexion a SFTP */
-    private static final String user = "root";
+    private static final String user = "XXXXXXXXX";
     private static final String host = "localhost";
     private static final Integer port = 22;
-    private static final String pass = "abc123.";
+    private static final String pass = "XXXXXXXXX";
     
     /* Carpeta de almacenamiento de Archivos */
     private static final String directorio_servidor = "/pruebas-server/img/catalogo/";

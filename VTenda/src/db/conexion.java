@@ -18,10 +18,10 @@ public class conexion {
     Connection cn = null;
     
     /* Parametros de Conexion a Base de Datos */
-    final String dbdir = "localhost";
-    final String dbName = "Fiandeira";
-    final String dbUser = "root";
-    final String dbPass = "";
+    final String dbdir = "XXXXXXXXXXXXXXXXXXX";
+    final String dbName = "XXXXXXXXXX";
+    final String dbUser = "XXXXXXXXXX";
+    final String dbPass = "XXXXXXXXXX";
     
     /* Conexion Segura por MySQL */
     final String urlssl = "jdbc:mysql://"+dbdir+"/"+dbName+"?verifyServerCertificate=false"+"&useSSL=true"+"&requireSSL=true";
