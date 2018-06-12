@@ -18,7 +18,7 @@ import java.io.File;
 public class SubirIMG {
     
     /* Datos de Conexion a SFTP */
-    private static final String user = "XXXXXXXXX";
+    private static final String user = "root";
     private static final String host = "localhost";
     private static final Integer port = 22;
     private static final String pass = "XXXXXXXXX";
