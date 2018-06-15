@@ -21,10 +21,10 @@ public class SubirIMG {
     private static final String user = "root";
     private static final String host = "localhost";
     private static final Integer port = 22;
-    private static final String pass = "XXXXXXXXX";
+    private static final String pass = "abc123.";
     
     /* Carpeta de almacenamiento de Archivos */
-    private static final String directorio_servidor = "/pruebas-server/img/catalogo/";
+    private static final String directorio_servidor = "/img/catalogo/";
     
     public String nombre_producto;
     public File directorio_equipo;

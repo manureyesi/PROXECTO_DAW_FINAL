@@ -118,6 +118,7 @@
 						<video controls preload="auto" title="Video o Son do Sabugueiro" poster="img/poster/poster_video.png">
 							<source src="source/O_son_do_sabugueiro.mp4" type="audio/mpeg">
 							<source src="source/O_son_do_sabugueiro.ogv" type="audio/ogv">
+								<source src="source/O_son_do_sabugueiro.webm" type="audio/webm">
 							O teu navegador non soporta Video.
 						</video>
 					</div>
@@ -135,7 +136,7 @@
 					crearFooter();
 
 				?>
-				
+
 			</footer>
 
 		</div>
@@ -151,6 +152,7 @@
 			?>
 
 		</div>
+
 
 	</body>
 </html>

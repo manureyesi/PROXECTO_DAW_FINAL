@@ -6,12 +6,9 @@
 package vtenda;
 
 import java.awt.Image;
-import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import javax.swing.ImageIcon;
 
 /**
  *
@@ -26,7 +23,7 @@ public class PaCambioContrasena extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         
-        Image icono = Toolkit.getDefaultToolkit().getImage(VTenda.dirIMG);
+        Image icono = new ImageIcon(getClass().getResource(VTenda.dirIMG)).getImage();
         this.setIconImage(icono);
         this.setLocationRelativeTo(null);
         
@@ -148,7 +145,8 @@ public class PaCambioContrasena extends javax.swing.JDialog {
 
     private void cambiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cambiarActionPerformed
         
-        Encriptar en = new Encriptar(this.pass1.getText());
+        Encriptar antigua = new Encriptar(this.passA.getText());
+        Encriptar nueva = new Encriptar(this.pass1.getText());
                 
         if(this.passA.getText().isEmpty()||this.pass1.getText().isEmpty()||this.pass2.getText().isEmpty()){
             
@@ -170,19 +168,16 @@ public class PaCambioContrasena extends javax.swing.JDialog {
             this.errores.setText("La contraseña tiene que ser mayor de 8 caracteres");
             
         }
-        else if(en.getCifer().compareTo(VTenda.contrasena) == 0){
+        else if(antigua.getCifer().compareTo(VTenda.contrasena) == 0){
             
             try{
-                
-                
                 
                 /*Conexion contra DB*/
                 db.consultas con = new db.consultas();
 
                 /* Cambio contraseña */
-                con.update("usuarios", "contrasena = '"+en.getCifer()+"'", "usuario = '"+VTenda.usuario+"'");
+                con.update("usuarios", "contrasena = '"+nueva.getCifer()+"'", "usuario = '"+VTenda.usuario+"'");
                     
-                
                 this.errores.setText("Contraseña cambiada con exito");
                 System.out.println("Contraseña cambiada con exito");
                 
@@ -195,9 +190,7 @@ public class PaCambioContrasena extends javax.swing.JDialog {
             
         }
         else{
-            
             this.errores.setText("La contraseña actual no es correcta");
-        
         }
         
         

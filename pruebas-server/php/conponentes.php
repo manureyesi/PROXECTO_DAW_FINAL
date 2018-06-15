@@ -19,7 +19,7 @@
 
     function crearMenuCatalogo(){
 
-        $resultado = selectPreparado("categorias", "1");
+        $resultado = selectPreparado("categorias", "cod IN (SELECT DISTINCT codCategoria FROM productos WHERE stock != 0 and img1 IS NOT NULL) ORDER BY categorias.cod ASC");
         $crearmenu = "";
         foreach ($resultado as $row){
 

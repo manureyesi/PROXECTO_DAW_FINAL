@@ -16,6 +16,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.ImageIcon;
 
 /**
  *
@@ -32,7 +33,7 @@ public class PaRegistro extends javax.swing.JFrame {
         
         initComponents();
         
-        Image icono = Toolkit.getDefaultToolkit().getImage(VTenda.dirIMG);
+        Image icono = new ImageIcon(getClass().getResource(VTenda.dirIMG)).getImage();
         this.setIconImage(icono);
         this.setLocationRelativeTo(null);
         

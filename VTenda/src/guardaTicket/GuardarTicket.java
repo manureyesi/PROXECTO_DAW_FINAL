@@ -6,11 +6,12 @@
 package guardaTicket;
 
 import java.awt.Image;
-import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 import java.sql.SQLException;
 import java.util.Calendar;
 import java.util.Date;
+import javax.swing.ImageIcon;
+import vtenda.VTenda;
 
 /**
  *
@@ -27,7 +28,7 @@ public class GuardarTicket extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         
-        Image icono = Toolkit.getDefaultToolkit().getImage(vtenda.VTenda.dirIMG);
+        Image icono = new ImageIcon(getClass().getResource(VTenda.dirIMG)).getImage();
         this.setIconImage(icono);
         this.setLocationRelativeTo(null);
         

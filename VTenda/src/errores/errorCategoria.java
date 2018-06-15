@@ -6,8 +6,9 @@
 package errores;
 
 import java.awt.Image;
-import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
+import javax.swing.ImageIcon;
+import vtenda.VTenda;
 
 /**
  *
@@ -22,7 +23,7 @@ public class errorCategoria extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         
-        Image icono = Toolkit.getDefaultToolkit().getImage(vtenda.VTenda.dirIMG);
+        Image icono = new ImageIcon(getClass().getResource(VTenda.dirIMG)).getImage();
         this.setIconImage(icono);
         this.setLocationRelativeTo(null);
         
@@ -56,7 +57,7 @@ public class errorCategoria extends javax.swing.JDialog {
             }
         });
 
-        anadir.setBackground(new java.awt.Color(153, 153, 153));
+        anadir.setBackground(new java.awt.Color(204, 204, 204));
         anadir.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         anadir.setText("Añadir Categoría");
         anadir.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
@@ -72,7 +73,7 @@ public class errorCategoria extends javax.swing.JDialog {
         jLInfo2.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLInfo2.setText("Antes de añadir un producto creela");
 
-        volver.setBackground(new java.awt.Color(153, 153, 153));
+        volver.setBackground(new java.awt.Color(204, 204, 204));
         volver.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         volver.setText("Volver");
         volver.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));

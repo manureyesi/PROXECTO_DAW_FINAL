@@ -5,9 +5,10 @@
  */
 package vtenda;
 
+import java.awt.Color;
 import java.awt.Image;
-import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
+import javax.swing.ImageIcon;
 
 /**
  *
@@ -21,7 +22,7 @@ public class PaLogin extends javax.swing.JFrame {
     public PaLogin() {
         initComponents();
         
-        Image icono = Toolkit.getDefaultToolkit().getImage(VTenda.dirIMG);
+        Image icono = new ImageIcon(getClass().getResource(VTenda.dirIMG)).getImage();
         this.setIconImage(icono);
         this.setLocationRelativeTo(null);
         this.errores.setText("");
@@ -37,13 +38,18 @@ public class PaLogin extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLUsuario = new javax.swing.JLabel();
-        jLContrasena = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
         usuario = new javax.swing.JTextField();
         contrasena = new javax.swing.JPasswordField();
         errores = new javax.swing.JLabel();
         entrar = new javax.swing.JButton();
         registro = new javax.swing.JButton();
+        icoPrograma = new javax.swing.JLabel();
+        userIco = new javax.swing.JLabel();
+        passIco = new javax.swing.JLabel();
+        olvidarContra = new javax.swing.JLabel();
+
+        jLabel1.setText("jLabel1");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("VTenda - Login");
@@ -53,12 +59,6 @@ public class PaLogin extends javax.swing.JFrame {
                 formWindowOpened(evt);
             }
         });
-
-        jLUsuario.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
-        jLUsuario.setText("Usuario:");
-
-        jLContrasena.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
-        jLContrasena.setText("Contraseña:");
 
         usuario.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         usuario.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -73,8 +73,6 @@ public class PaLogin extends javax.swing.JFrame {
                 contrasenaKeyPressed(evt);
             }
         });
-
-        errores.setFont(new java.awt.Font("Tahoma", 0, 13)); // NOI18N
 
         entrar.setBackground(new java.awt.Color(204, 204, 204));
         entrar.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
@@ -96,43 +94,87 @@ public class PaLogin extends javax.swing.JFrame {
             }
         });
 
+        icoPrograma.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/logo_fiandeira.png"))); // NOI18N
+
+        userIco.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/userpequeno.png"))); // NOI18N
+
+        passIco.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/passpequeno.png"))); // NOI18N
+
+        olvidarContra.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        olvidarContra.setText("Olvidaste la Contraseña?");
+        olvidarContra.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+            public void mouseMoved(java.awt.event.MouseEvent evt) {
+                olvidarContraMouseMoved(evt);
+            }
+        });
+        olvidarContra.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                olvidarContraMouseClicked(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                olvidarContraMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                olvidarContraMouseExited(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(27, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(icoPrograma)
+                            .addComponent(passIco)
+                            .addComponent(userIco))
+                        .addGap(50, 50, 50))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(errores, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(entrar, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(registro, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(18, 18, 18))))
+            .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(usuario, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(contrasena))
-                    .addComponent(errores, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(81, 81, 81)
-                        .addComponent(jLContrasena)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(entrar, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 65, Short.MAX_VALUE)
-                        .addComponent(registro, javax.swing.GroupLayout.PREFERRED_SIZE, 167, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap())
+                        .addContainerGap()
+                        .addComponent(olvidarContra, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                        .addGap(127, 127, 127)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(usuario, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(contrasena, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLUsuario)
-                    .addComponent(jLContrasena))
+                .addComponent(icoPrograma)
+                .addGap(26, 26, 26)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(userIco)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(11, 11, 11)
+                        .addComponent(usuario, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(34, 34, 34)
+                        .addComponent(contrasena, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addComponent(passIco)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(usuario, javax.swing.GroupLayout.DEFAULT_SIZE, 31, Short.MAX_VALUE)
-                    .addComponent(contrasena))
+                .addComponent(olvidarContra, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(errores, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(entrar)
                     .addComponent(registro))
@@ -194,6 +236,8 @@ public class PaLogin extends javax.swing.JFrame {
 
                     case 3:
                     
+                    this.olvidarContra.setForeground(Color.BLACK); 
+                        
                     System.out.println("Entrando con el usuario: "+this.usuario.getText());
                         
                     VTenda.PaLogin.setVisible(false);
@@ -230,6 +274,8 @@ public class PaLogin extends javax.swing.JFrame {
     private void registroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_registroActionPerformed
         
         System.out.println("Entrando en registro");
+        
+        this.olvidarContra.setForeground(Color.BLACK); 
         
         this.errores.setText("");
 
@@ -272,8 +318,27 @@ public class PaLogin extends javax.swing.JFrame {
         
         this.usuario.setText("");
         this.contrasena.setText("");
+        this.olvidarContra.setForeground(Color.BLACK); 
         
     }//GEN-LAST:event_formWindowOpened
+
+    private void olvidarContraMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_olvidarContraMouseClicked
+        System.out.println("Entrando en recuperar Cuenta");
+        admin.recuperarCuenta recuperarCuenta = new admin.recuperarCuenta(new javax.swing.JDialog(),true);
+        recuperarCuenta.setVisible(true); 
+    }//GEN-LAST:event_olvidarContraMouseClicked
+
+    private void olvidarContraMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_olvidarContraMouseEntered
+        this.olvidarContra.setForeground(Color.MAGENTA); 
+    }//GEN-LAST:event_olvidarContraMouseEntered
+
+    private void olvidarContraMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_olvidarContraMouseMoved
+        // TODO add your handling code here:
+    }//GEN-LAST:event_olvidarContraMouseMoved
+
+    private void olvidarContraMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_olvidarContraMouseExited
+        this.olvidarContra.setForeground(Color.BLACK); 
+    }//GEN-LAST:event_olvidarContraMouseExited
 
     /**
      * @param args the command line arguments
@@ -314,9 +379,12 @@ public class PaLogin extends javax.swing.JFrame {
     private javax.swing.JPasswordField contrasena;
     private javax.swing.JButton entrar;
     private javax.swing.JLabel errores;
-    private javax.swing.JLabel jLContrasena;
-    private javax.swing.JLabel jLUsuario;
+    private javax.swing.JLabel icoPrograma;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel olvidarContra;
+    private javax.swing.JLabel passIco;
     private javax.swing.JButton registro;
+    private javax.swing.JLabel userIco;
     private javax.swing.JTextField usuario;
     // End of variables declaration//GEN-END:variables
 }

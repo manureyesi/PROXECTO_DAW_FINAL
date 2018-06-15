@@ -6,10 +6,11 @@
 package verTicket;
 
 import java.awt.Image;
-import java.awt.Toolkit;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import javax.swing.ImageIcon;
 import javax.swing.table.DefaultTableModel;
+import vtenda.VTenda;
 
 /**
  *
@@ -26,7 +27,7 @@ public class verTicket extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         
-        Image icono = Toolkit.getDefaultToolkit().getImage(vtenda.VTenda.dirIMG);
+        Image icono = new ImageIcon(getClass().getResource(VTenda.dirIMG)).getImage();
         this.setIconImage(icono);
         this.setLocationRelativeTo(null);
         
@@ -136,7 +137,7 @@ public class verTicket extends javax.swing.JDialog {
         total.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
         total.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
 
-        volver1.setBackground(new java.awt.Color(153, 153, 153));
+        volver1.setBackground(new java.awt.Color(204, 204, 204));
         volver1.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         volver1.setText("Volver");
         volver1.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
@@ -277,7 +278,12 @@ public class verTicket extends javax.swing.JDialog {
                 
                 while(buscaNombre.next()){
                     
-                    Object datos[]={rs.getString("codProducto"), buscaNombre.getString("nombre"), rs.getInt("stock"), rs.getDouble("precioIVA"), rs.getInt("descuento"), rs.getDouble("PrecioFinProducto")};
+                    String auxDescuento = "";
+                    if(rs.getInt("descuento") != 0){
+                        auxDescuento = rs.getInt("descuento")+" %";
+                    }
+                    
+                    Object datos[]={rs.getString("codProducto"), buscaNombre.getString("nombre"), rs.getInt("stock"), rs.getDouble("precioIVA"), auxDescuento, rs.getDouble("PrecioFinProducto")};
                     modelo.addRow(datos);
                 }
                                 

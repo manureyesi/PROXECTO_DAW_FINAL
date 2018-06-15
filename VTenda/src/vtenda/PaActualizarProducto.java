@@ -6,9 +6,9 @@
 package vtenda;
 
 import java.awt.Image;
-import java.awt.Toolkit;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import javax.swing.ImageIcon;
 
 /**
  *
@@ -24,7 +24,7 @@ public class PaActualizarProducto extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         
-        Image icono = Toolkit.getDefaultToolkit().getImage(VTenda.dirIMG);
+        Image icono = new ImageIcon(getClass().getResource(VTenda.dirIMG)).getImage();
         this.setIconImage(icono);
         this.setLocationRelativeTo(null);
         

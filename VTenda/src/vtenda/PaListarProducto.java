@@ -6,10 +6,10 @@
 package vtenda;
 
 import java.awt.Image;
-import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import javax.swing.ImageIcon;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -25,7 +25,7 @@ public class PaListarProducto extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         
-        Image icono = Toolkit.getDefaultToolkit().getImage(VTenda.dirIMG);
+        Image icono = new ImageIcon(getClass().getResource(VTenda.dirIMG)).getImage();
         this.setIconImage(icono);
         
         this.setLocationRelativeTo(null);
@@ -248,7 +248,7 @@ public class PaListarProducto extends javax.swing.JDialog {
                 /* Redondear */
                 Redondear rd = new Redondear();
                 
-                Object Datos[]={p1.getCodArticulo() ,p1.getNomeArticulo(), p1.getCategoria(), p1.getStock(), (rd.redondearDecimales(p1.getPrecioSin())+"").replace('.', ','), (rd.redondearDecimales(p1.getIVA())+"").replace('.', ','), (rd.redondearDecimales(p1.getPrecioSin()+p1.getIVA())+"").replace('.', ',') };
+                Object Datos[]={p1.getCodArticulo() ,p1.getNomeArticulo(), p1.getCategoria(), p1.getStock(), (rd.redondearDecimales(p1.getPrecioSin())+" €").replace('.', ','), (rd.redondearDecimales(p1.getIVA())+" €").replace('.', ','), (rd.redondearDecimales(p1.getPrecioSin()+p1.getIVA())+" €").replace('.', ',') };
                 modelo.addRow(Datos);
                 
             }

@@ -12,7 +12,7 @@ package vtenda;
 public class VTenda {
     
     /***************** DIR IMG ****************************************************************/
-        public static String dirIMG = "img/IconoProgramaFinal.png";
+        public static String dirIMG = "/img/IconoProgramaFinal.png";
     /***************** GRAFICOS ****************************************************************/
         public static PaLogin PaLogin = new PaLogin();
         public static PaPrincipal PaPrincipal = new PaPrincipal();

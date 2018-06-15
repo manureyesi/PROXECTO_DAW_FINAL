@@ -6,8 +6,9 @@
 package errores;
 
 import java.awt.Image;
-import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
+import javax.swing.ImageIcon;
+import vtenda.VTenda;
 
 /**
  *
@@ -22,7 +23,7 @@ public class errorContraseña extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         
-        Image icono = Toolkit.getDefaultToolkit().getImage(vtenda.VTenda.dirIMG);
+        Image icono = new ImageIcon(getClass().getResource(VTenda.dirIMG)).getImage();
         this.setIconImage(icono);
         this.setLocationRelativeTo(null);
         
@@ -61,7 +62,7 @@ public class errorContraseña extends javax.swing.JDialog {
         jLInfo2.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLInfo2.setText("Porfavor cambiela para proteger su cuenta");
 
-        ok.setBackground(new java.awt.Color(153, 153, 153));
+        ok.setBackground(new java.awt.Color(204, 204, 204));
         ok.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         ok.setText("OK");
         ok.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));

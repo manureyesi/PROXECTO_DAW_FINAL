@@ -73,8 +73,6 @@ public class buscarUser {
 
                             VTenda.usuario = rs.getString("usuario");
                             VTenda.contrasena = rs.getString("contrasena");
-
-                            
                         }
                         
                         

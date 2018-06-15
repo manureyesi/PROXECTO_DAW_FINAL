@@ -6,10 +6,11 @@
 package verTicket;
 
 import java.awt.Image;
-import java.awt.Toolkit;
 import java.awt.event.KeyEvent;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import javax.swing.ImageIcon;
+import vtenda.VTenda;
 
 /**
  *
@@ -26,7 +27,7 @@ public class buscarTicket extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         
-        Image icono = Toolkit.getDefaultToolkit().getImage(vtenda.VTenda.dirIMG);
+        Image icono = new ImageIcon(getClass().getResource(VTenda.dirIMG)).getImage();
         this.setIconImage(icono);
         this.setLocationRelativeTo(null);
     }
@@ -66,7 +67,7 @@ public class buscarTicket extends javax.swing.JDialog {
             }
         });
 
-        volver1.setBackground(new java.awt.Color(153, 153, 153));
+        volver1.setBackground(new java.awt.Color(204, 204, 204));
         volver1.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         volver1.setText("Volver");
         volver1.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
@@ -76,7 +77,7 @@ public class buscarTicket extends javax.swing.JDialog {
             }
         });
 
-        verTicket.setBackground(new java.awt.Color(153, 153, 153));
+        verTicket.setBackground(new java.awt.Color(204, 204, 204));
         verTicket.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         verTicket.setText("Ver Ticket");
         verTicket.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));

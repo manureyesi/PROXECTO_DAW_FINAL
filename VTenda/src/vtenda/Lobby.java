@@ -9,9 +9,9 @@ package vtenda;
 import Animacion.Fade;
 import java.awt.Color;
 import java.awt.Image;
-import java.awt.Toolkit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.ImageIcon;
 
 /**
  *
@@ -29,7 +29,8 @@ public class Lobby extends javax.swing.JFrame {
         Lobby.this.setBackground(new Color(0,0,0,0));
         //Lobby.this.setOpacity(0.6f);
         
-        Image icono = Toolkit.getDefaultToolkit().getImage(VTenda.dirIMG);
+        Image icono = new ImageIcon(getClass().getResource(VTenda.dirIMG)).getImage();
+        
         this.setIconImage(icono);
         this.setLocationRelativeTo(null);
     }

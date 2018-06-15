@@ -6,8 +6,8 @@
 package errores;
 
 import java.awt.Image;
-import java.awt.Toolkit;
-import java.awt.event.KeyEvent;
+import javax.swing.ImageIcon;
+import vtenda.VTenda;
 
 /**
  *
@@ -22,7 +22,7 @@ public class errorCerrarTicketConContenido extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         
-        Image icono = Toolkit.getDefaultToolkit().getImage(vtenda.VTenda.dirIMG);
+        Image icono = new ImageIcon(getClass().getResource(VTenda.dirIMG)).getImage();
         this.setIconImage(icono);
         this.setLocationRelativeTo(null);
         
@@ -62,7 +62,7 @@ public class errorCerrarTicketConContenido extends javax.swing.JDialog {
         jLInfo2.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLInfo2.setText("será guardado en Tickets erroneos.");
 
-        volver.setBackground(new java.awt.Color(153, 153, 153));
+        volver.setBackground(new java.awt.Color(204, 204, 204));
         volver.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         volver.setText("Aceptar");
         volver.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
@@ -72,7 +72,7 @@ public class errorCerrarTicketConContenido extends javax.swing.JDialog {
             }
         });
 
-        cancelar.setBackground(new java.awt.Color(153, 153, 153));
+        cancelar.setBackground(new java.awt.Color(204, 204, 204));
         cancelar.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         cancelar.setText("Cancelar");
         cancelar.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));

@@ -6,9 +6,10 @@
 package admin;
 
 import java.awt.Image;
-import java.awt.Toolkit;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import javax.swing.ImageIcon;
+import vtenda.VTenda;
 
 /**
  *
@@ -23,7 +24,7 @@ public class administrar extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         
-        Image icono = Toolkit.getDefaultToolkit().getImage(vtenda.VTenda.dirIMG);
+        Image icono = new ImageIcon(getClass().getResource(VTenda.dirIMG)).getImage();
         this.setIconImage(icono);
         this.setLocationRelativeTo(null);
     }
@@ -190,18 +191,24 @@ public class administrar extends javax.swing.JDialog {
         
         try {
             
+            int cont = 0;
+            
             db.consultas con = new db.consultas();
 
-                ResultSet rs = con.select("ticket", "estado = 'Iniciado' and codVendedor = (SELECT cod FROM usuarios WHERE usuario = '"+vtenda.VTenda.usuario+"') limit 0,1");
+                ResultSet rs = con.select("ticket", "estado = 'Iniciado' AND cod IN (SELECT DISTINCT codTicket FROM productosticket WHERE 1) limit 0,1");
 
                 while(rs.next()){
-
-                    System.out.println("Desbloquear boton de Arreglar Ticket");
-
-                    this.arreglarTicket.setEnabled(true);
-                    
+                    cont ++;
                 }
-             
+                
+                if(cont != 0){
+                    System.out.println("Desbloquear boton de Arreglar Ticket");
+                    this.arreglarTicket.setEnabled(true);
+                }
+                else{
+                    this.arreglarTicket.setEnabled(false);
+                }
+                
         } 
         catch (SQLException ex) {
             System.err.println("Error al buscar un Ticket sin Cerrar");

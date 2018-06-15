@@ -6,11 +6,12 @@
 package admin;
 
 import java.awt.Image;
-import java.awt.Toolkit;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import javax.swing.DefaultListModel;
+import javax.swing.ImageIcon;
 import javax.swing.JList;
+import vtenda.VTenda;
 
 /**
  *
@@ -28,7 +29,7 @@ public class buscarTicket extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         
-        Image icono = Toolkit.getDefaultToolkit().getImage(vtenda.VTenda.dirIMG);
+        Image icono = new ImageIcon(getClass().getResource(VTenda.dirIMG)).getImage();
         this.setIconImage(icono);
         this.setLocationRelativeTo(null);
     }
@@ -57,7 +58,7 @@ public class buscarTicket extends javax.swing.JDialog {
             }
         });
 
-        volver.setBackground(new java.awt.Color(153, 153, 153));
+        volver.setBackground(new java.awt.Color(204, 204, 204));
         volver.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         volver.setText("Volver");
         volver.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
@@ -70,7 +71,7 @@ public class buscarTicket extends javax.swing.JDialog {
         listaTicket.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jScrollPane1.setViewportView(listaTicket);
 
-        recuperar.setBackground(new java.awt.Color(153, 153, 153));
+        recuperar.setBackground(new java.awt.Color(204, 204, 204));
         recuperar.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         recuperar.setText("Recuperar Ticket");
         recuperar.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
@@ -125,7 +126,7 @@ public class buscarTicket extends javax.swing.JDialog {
             
             db.consultas con = new db.consultas();
             
-            ResultSet rs = con.select("ticket", "estado = 'Iniciado'");
+            ResultSet rs = con.select("ticket", "estado = 'Iniciado' AND cod IN (SELECT DISTINCT codTicket FROM productosticket WHERE 1)");
             
             JList listaNombres=new JList();
             DefaultListModel modelo = new DefaultListModel();
@@ -149,6 +150,7 @@ public class buscarTicket extends javax.swing.JDialog {
         
         if(this.listaTicket.getSelectedValue() == null){
             this.errores.setText("No tiene seleccionado ningun Ticket");
+            System.err.println("Seleccione un Ticket a Recuperar");
         }
         else{
             
