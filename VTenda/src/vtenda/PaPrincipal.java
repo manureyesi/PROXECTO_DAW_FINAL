@@ -419,7 +419,7 @@ public class PaPrincipal extends javax.swing.JFrame {
         if(java.awt.Desktop.isDesktopSupported()){
         try{
             Desktop dk = Desktop.getDesktop();
-            dk.browse(new URI("https://pruebas.fiandeira.es"));
+            dk.browse(new URI("https://fiandeira.gal"));
         }catch(IOException | URISyntaxException e){
             System.out.println("Error al abrir URL: "+e.getMessage());
         }

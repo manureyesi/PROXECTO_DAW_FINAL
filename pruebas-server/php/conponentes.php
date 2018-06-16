@@ -25,7 +25,7 @@
 
             $varDirWeb = str_replace(" ", "_", $row["nombre"]);
 
-            $crearmenu .= '<li><a href="catalogo.php?categoria='.$varDirWeb.'" title="Categoria de "'.$row["nombre"].'">'.$row["nombre"].'</a></li>';
+            $crearmenu .= '<li><a href="catalogo.php?categoria='.$varDirWeb.'" title="Categoria de '.$row["nombre"].'">'.$row["nombre"].'</a></li>';
 
         }
 

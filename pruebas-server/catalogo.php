@@ -50,7 +50,7 @@
 			<form class="buscador">
 
 				<input type="text" id="buscar" name="buscar" placeholder="Buscador">
-				<label for="buscar" class="icon-search"></label>
+				<label for="buscar" class="icon-search" title="Buscador"></label>
 
 				<input type="submit" name="Enviar" value="Enviar">
 

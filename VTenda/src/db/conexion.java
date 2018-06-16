@@ -19,7 +19,7 @@ public class conexion {
     
     /* Parametros de Conexion a Base de Datos */
     final String dbdir = "localhost";
-    final String dbName = "fiandeira";
+    final String dbName = "Fiandeira";
     final String dbUser = "root";
     final String dbPass = "";
     

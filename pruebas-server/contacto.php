@@ -62,7 +62,7 @@
 				</div>
 
 
-				<form action="" method="post" id="formularioContacto">
+				<form method="post" id="formularioContacto">
 
 					<div id="coloca">
 
