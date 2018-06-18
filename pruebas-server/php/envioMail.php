@@ -10,8 +10,8 @@
     $enviar = $_POST["enviar"];
 
     if($enviar = "enviar"){
-        
-        if(insertPreparado("formularioContacto", "nombre, mail, telefono, pregunta", "'".$name."', '".$mail."', '".$telefono."', '".$pregunta."'") == true){
+
+        if(insertPreparado("formulariocontacto", "nombre, mail, telefono, pregunta", "'".$name."', '".$mail."', '".$telefono."', '".$pregunta."'") == true){
             echo "Enviado correctamente. En breves recibira a resposta ao seu correo.";
         }
         else{
