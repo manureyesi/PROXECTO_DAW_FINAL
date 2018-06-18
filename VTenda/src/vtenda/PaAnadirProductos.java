@@ -617,7 +617,7 @@ public class PaAnadirProductos extends javax.swing.JDialog {
                         //Generar codigo de Barras
                         Barcode barcode = null;
                         try {
-                            barcode = BarcodeFactory.createCode39(this.codArticulo.getText(), true);
+                            barcode = BarcodeFactory.createCode128(this.codArticulo.getText());
                         } 
                         catch (Exception e) {
                         }
@@ -845,7 +845,7 @@ public class PaAnadirProductos extends javax.swing.JDialog {
                 Barcode barcode = null;
 
                 try {
-                    barcode = BarcodeFactory.createCode39(this.codArticulo.getText(), true);
+                    barcode = BarcodeFactory.createCode128(this.codArticulo.getText());
                 } 
                 catch (Exception e) {
                 }
