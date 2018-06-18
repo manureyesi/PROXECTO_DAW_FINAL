@@ -15,7 +15,7 @@ import vtenda.VTenda;
 
 /**
  *
- * @author 6001111
+ * @author manu
  */
 public class RecuperaTicket extends javax.swing.JDialog {
 
@@ -131,7 +131,25 @@ public class RecuperaTicket extends javax.swing.JDialog {
                 
                 db.consultas con = new db.consultas();
                 
-                ResultSet rs = con.select("ticket", "estado = 'Guardado' and codVendedor = "+vtenda.VTenda.vendedor.getNumVendedor());
+                ResultSet comprobarAdmin = con.select("usuarios", "cod = "+vtenda.VTenda.vendedor.getNumVendedor());
+                
+                boolean comprobar = false;
+                
+                while(comprobarAdmin.next()){
+                    if(comprobarAdmin.getBoolean("admin")){
+                        comprobar = true;
+                    }
+                }
+                
+                ResultSet rs;
+                
+                if(comprobar){
+                    rs = con.select("ticket", "estado = 'Guardado'");
+                }
+                else{
+                    System.out.println("Entrando aqui");
+                    rs = con.select("ticket", "estado = 'Guardado' and codVendedor = "+vtenda.VTenda.vendedor.getNumVendedor());
+                }
                 
                 int cont = 0;
                 
@@ -175,8 +193,26 @@ public class RecuperaTicket extends javax.swing.JDialog {
             
             db.consultas con = new db.consultas();
             
-            ResultSet rs = con.select("ticket", "estado = 'Guardado' and codVendedor = "+vtenda.VTenda.vendedor.getNumVendedor());
-            
+            ResultSet comprobarAdmin = con.select("usuarios", "cod = "+vtenda.VTenda.vendedor.getNumVendedor());
+                
+            boolean comprobar = false;
+                
+            while(comprobarAdmin.next()){
+                if(comprobarAdmin.getBoolean("admin")){
+                    comprobar = true;
+                }
+            }
+
+            ResultSet rs;
+
+            if(comprobar){
+                rs = con.select("ticket", "estado = 'Guardado'");
+            }
+            else{
+                System.out.println("Entrando aqui");
+                rs = con.select("ticket", "estado = 'Guardado' and codVendedor = "+vtenda.VTenda.vendedor.getNumVendedor());
+            }
+                
             JList listaNombres=new JList();
             DefaultListModel modelo = new DefaultListModel();
             
