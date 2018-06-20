@@ -1196,6 +1196,10 @@ public class TPV extends javax.swing.JDialog {
                     }
 
                 }
+                Redondear rd = new Redondear();
+                
+                precioFin = rd.redondearDecimales(precioFin);
+                
                 this.total = precioFin;
                 this.totalTicket.setText(precioFin+" €");
                     
